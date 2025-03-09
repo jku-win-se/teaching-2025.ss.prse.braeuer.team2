@@ -1,2 +1,1 @@
-# teaching-2025.ss.prse.braeuer.team2
-Lunchify App
+# Praktikum Software Engineering: Lunchify
