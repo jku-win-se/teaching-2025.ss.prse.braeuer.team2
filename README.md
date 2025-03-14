@@ -1,7 +1,7 @@
 ## Praktikum Software Engineering: Lunchify
 ### Github
 GitHub ist eine Plattform zur Versionsverwaltung, die auf Git basiert. Du kannst dort Code speichern, verwalten und mit anderen zusammenarbeiten. Ein Repository ist dabei wie ein Ordner, in dem sich dein Projekt mit allen Dateien befindet.
-
+Pfusch
 #### Repository
 ##### Bestehendes Repository aufrufen
 ![image](https://github.com/user-attachments/assets/f28c0cc6-3fd0-4742-89d8-20fcb8782469)
