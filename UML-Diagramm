@@ -1,0 +1,55 @@
+@startuml
+class User {
+ +email: String
+ +password: String
+ +userId: integer
+ +history(): void
+ +invoiceUpload(): void
+ +invoiceCorrection(invoiceId: int): void
+ +invoiceDeletion(invoiceId: int): void
+}
+
+class Administrator extends User {
+ +adminId: integer
+ +refundExport(user: User, payroll: double): void
+ +invoiceOverview(): List
+ +searchUser(userId: integer): User
+ +editUser(email: String, password: String, userId: integer): void
+ +editRefund(invoiceId: Invoice): double
+ +markAnomalies(user: User): void
+}
+
+class Invoice {
+ +id: int
+ +date: Date
+ +amount: float
+ +category: String
+}
+
+class OCR {
+ +textRecognition(file: Invoice): String
+ +invoiceClassification(type: String): String
+ +amountRecognition(file: Invoice): double
+}
+
+class Refund {
+ +state: String
+ +getAmount(invoiceType: String): double
+ +dayLimitation(date: Invoice, userId: User): boolean
+ +notAdmin(admin: Administrator, user: User): boolean
+}
+
+class Authentification {
+ +login(email: String, password: String): void
+ +logout(user: User): void
+}
+
+User "1" --> "*" Invoice : "uploads"
+User --> Authentification : "has to login"
+User --> Refund : "requests"
+Administrator --> Refund : "administrates"
+OCR --> Invoice : "analyses"
+Refund --> User : "receives confirmation"
+Refund --> OCR : "uses"
+OCR --> Refund : "supports"
+@enduml
