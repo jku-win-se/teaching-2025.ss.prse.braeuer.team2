@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 public class Database {
 
+    //123
     // Konstanten für die Datenbankverbindung
     private static final String URL = "jdbc:postgresql://aws-0-eu-central-1.pooler.supabase.com:6543/postgres";
     private static final String USER = "postgres.pwltfjlqripcrhenhgnk";
