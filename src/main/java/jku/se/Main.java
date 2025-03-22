@@ -4,12 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class Main {
-    private static final String URL = "jdbc:postgresql://postgres:[YOUR-PASSWORD]@db.pwltfjlqripcrhenhgnk.supabase.co:5432/postgres";
-    private static final String USER = "Lunchify";
-    private static final String PASSWORD = "ujCpo7WdTPUzWpss";
+import static jku.se.Database.insertRechnung;
 
-    public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+public class Main {
+    public static void main(String[] args) {
+        // Verbindung aufbauen
+        try (Connection connection = Database.getConnection()) {
+            System.out.println("Connected to the database!");
+
+            // Rechnung einfügen
+            Database.insertRechnung(connection, "User1", 19.99, "2024-03-19", invoice_typ.Restaurant, false);
+        } catch (SQLException e) {
+            System.out.println("Connection failed: " + e.getMessage());
+        }
     }
 }

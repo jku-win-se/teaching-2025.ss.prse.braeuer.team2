@@ -6,22 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class Database {
-    public static void main(String[] args) {
-        String url = "jdbc:postgresql://aws-0-eu-central-1.pooler.supabase.com:6543/postgres";
-        String user = "postgres.pwltfjlqripcrhenhgnk";
-        String password = "ujCpo7WdTPUzWpss"; // Replace with your actual password
 
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
-            System.out.println("Connected to the database!");
+    // Konstanten für die Datenbankverbindung
+    private static final String URL = "jdbc:postgresql://aws-0-eu-central-1.pooler.supabase.com:6543/postgres";
+    private static final String USER = "postgres.pwltfjlqripcrhenhgnk";
+    private static final String PASSWORD = "ujCpo7WdTPUzWpss"; // Ersetze mit deinem Passwort
 
-            insertRechnung(connection, "User1",19.99, "2024-03-19", invoice_typ.Restaurant, false);
-            // Perform database operations here
-        } catch (SQLException e) {
-            System.out.println("Connection failed: " + e.getMessage());
-        }
+    // Methode, um eine Verbindung zur Datenbank zu erhalten
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static void insertRechnung(Connection connection, String username, double betrag, String datum, invoice_typ typ,boolean proved) {
+    public static boolean insertRechnung(Connection connection, String username, double betrag, String datum, invoice_typ typ,boolean proved) {
         String sql = "INSERT INTO rechnungen (username,betrag, datum, typ,proved) VALUES (?, ?, ?,?,?)";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -33,12 +29,15 @@ public class Database {
             int rowsAffected = pstmt.executeUpdate();
             if (rowsAffected > 0) {
                 System.out.println("Rechnung erfolgreich eingefügt!");
+                return true;
             } else {
                 System.out.println("Keine Rechnung eingefügt.");
+                return false;
             }
         } catch (SQLException e) {
             System.out.println("Insert failed: " + e.getMessage());
         }
+        return false;
     }
 
 }
