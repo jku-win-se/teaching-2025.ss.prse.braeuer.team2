@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.SubmitBillController">
+
+    <children>
+        <!-- Titel -->
+        <Label layoutX="211.0" layoutY="33.0" prefHeight="37.0" prefWidth="279.0" style="-fx-font-size: 16;" text="📄 Rechnung hochladen und einreichen" />
+
+        <!-- Datei-Auswahl-Button -->
+        <Button layoutX="201.0" layoutY="80.0" onAction="#handleFileUpload" prefHeight="25.0" prefWidth="310.0" text="📂 Datei auswählen" />
+
+        <!-- Textfeld für den Dateipfad -->
+        <TextField fx:id="filePathField" editable="false" layoutX="201.0" layoutY="114.0" prefHeight="146.0" prefWidth="310.0" promptText="Keine Datei ausgewählt..." />
+
+        <!-- Erfolgsnachricht -->
+        <Label fx:id="successMessage" layoutX="270.0" layoutY="311.0" prefHeight="20.0" prefWidth="241.0" style="-fx-font-size: 14px; -fx-text-fill: green; -fx-font-weight: bold;" />
+
+        <!-- Einreichen-Button -->
+        <Button layoutX="367.0" layoutY="277.0" onAction="#handleUpload" text="✅ Rechnung hochladen" />
+
+        <!-- Zurück-Button -->
+        <Button layoutX="20.0" layoutY="20.0" onAction="#goBackToDashboard" text="⬅ Zurück" />
+    </children>
+</AnchorPane>
