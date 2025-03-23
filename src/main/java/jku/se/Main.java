@@ -1,9 +1,8 @@
 package jku.se;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-
+import java.sql.DriverManager;
 import static jku.se.Database.insertRechnung;
 
 public class Main {
