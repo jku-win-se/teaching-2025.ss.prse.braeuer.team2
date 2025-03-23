@@ -13,7 +13,6 @@ public class LunchifyApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        System.out.println("-----------------------Test1-------------------");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/login.fxml"));
 
         Scene scene = new Scene(fxmlLoader.load());

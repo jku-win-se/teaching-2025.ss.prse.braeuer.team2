@@ -12,7 +12,7 @@ public class Main {
             System.out.println("Connected to the database!");
 
             // Rechnung einfügen
-            Database.insertRechnung(connection, "User1", 19.99, "2024-03-19", invoice_typ.Restaurant, false);
+            Database.insertRechnung(connection, "Flo", 20.99, "2024-03-19", invoice_typ.Restaurant, false);
         } catch (SQLException e) {
             System.out.println("Connection failed: " + e.getMessage());
         }
