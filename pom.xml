@@ -90,6 +90,21 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- HTTP Client für API-Anfragen -->
+        <dependency>
+            <groupId>org.apache.httpcomponents.client5</groupId>
+            <artifactId>httpclient5</artifactId>
+            <version>5.2</version>
+        </dependency>
+
+        <!-- JSON Verarbeitung -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20210307</version>
+        </dependency>
+
         <dependency>
             <groupId>com.dlsc.formsfx</groupId>
             <artifactId>formsfx-core</artifactId>
@@ -100,6 +115,10 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+
+
         </dependency>
     </dependencies>
+
 </project>
+
