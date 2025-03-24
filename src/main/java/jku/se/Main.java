@@ -4,8 +4,6 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static jku.se.Database.uploadImage;
-
 public class Main {
     public static void main(String[] args) {
         // Verbindung aufbauen

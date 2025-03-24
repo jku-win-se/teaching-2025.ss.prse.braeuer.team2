@@ -107,5 +107,19 @@
             <artifactId>json</artifactId>
             <version>20210307</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.dlsc.formsfx</groupId>
+            <artifactId>formsfx-core</artifactId>
+            <version>11.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.openjfx</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+
+        </dependency>
     </dependencies>
+
 </project>
