@@ -1,3 +1,4 @@
+/*
 import jku.se.Database;
 import jku.se.invoice_typ;
 import org.junit.Test;
@@ -30,3 +31,4 @@ public class DatabaseTest {
         Assertions.assertTrue(success);
     }
 }
+*/

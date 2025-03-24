@@ -4,6 +4,8 @@ import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+
+
 public class Main {
     public static void main(String[] args) {
         // Verbindung aufbauen
@@ -16,6 +18,7 @@ public class Main {
 
             // Rechnung einfügen
             Database.insertInvoice(connection, "User1", 19.99, "2024-02-20", invoice_typ.Restaurant, false, imageFile);
+
 
         } catch (SQLException e) {
             System.out.println("Connection failed: " + e.getMessage());
