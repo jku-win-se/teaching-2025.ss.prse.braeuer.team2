@@ -1,12 +1,34 @@
 package jku.se;
 
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Label;
+import jku.se.Controller.SubmitBillController;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+
+
+import javax.imageio.IIOParam;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.file.Files;
 import java.sql.*;
+import java.time.LocalDate;
 
 public class Database {
+
+    // Beispiel für das Label, das an die GUI übergeben wird
+    private static Label successMessage;
+
+    // Methode zum Setzen des Labels (wird später in der GUI aufgerufen)
+    public static void setSuccessMessageLabel(Label label) {
+        successMessage = label;
+    }
+
+
+
 
     // Konstanten für die Datenbankverbindung
     private static final String JDBC_URL = "jdbc:postgresql://aws-0-eu-central-1.pooler.supabase.com:6543/postgres?prepareThreshold=0";
@@ -75,19 +97,29 @@ public class Database {
         return SUPABASE_URL + "/storage/v1/object/public/" + SUPABASE_BUCKET + "/" + filePath;
     }
 
-    public static boolean insertInvoice(Connection connection, String username, double betrag, String datum, invoice_typ typ, boolean proved, File imageFile) {
-        String sqlInsert = "INSERT INTO rechnungen (username, betrag, datum, typ, proved, image) VALUES (?, ?, ?, ?, ?, ?)";
+    public static boolean uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile,SubmitBillController controller) {
+        String sqlInsert = "INSERT INTO rechnungen (username, betrag, datum, typ, status, image) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             // Deaktiviere Auto-Commit, damit wir manuell transaktionale Kontrolle übernehmen können
             connection.setAutoCommit(false);
 
+            //Prüfen ob das eingegebene Datum innerhalb des aktuellen Monats ist
+            if(!InvoiceScan.isWithinCurrentMonth(datum)) {
+                controller.displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");
+                connection.rollback();  // Rollback bei Fehler
+                System.out.println("Datum muss innerhalb des aktuellen Monats liegen.");
+                return false;
+            }
+
             // Prüfen, ob bereits eine Rechnung für das Datum existiert
             if (invoiceExists(connection, username, datum)) {
+                controller.displayMessage("Rechnung für dieses Datum existiert bereits!", "red");
                 System.out.println("Rechnung für dieses Datum existiert bereits!");
                 connection.rollback();  // Rollback bei Fehler
                 return false;
             }
+
 
             // Bild hochladen
             String imageUrl = uploadImage(imageFile);
@@ -101,13 +133,14 @@ public class Database {
             try (PreparedStatement pstmt = connection.prepareStatement(sqlInsert)) {
                 pstmt.setString(1, username);
                 pstmt.setDouble(2, betrag);
-                pstmt.setDate(3, java.sql.Date.valueOf(datum));
-                pstmt.setObject(4, typ, java.sql.Types.OTHER);
-                pstmt.setBoolean(5, proved);
+                pstmt.setDate(3, Date.valueOf(datum));
+                pstmt.setObject(4, typ, Types.OTHER);
+                pstmt.setObject(5, status, Types.OTHER);
                 pstmt.setString(6, imageUrl);
 
                 int rowsAffected = pstmt.executeUpdate();
                 if (rowsAffected > 0) {
+                    controller.displayMessage("Rechnung erfolgreich eingefügt!", "green");
                     System.out.println("Rechnung erfolgreich eingefügt!");
                     connection.commit();  // Transaktion erfolgreich abschließen
                     return true;
@@ -141,7 +174,7 @@ public class Database {
         return false;
     }
 
-    public static boolean invoiceExists(Connection connection, String username, String datum) {
+    public static boolean invoiceExists(Connection connection, String username, LocalDate datum) {
         String sql = "SELECT 1 FROM rechnungen WHERE username = ? AND datum = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
@@ -155,4 +188,42 @@ public class Database {
         return false;
     }
 
+
+    public static void invoiceScanUpload(String path, SubmitBillController controller) {
+        // Führe die OCR-Verarbeitung und Datenbankoperationen in einem Hintergrund-Thread aus
+        new Thread(() -> {
+            Invoice invoice = null;
+            try {
+                // Gebe den Pfad zur Bilddatei an
+                InvoiceScan invoiceScan = new InvoiceScan(controller);
+                invoice = invoiceScan.scanInvoice(path);
+                // Ausgabe der extrahierten Daten (optional)
+                //System.out.println(invoice);  // Ausgabe der gesamten Rechnung
+            } catch (Exception e) {
+                System.out.println("Fehler beim Scannen der Rechnung: " + e.getMessage());
+                Platform.runLater(() -> controller.displayMessage("Fehler beim Scannen der Rechnung: " + e.getMessage(), "red"));
+                return; // Falls ein Fehler auftritt, die Methode abbrechen
+            }
+
+            // Datenbankoperationen ausführen
+            try (Connection connection = Database.getConnection()) {
+                File imageFile = new File(path); // Pfad zur Datei
+
+                double sum = invoice.getSum();
+                LocalDate date = invoice.getDate();
+                InvoiceType invoiceType = invoice.getTyp();
+                InvoiceStatus invoiceStatus = invoice.getStatus();
+
+                // Rechnung in die Datenbank einfügen
+                Database.uploadInvoice(connection, "User1", sum, date, invoiceType, invoiceStatus, imageFile,controller);
+
+            } catch (SQLException e) {
+                System.out.println("Fehler bei der Verbindung zur Datenbank: " + e.getMessage());
+                Platform.runLater(() -> controller.displayMessage("Fehler bei der Verbindung zur Datenbank: " + e.getMessage(), "red"));
+            }
+        }).start(); // Startet den Hintergrund-Thread
+    }
+
+
 }
+
