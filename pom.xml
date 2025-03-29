@@ -135,6 +135,35 @@
             <version>2.14.1</version>
         </dependency>
 
+
+        <!-- Mockito Inline for Static Mocks -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>4.0.0</version> <!-- Use the latest version -->
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Mockito JUnit Jupiter for JUnit 5 integration -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>4.0.0</version> <!-- Use the latest version -->
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>5.1.0</version> <!-- Make sure to use the latest stable version -->
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.testfx</groupId>
+            <artifactId>testfx-core</artifactId>
+            <version>4.0.16-alpha</version>
+        </dependency>
     </dependencies>
 
 </project>

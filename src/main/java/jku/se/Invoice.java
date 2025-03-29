@@ -3,10 +3,10 @@ package jku.se;
 import java.time.LocalDate;
 
 public class Invoice {
-    // Eigenschaften der Klasse
-    private LocalDate date;  // Datum der Rechnung (z.B. "2025-03-17")
-    private double sum;  // Gesamtsumme der Rechnung
-    private InvoiceType typ;    // Typ der Rechnung (z.B. "Einkauf", "Dienstleistung")
+
+    private LocalDate date;
+    private double sum;
+    private InvoiceType typ;
     private InvoiceStatus status;
 
     // Konstruktor zum Erstellen einer neuen Invoice
@@ -17,7 +17,7 @@ public class Invoice {
         this.status = status;
     }
 
-    // Getter und Setter für die Eigenschaften
+    // Getter and Setter
     public LocalDate getDate() {
         return date;
     }
@@ -45,11 +45,12 @@ public class Invoice {
     public void setStatus(InvoiceStatus status) {
         this.status = status;
     }
+
     public InvoiceStatus getStatus() {
         return status;
     }
 
-    // Eine Methode zum Ausgeben der Rechnungsinformationen als String
+    //A method to output the invoice information as a string
     @Override
     public String toString() {
         return "Rechnung [Datum=" + date + ", Summe=" + sum + " EUR, Typ=" + typ + "]";
