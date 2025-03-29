@@ -12,5 +12,3 @@ public class RequestManagementController extends Controller{
         switchScene(event, "adminPanel.fxml");
     }
 }
-
-
