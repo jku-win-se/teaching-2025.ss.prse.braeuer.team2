@@ -10,8 +10,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import jku.se.Database;
 
-public class LoginController extends Controller{
+public class LoginController extends Controller {
+
     @FXML
     private Button btn_login;
 
@@ -29,15 +31,29 @@ public class LoginController extends Controller{
         String username = txt_username.getText();
         String password = txt_password.getText();
 
-        if (username.equals("user@gmail.com") && password.equals("user")) {
+        if (username.isEmpty() || password.isEmpty()) {
+            lbl_message.setText("Bitte geben Sie sowohl Benutzernamen als auch Passwort ein!");
+            lbl_message.setStyle("-fx-text-fill: red;");
+            return;
+        }
+
+        StringBuilder userRole = new StringBuilder();
+
+        // Login-Validierung über Database-Klasse
+        if (Database.validateLogin(username, password, userRole)) {
             lbl_message.setText("");
-            switchToDashboardUser();
-        } else if (username.equals("admin@gmail.com") && password.equals("admin")) {
-            lbl_message.setText("");
-            switchToDashboardAdmin();
-        } else if (username.equals("") && password.equals("")) {
-            lbl_message.setText("");
-            switchToDashboardAdmin();
+            switch (userRole.toString()) {
+                case "user":
+                    switchToDashboardUser();
+                    break;
+                case "admin":
+                    switchToDashboardAdmin();
+                    break;
+                default:
+                    lbl_message.setText("Unbekannte Rolle!");
+                    lbl_message.setStyle("-fx-text-fill: red;");
+                    break;
+            }
         } else {
             lbl_message.setText("Benutzername oder Passwort falsch!");
             lbl_message.setStyle("-fx-text-fill: red;");
@@ -46,9 +62,6 @@ public class LoginController extends Controller{
 
     private void switchToDashboardUser() throws IOException {
         URL fxmlLocation = getClass().getResource("/dashboardUser.fxml");
-
-        System.out.println("FXML-Pfad: " + fxmlLocation);
-
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) btn_login.getScene().getWindow();
@@ -57,8 +70,6 @@ public class LoginController extends Controller{
 
     private void switchToDashboardAdmin() throws IOException {
         URL fxmlLocation = getClass().getResource("/dashboardAdmin.fxml");
-        System.out.println("FXML-Pfad: " + fxmlLocation);
-
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
         Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) btn_login.getScene().getWindow();
