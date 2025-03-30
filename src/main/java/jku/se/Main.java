@@ -1,28 +1,22 @@
 package jku.se;
 
+import javafx.scene.control.Label;
+import jku.se.Controller.SubmitBillController;
+import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
-
+import java.time.LocalDate;
 
 
 public class Main {
     public static void main(String[] args) {
-        // Verbindung aufbauen
-        try (Connection connection = Database.getConnection()) {
-            System.out.println("Connected to the database!");
 
-
-
-            File imageFile = new File("C:/Users/Lukas/Desktop/Rechnungen/5.pdf"); // Pfad zur Datei
-
-            // Rechnung einfügen
-            Database.insertInvoice(connection, "User1", 19.99, "2024-02-20", invoice_typ.Restaurant, false, imageFile);
-
-
-        } catch (SQLException e) {
-            System.out.println("Connection failed: " + e.getMessage());
-        }
+        SubmitBillController controller = new SubmitBillController();
+        String path = "C:/Users/Lukas/Desktop/Rechnungen/6.jpg";
+        Database.invoiceScanUpload(path, controller);
 
     }
 }

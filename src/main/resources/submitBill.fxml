@@ -18,7 +18,7 @@
         <TextField fx:id="filePathField" editable="false" layoutX="201.0" layoutY="114.0" prefHeight="146.0" prefWidth="310.0" promptText="Keine Datei ausgewählt..." />
 
         <!-- Erfolgsnachricht -->
-        <Label fx:id="successMessage" layoutX="270.0" layoutY="311.0" prefHeight="20.0" prefWidth="241.0" style="-fx-font-size: 14px; -fx-text-fill: green; -fx-font-weight: bold;" />
+        <Label fx:id="successMessage" layoutX="201.0" layoutY="311.0" prefHeight="20.0" prefWidth="310.0" style="-fx-font-size: 14px; -fx-text-fill: green; -fx-font-weight: bold; " alignment="CENTER" />
 
         <!-- Einreichen-Button -->
         <Button layoutX="367.0" layoutY="277.0" onAction="#handleUpload" text="✅ Rechnung hochladen" />
