@@ -86,8 +86,8 @@ public class Database {
     }
 
     //uploads the invoice data to the table rechnungen (AI)
-    public static void uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile, SubmitBillController controller) {
-        String sqlInsert = "INSERT INTO rechnungen (username, betrag, datum, typ, status, image) VALUES (?, ?, ?, ?, ?, ?)";
+    public static void uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile, Double refund, SubmitBillController controller) {
+        String sqlInsert = "INSERT INTO rechnungen (username, betrag, datum, typ, status, image,refund) VALUES (?, ?, ?, ?, ?, ?,?)";
 
         //transaction
         try {
@@ -125,6 +125,7 @@ public class Database {
                 pstmt.setObject(4, typ, Types.OTHER);
                 pstmt.setObject(5, status, Types.OTHER);
                 pstmt.setString(6, imageUrl);
+                pstmt.setDouble(7, refund);
 
                 //check if the insert was successfully
                 int rowsAffected = pstmt.executeUpdate();
@@ -197,9 +198,10 @@ public class Database {
                 LocalDate date = invoice.getDate();
                 InvoiceType invoiceType = invoice.getTyp();
                 InvoiceStatus invoiceStatus = invoice.getStatus();
+                double refund = invoice.getRefund();
 
                 // Insert invoice into the database
-                Database.uploadInvoice(connection, "User1", sum, date, invoiceType, invoiceStatus, imageFile,controller);
+                Database.uploadInvoice(connection, "user", sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
 
             } catch (SQLException e) {
                 System.out.println("Fehler bei der Verbindung zur Datenbank: " + e.getMessage());

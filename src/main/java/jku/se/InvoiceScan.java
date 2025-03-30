@@ -6,6 +6,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -35,7 +36,7 @@ public class InvoiceScan {
     }
 
     //scans the uploaded invoice and returns a invoice (date, sum, type, status) (AI)
-    public Invoice scanInvoice(String imagePath) throws TesseractException, IOException {
+    public Invoice scanInvoice(String imagePath) throws TesseractException, IOException, SQLException {
 
         String text;
         //generates a file object
@@ -110,13 +111,18 @@ public class InvoiceScan {
             type = controller.requestManualType();
         }
 
+        //calculate refund
+        double refund = Refund.refundCalculation(sum,type);
+
+
         // Return an invoice with the extracted information
         System.out.println(text);
         System.out.println(lDate);
         System.out.println(sum);
         System.out.println(type);
-        return new Invoice(lDate, sum, type,status);
+        return new Invoice(lDate, sum, type,status,refund);
     }
+
 
 
     /*

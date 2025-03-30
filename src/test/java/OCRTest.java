@@ -59,7 +59,7 @@ public class OCRTest {
 
         String username = "Test";
         LocalDate date = LocalDate.now();
-        uploadInvoice(connection, username, 100.50, date, typ, status, tempImage, controller);
+        uploadInvoice(connection, username, 100.50, date, typ, status, tempImage,3.0, controller);
 
         boolean exists = Database.invoiceExists(connection, "Test", date);
         assertTrue(exists);
@@ -89,7 +89,7 @@ public class OCRTest {
 
         String username = "Test";
         LocalDate date = LocalDate.now();
-        uploadInvoice(connection, username, 100.50, date, typ, status, tempImage, controller);
+        uploadInvoice(connection, username, 100.50, date, typ, status, tempImage,3.0, controller);
 
         var result = connection.createStatement().executeQuery("SELECT COUNT(*) FROM rechnungen WHERE username = 'Test' AND datum = '" + date.toString() + "'");
         result.next();
@@ -235,6 +235,7 @@ public class OCRTest {
         assertTrue(InvoiceScan.isWithinCurrentMonth(today));
     }
 
+    //converts different date formats into one standard format
     @Test
     void testStringtoDate (){
         String date = "24,05,25";
@@ -275,7 +276,7 @@ public class OCRTest {
     }
 
     @Test
-    void testScanInvoice_Success() throws TesseractException, IOException {
+    void testScanInvoice_Success() throws TesseractException, IOException, SQLException {
         // Beispiel-Testbild (sollte eine echte Rechnung sein)
         String testImagePath = "src/test/resources/testfile.jpg";
 
@@ -289,8 +290,5 @@ public class OCRTest {
         assertEquals(9.95,invoice.getSum());
         assertEquals(InvoiceType.SUPERMARKET,invoice.getTyp());
     }
-
-
-
 
 }

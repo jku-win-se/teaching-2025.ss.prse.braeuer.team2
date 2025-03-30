@@ -8,13 +8,15 @@ public class Invoice {
     private double sum;
     private InvoiceType typ;
     private InvoiceStatus status;
+    private double refund;
 
     // Konstruktor zum Erstellen einer neuen Invoice
-    public Invoice(LocalDate date, double sum, InvoiceType typ, InvoiceStatus status) {
+    public Invoice(LocalDate date, double sum, InvoiceType typ, InvoiceStatus status, double refund) {
         this.date = date;
         this.sum = sum;
         this.typ = typ;
         this.status = status;
+        this.refund = refund;
     }
 
     // Getter and Setter
@@ -48,6 +50,13 @@ public class Invoice {
 
     public InvoiceStatus getStatus() {
         return status;
+    }
+
+    public void setRefund(double refund) {
+        this.refund = refund;
+    }
+    public double getRefund() {
+        return refund;
     }
 
     //A method to output the invoice information as a string

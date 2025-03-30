@@ -12,7 +12,8 @@ module com.example.lunchify {
     exports jku.se; // Alle Klassen im jku.se Package exportieren
     opens jku.se.Controller to javafx.fxml; // Controller für javafx.fxml öffnen
 
-    exports jku.se.Controller;  // Erlaubt den Zugriff auf dieses Paket von anderen Modulen
+    exports jku.se.Controller;
+    opens jku.se to javafx.fxml;  // Erlaubt den Zugriff auf dieses Paket von anderen Modulen
 
 }
 
