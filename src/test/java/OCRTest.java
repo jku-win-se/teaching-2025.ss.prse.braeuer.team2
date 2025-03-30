@@ -57,11 +57,11 @@ public class OCRTest {
         InvoiceScan invoiceScan = new InvoiceScan(controller);
         Connection connection= Database.getConnection();
 
-        String username = "Test";
+        String username = "user";
         LocalDate date = LocalDate.now();
         uploadInvoice(connection, username, 100.50, date, typ, status, tempImage,3.0, controller);
 
-        boolean exists = Database.invoiceExists(connection, "Test", date);
+        boolean exists = Database.invoiceExists(connection, "user", date);
         assertTrue(exists);
 
         deleteInvoice(connection, username, date);
@@ -87,11 +87,11 @@ public class OCRTest {
         InvoiceScan invoiceScan = new InvoiceScan(controller);
         Connection connection= Database.getConnection();
 
-        String username = "Test";
+        String username = "user";
         LocalDate date = LocalDate.now();
         uploadInvoice(connection, username, 100.50, date, typ, status, tempImage,3.0, controller);
 
-        var result = connection.createStatement().executeQuery("SELECT COUNT(*) FROM rechnungen WHERE username = 'Test' AND datum = '" + date.toString() + "'");
+        var result = connection.createStatement().executeQuery("SELECT COUNT(*) FROM rechnungen WHERE username = 'user' AND datum = '" + date.toString() + "'");
         result.next();
         assertEquals(1, result.getInt(1));
 
