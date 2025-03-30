@@ -8,10 +8,13 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.scene.Node;
@@ -22,7 +25,7 @@ import javafx.stage.Stage;
 import jku.se.Database;
 import jku.se.InvoiceScan;
 import jku.se.InvoiceType;
-
+import jku.se.MessageStore;
 
 public class SubmitBillController extends Controller {
 
@@ -31,8 +34,19 @@ public class SubmitBillController extends Controller {
 
     @FXML
     private Label successMessage;
+    @FXML
+    private DashboardUserController dashboardUserController;
+
+    @FXML
+    private InvoiceController invoiceController;
 
     private InvoiceScan invoiceScan;  // Reference to InvoiceScan
+
+    @FXML
+    private Label messageLabel;
+
+    @FXML
+    private ListView<Label> messagePopUp = new ListView<>();
 
     //constructor
     public SubmitBillController() {
@@ -46,6 +60,7 @@ public class SubmitBillController extends Controller {
         Platform.runLater(() -> {
             if (successMessage != null) {
                 successMessage.setText(message);
+                invoiceController.setStatus(message);
                 successMessage.setStyle("-fx-text-fill: " + color + ";");
             }
         });
@@ -53,8 +68,35 @@ public class SubmitBillController extends Controller {
 
     @FXML
     private void goBackToDashboard(ActionEvent event) throws IOException {
+
+        String message = InvoiceController.getMessage();
+        System.out.println(message);
+        MessageStore.addMessage(message);
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/dashboardUser.fxml"));
+        Parent root = loader.load();
+
+        // Hole den Controller nach dem Laden des FXMLs
+        DashboardUserController dashboardUserController = loader.getController();
+
+        // Setze die Nachricht für das Pop-Up
+        dashboardUserController.setShowMessagePopupOnInitialize(true);
+
         switchScene(event, "dashboardUser.fxml");
+
+
+            /*messageLabel = new Label(message);
+            System.out.println(messageLabel);
+
+            if (messagePopUp.getItems().size() >= 10) {
+                messagePopUp.getItems().remove(messagePopUp.getItems().size() - 1);  // Entferne die älteste Nachricht
+            }
+
+            // Füge die neue Nachricht zur ListView hinzu
+
+            messagePopUp.getItems().addFirst(messageLabel);*/
     }
+
 
     //method to choose the invoice you want to upload
     @FXML
@@ -70,6 +112,7 @@ public class SubmitBillController extends Controller {
 
         if (selectedFile != null) {
             filePathField.setText(selectedFile.getAbsolutePath());
+            this.invoiceController = new InvoiceController(selectedFile.getAbsolutePath());
             successMessage.setText(""); // reset message
         } else {
             filePathField.setText("Keine Datei ausgewählt...");
@@ -90,7 +133,6 @@ public class SubmitBillController extends Controller {
         Database.invoiceScanUpload(filePath, this);//call method to scan and upload
         successMessage.setText("Rechnung wird hochgeladen");
         successMessage.setStyle("-fx-text-fill: green;");
-
     }
 
     //shows a field to input the date manual (AI)
@@ -190,6 +232,12 @@ public class SubmitBillController extends Controller {
                     displayMessage("Betrag erfolgreich eingegeben: " + parsedAmount, "green");
                     stage.close();
                     latch.countDown();
+
+                    // für PopUp Nachricht
+                    if (invoiceController != null) {
+                        invoiceController.setAmount(parsedAmount);
+                    }
+
                 } catch (NumberFormatException ex) {
                     displayMessage("Ungültiger Betrag! Bitte eine Zahl im Format 123.45 eingeben.", "red");
                 }
@@ -251,4 +299,14 @@ public class SubmitBillController extends Controller {
 
         return selectedType[0];
     }
+
+    public void setDashboardUserController(DashboardUserController dashboardUserController) {
+        this.dashboardUserController = dashboardUserController;
+    }
+
+    @FXML
+    public Label getSuccessMessage(){
+        return successMessage;
+    }
+
 }
