@@ -18,6 +18,7 @@ public class OCRTest {
     // Initializes JavaFX once for all tests
     @BeforeAll
     static void initJFX() throws Exception {
+        System.setProperty("java.awt.headless", "true");
         Platform.startup(() -> {});
     }
 
