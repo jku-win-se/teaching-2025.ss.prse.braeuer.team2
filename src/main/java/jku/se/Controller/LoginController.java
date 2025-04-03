@@ -10,69 +10,67 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jku.se.Database;
+import jku.se.Login;
+import jku.se.Role;
+import jku.se.Status;
 
 public class LoginController extends Controller {
 
-    @FXML
-    private Button btn_login;
-
-    @FXML
-    private TextField txt_username;
-
-    @FXML
-    private PasswordField txt_password;
-
-    @FXML
-    private Label lbl_message;
+    @FXML private Button btn_login;
+    @FXML private TextField txt_username;
+    @FXML private PasswordField txt_password;
+    @FXML private Label lbl_message;
 
     @FXML
     private void btn_loginActionPerformed() throws IOException {
-        String username = txt_username.getText();
+        String username = txt_username.getText().trim();
         String password = txt_password.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            lbl_message.setText("Bitte geben Sie sowohl Benutzernamen als auch Passwort ein!");
-            lbl_message.setStyle("-fx-text-fill: red;");
+            showErrorMessage("Bitte geben Sie sowohl Benutzernamen als auch Passwort ein!");
             return;
         }
 
         StringBuilder userRole = new StringBuilder();
+        StringBuilder accountStatus = new StringBuilder();
 
-        // Login-Validierung über Database-Klasse
-        if (Database.validateLogin(username, password, userRole)) {
+        if (Login.validateLogin(username, password, userRole, accountStatus)) {
             lbl_message.setText("");
-            switch (userRole.toString()) {
-                case "user":
-                    switchToDashboardUser();
+
+            if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
+                showErrorMessage("Ihr Konto wurde gesperrt. Bitte kontaktieren Sie den Administrator.");
+                return;
+            }
+
+            switch (Role.valueOf(userRole.toString().toUpperCase())) {
+                case USER:
+                    switchToDashboard("/dashboardUser.fxml");
                     break;
-                case "admin":
-                    switchToDashboardAdmin();
+                case ADMIN:
+                    switchToDashboard("/dashboardAdmin.fxml");
                     break;
                 default:
-                    lbl_message.setText("Unbekannte Rolle!");
-                    lbl_message.setStyle("-fx-text-fill: red;");
+                    showErrorMessage("Unbekannte Rolle!");
                     break;
             }
         } else {
-            lbl_message.setText("Benutzername oder Passwort falsch!");
-            lbl_message.setStyle("-fx-text-fill: red;");
+            if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
+                showErrorMessage("Ihr Konto wurde nach 10 fehlgeschlagenen Versuchen gesperrt.");
+            } else {
+                showErrorMessage("Benutzername oder Passwort falsch!");
+            }
         }
     }
 
-    private void switchToDashboardUser() throws IOException {
-        URL fxmlLocation = getClass().getResource("/dashboardUser.fxml");
+    private void switchToDashboard(String fxmlPath) throws IOException {
+        URL fxmlLocation = getClass().getResource(fxmlPath);
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
-        Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) btn_login.getScene().getWindow();
-        stage.setScene(scene);
+        stage.setScene(new Scene(fxmlLoader.load()));
     }
 
-    private void switchToDashboardAdmin() throws IOException {
-        URL fxmlLocation = getClass().getResource("/dashboardAdmin.fxml");
-        FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
-        Scene scene = new Scene(fxmlLoader.load());
-        Stage stage = (Stage) btn_login.getScene().getWindow();
-        stage.setScene(scene);
+    private void showErrorMessage(String message) {
+        lbl_message.setText(message);
+        lbl_message.setStyle("-fx-text-fill: red;");
     }
 }
