@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class RefundTest {
 
+    public RefundTest() {}
+
     private Refund refund = new Refund();
 
     @Test
@@ -37,7 +39,7 @@ public class RefundTest {
     }
 
     @Test
-    void testRefundSupermarket() throws SQLException {
+    public void testRefundSupermarket() throws SQLException {
         double ref = refund.getRefundSupermarket();
         refund.setRefundSupermarket(5);
         double result = refund.getRefundSupermarket();
@@ -74,7 +76,7 @@ public class RefundTest {
     }
 
     @Test
-    void testRefundRestaurant() throws SQLException {
+    public void testRefundRestaurant() throws SQLException {
         double ref = refund.getRefundRestaurant();
         refund.setRefundRestaurant(5);
         double result = refund.getRefundRestaurant();

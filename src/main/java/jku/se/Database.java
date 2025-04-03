@@ -247,6 +247,50 @@ public class Database {
         return false;
     }
 
+    //method to delete a specific invoice from the database
+    public static boolean deleteInvoice(Connection connection, String username, LocalDate date) {
+        // First, fetch the image URL associated with the invoice record
+        String imageUrl = null;
+        try {
+            // Query to get the image URL for the invoice
+            String query = "SELECT image FROM rechnungen WHERE username = ? AND datum = ?";
+            try (PreparedStatement stmt = connection.prepareStatement(query)) {
+                stmt.setString(1, username);
+                stmt.setDate(2, java.sql.Date.valueOf(date));
+
+                ResultSet resultSet = stmt.executeQuery();
+                if (resultSet.next()) {
+                    imageUrl = resultSet.getString("image");
+                }
+            }
+
+            // If an image URL is found, delete the image from Supabase Storage
+            if (imageUrl != null && deleteImage(imageUrl)) {
+                // Image deletion was successful, now delete the invoice record from the database
+                String deleteQuery = "DELETE FROM rechnungen WHERE username = ? AND datum = ?";
+                try (PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery)) {
+                    deleteStmt.setString(1, username);
+                    deleteStmt.setDate(2, java.sql.Date.valueOf(date));
+
+                    int rowsAffected = deleteStmt.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Invoice and image deleted successfully.");
+                        return true; // Successful deletion
+                    } else {
+                        System.out.println("No invoice record found to delete.");
+                        return false; // Invoice not found
+                    }
+                }
+            } else {
+                System.out.println("Image deletion failed.");
+                return false; // Image deletion failed
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Error occurred during deletion process
+        }
+    }
+
 
 }
 

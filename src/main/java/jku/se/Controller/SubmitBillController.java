@@ -6,23 +6,25 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.event.ActionEvent;
+import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.Node;
+import javafx.event.ActionEvent;
+import javafx.util.Duration;
 import jku.se.Database;
 import jku.se.InvoiceScan;
 import jku.se.InvoiceType;
-
 
 public class SubmitBillController extends Controller {
 
@@ -32,21 +34,23 @@ public class SubmitBillController extends Controller {
     @FXML
     private Label successMessage;
 
-    private InvoiceScan invoiceScan;  // Reference to InvoiceScan
+    private InvoiceScan invoiceScan;
+    private Timeline uploadAnimation;
 
-    //constructor
     public SubmitBillController() {
-        // Initialize InvoiceScan
         this.invoiceScan = new InvoiceScan(this);
     }
 
-    //method to display the message
     @FXML
     public void displayMessage(String message, String color) {
         Platform.runLater(() -> {
             if (successMessage != null) {
                 successMessage.setText(message);
-                successMessage.setStyle("-fx-text-fill: " + color + ";");
+                successMessage.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: normal;");
+
+                if (uploadAnimation != null && !message.contains("hochgeladen")) {
+                    uploadAnimation.stop();
+                }
             }
         });
     }
@@ -56,10 +60,8 @@ public class SubmitBillController extends Controller {
         switchScene(event, "dashboardUser.fxml");
     }
 
-    //method to choose the invoice you want to upload
     @FXML
     private void handleFileUpload(ActionEvent event) {
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Rechnung auswählen");
         fileChooser.getExtensionFilters().addAll(
@@ -70,30 +72,39 @@ public class SubmitBillController extends Controller {
 
         if (selectedFile != null) {
             filePathField.setText(selectedFile.getAbsolutePath());
-            successMessage.setText(""); // reset message
+            displayMessage("", "black");
         } else {
             filePathField.setText("Keine Datei ausgewählt...");
         }
     }
 
-    //button "Rechnung hochladen"
     @FXML
     private void handleUpload(ActionEvent event) {
         String filePath = filePathField.getText();
 
         if (filePath.isEmpty() || filePath.equals("Keine Datei ausgewählt...")) {
-            successMessage.setText("Keine Datei ausgewählt!");
-            successMessage.setStyle("-fx-text-fill: red;");
+            displayMessage("Keine Datei ausgewählt!", "red");
             return;
         }
 
-        Database.invoiceScanUpload(filePath, this);//call method to scan and upload
-        successMessage.setText("Rechnung wird hochgeladen");
-        successMessage.setStyle("-fx-text-fill: green;");
+        if (uploadAnimation != null) {
+            uploadAnimation.stop();
+        }
 
+        uploadAnimation = new Timeline(
+                new KeyFrame(Duration.seconds(0.5), e -> successMessage.setText("Rechnung wird hochgeladen")),
+                new KeyFrame(Duration.seconds(1.0), e -> successMessage.setText("Rechnung wird hochgeladen..."))
+        );
+        uploadAnimation.setCycleCount(Timeline.INDEFINITE);
+        uploadAnimation.play();
+
+        new Thread(() -> {
+            Database.invoiceScanUpload(filePath, this);
+        }).start();
     }
 
-    //shows a field to input the date manual (AI)
+
+//shows a field to input the date manual (AI)
     public LocalDate requestManualDate() {
         // Create a CountDownLatch to block the current thread until the user has entered a date
         CountDownLatch latch = new CountDownLatch(1);
