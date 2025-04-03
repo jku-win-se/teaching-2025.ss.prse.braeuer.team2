@@ -65,7 +65,7 @@ public class OCRTest {
         boolean exists = Database.invoiceExists(connection, "user", date);
         assertTrue(exists);
 
-        deleteInvoice(connection, username, date);
+        Database.deleteInvoice(connection, username, date);
     }
 
     //checks if there is already an invoice uploaded for that day -> expected that no invoice exist for that day and user
@@ -96,20 +96,14 @@ public class OCRTest {
         result.next();
         assertEquals(1, result.getInt(1));
 
-        deleteInvoice(connection, username, date);
+        Database.deleteInvoice(connection, username, date);
     }
 
-    //method to delete a specific invoice from the database
-    void deleteInvoice (Connection connection, String username, LocalDate date){
-        String sqlDelete = "DELETE FROM rechnungen WHERE username = ? AND datum = ?";
-        try (PreparedStatement pstmt = connection.prepareStatement(sqlDelete)) {
-            pstmt.setString(1, username);
-            pstmt.setDate(2, Date.valueOf(date));
-            int rowsAffected = pstmt.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println("Fehler beim Löschen der Rechnung: " + e.getMessage());
-        }
-    }
+
+
+
+
+
 
     /*
         InvoiceScan.java
