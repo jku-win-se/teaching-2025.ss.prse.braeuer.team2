@@ -27,44 +27,13 @@ public class Database {
         if (conn != null) {
             try {
                 conn.close();  // Verbindung schließen
-                System.out.println("Datenbankverbindung geschlossen.");
             } catch (SQLException e) {
                 System.out.println("Fehler beim Schließen der Verbindung: " + e.getMessage());
             }
         }
     }
 
-    public static boolean validateLogin(String username, String password, StringBuilder userRole) {
-        String query = "SELECT * FROM accounts WHERE email = ?";
 
-        try (Connection conn = getConnection()) {
-            conn.setAutoCommit(false);
-
-            try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setString(1, username);
-
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        String storedPassword = rs.getString("password");
-                        userRole.append(rs.getString("role"));
-
-                        if (password.equals(storedPassword)) {
-                            conn.commit();
-                            return true;
-                        }
-                    }
-                }
-
-            } catch (SQLException e) {
-                conn.rollback();  // Rollback im Fehlerfall
-                System.out.println("Fehler bei der Abfrage: " + e.getMessage());
-            }
-
-        } catch (SQLException e) {
-            System.out.println("Fehler bei der Verbindung: " + e.getMessage());
-        }
-        return false;
-    }
 
     public static String uploadImage(File imageFile) {
         try {
