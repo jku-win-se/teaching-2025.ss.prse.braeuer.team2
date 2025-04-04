@@ -11,33 +11,32 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import jku.se.Login;
-import jku.se.Role;
 import jku.se.Status;
 
 public class LoginController extends Controller {
 
     @FXML private Button btn_login;
-    @FXML private TextField txt_username;
+    @FXML private TextField txt_email;
     @FXML private PasswordField txt_password;
     @FXML private Label lbl_message;
 
     @FXML
     private void btn_loginActionPerformed() throws IOException {
-        String username = txt_username.getText().trim();
+        String email = txt_email.getText().trim();
         String password = txt_password.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showErrorMessage("Bitte Benutzernamen als auch Passwort eingeben!");
+        if (email.isEmpty() || password.isEmpty()) {
+            showErrorMessage("Bitte E-Mail und Passwort eingeben!");
             return;
         }
 
         StringBuilder userRole = new StringBuilder();
         StringBuilder accountStatus = new StringBuilder();
 
-        if (Login.validateLogin(username, password, userRole, accountStatus)) {
+        if (Login.validateLogin(email, password, userRole, accountStatus)) {
             lbl_message.setText("");
 
-            switch (Role.valueOf(userRole.toString().toUpperCase())) {
+            switch (Login.getCurrentUserRole()) {
                 case USER:
                     switchToDashboard("/dashboardUser.fxml");
                     break;
@@ -45,12 +44,11 @@ public class LoginController extends Controller {
                     switchToDashboard("/dashboardAdmin.fxml");
                     break;
             }
-
         } else {
             if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
                 showErrorMessage("Konto nach 10 fehlgeschlagenen Versuchen gesperrt!");
             } else {
-                showErrorMessage("Benutzername oder Passwort falsch!");
+                showErrorMessage("E-Mail oder Passwort falsch!");
             }
         }
     }

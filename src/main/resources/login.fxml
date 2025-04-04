@@ -15,12 +15,12 @@
          </font>
       </Label>
 
-      <Label layoutX="50.0" layoutY="100.0" text="Benutzername:">
+      <Label layoutX="50.0" layoutY="100.0" text="E-Mail:">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="txt_username" layoutX="200.0" layoutY="100.0" promptText="Benutzername">
+      <TextField fx:id="txt_email" layoutX="200.0" layoutY="100.0" promptText="Ihre E-Mail-Adresse">
          <font>
             <Font size="14.0" />
          </font>

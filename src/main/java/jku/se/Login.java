@@ -8,11 +8,16 @@ import java.sql.SQLException;
 public class Login {
     private static final int MAX_FAILED_ATTEMPTS = 10;
 
-    public static boolean validateLogin(String username, String password, StringBuilder userRole, StringBuilder accountStatus) {
+    private static String currentUsername;
+    private static String currentUserEmail;
+    private static Role currentUserRole;
+    private static Status currentUserStatus;
+
+    public static boolean validateLogin(String email, String password, StringBuilder userRole, StringBuilder accountStatus) {
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
             try {
-                AccountData account = findAccount(conn, username);
+                AccountData account = findAccountByEmail(conn, email);
 
                 if (account == null) {
                     conn.commit();
@@ -28,11 +33,16 @@ public class Login {
                 }
 
                 if (password.equals(account.password)) {
-                    resetFailedAttempts(conn, username);
+                    currentUsername = account.username;
+                    currentUserEmail = email;
+                    currentUserRole = Role.valueOf(account.role);
+                    currentUserStatus = account.status;
+
+                    resetFailedAttempts(conn, email);
                     conn.commit();
                     return true;
                 } else {
-                    incrementFailedAttempts(conn, username, account.failedAttempts);
+                    incrementFailedAttempts(conn, email, account.failedAttempts);
                     conn.commit();
                     return false;
                 }
@@ -45,13 +55,15 @@ public class Login {
         }
     }
 
-    private static AccountData findAccount(Connection conn, String username) throws SQLException {
-        String query = "SELECT password, role, status, failed_attempts FROM accounts WHERE email = ?";
+    private static AccountData findAccountByEmail(Connection conn, String email) throws SQLException {
+        String query = "SELECT username, email, password, role, status, failed_attempts FROM accounts WHERE email = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, username);
+            stmt.setString(1, email);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new AccountData(
+                            rs.getString("username"),
+                            rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("role"),
                             Status.valueOf(rs.getString("status")),
@@ -63,10 +75,34 @@ public class Login {
         return null;
     }
 
+    public static String getCurrentUsername() {
+        return currentUsername;
+    }
+
+    public static String getCurrentUserEmail() {
+        return currentUserEmail;
+    }
+
+    public static Role getCurrentUserRole() {
+        return currentUserRole;
+    }
+
+    public static Status getCurrentUserStatus() {
+        return currentUserStatus;
+    }
+
+    public static void logout() {
+        currentUsername = null;
+        currentUserEmail = null;
+        currentUserRole = null;
+        currentUserStatus = null;
+    }
+
     private static void resetFailedAttempts(Connection conn, String email) throws SQLException {
         updateAccountStatus(conn, email, "SET failed_attempts = 0, status = 'ACTIVE'::account_status");
     }
 
+    //Chat GPT Anfang
     private static void incrementFailedAttempts(Connection conn, String email, int currentAttempts) throws SQLException {
         String action = currentAttempts + 1 >= MAX_FAILED_ATTEMPTS
                 ? "SET failed_attempts = failed_attempts + 1, status = 'BLOCKED'::account_status"
@@ -81,14 +117,19 @@ public class Login {
             stmt.executeUpdate();
         }
     }
+    //Chat GPT Ende
 
     private static class AccountData {
+        final String username;
+        final String email;
         final String password;
         final String role;
         final Status status;
         final int failedAttempts;
 
-        AccountData(String password, String role, Status status, int failedAttempts) {
+        AccountData(String username, String email, String password, String role, Status status, int failedAttempts) {
+            this.username = username;
+            this.email = email;
             this.password = password;
             this.role = role;
             this.status = status;
