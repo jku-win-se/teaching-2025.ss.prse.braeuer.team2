@@ -210,20 +210,20 @@ public class Database {
         }).start(); //starts the background thread
     }
 
-    //deletes an image from the supabase-storage
+    //deletes an image from the supabase-storage (AI)
     public static boolean deleteImage(String imageUrl) {
         try {
-            // Extrahiere den Dateinamen aus der URL
+            // Extracts file-name from url
             URI uri = new URI(imageUrl);
             String fileName = uri.getPath().substring(uri.getPath().lastIndexOf('/') + 1);
             String deleteUrl = SUPABASE_URL + "/storage/v1/object/" + SUPABASE_BUCKET + "/" + fileName;
 
-            // Verbindung für DELETE-Anfrage herstellen
+            //Connect to the database
             HttpURLConnection conn = (HttpURLConnection) new URL(deleteUrl).openConnection();
             conn.setRequestMethod("DELETE");
             conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_API_KEY);
 
-            // Antwort prüfen
+            // checks response
             int responseCode = conn.getResponseCode();
             if (responseCode == 200 || responseCode == 204) { // Erfolgreich gelöscht
                 System.out.println("Bild erfolgreich gelöscht: " + fileName);
@@ -231,7 +231,7 @@ public class Database {
             } else {
                 System.out.println("Löschen fehlgeschlagen: HTTP " + responseCode);
 
-                // Fehlerdetails abrufen
+                //Error-details
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
                     String inputLine;
                     StringBuilder response = new StringBuilder();
@@ -247,7 +247,7 @@ public class Database {
         return false;
     }
 
-    //method to delete a specific invoice from the database
+    //method to delete a specific invoice from the database and deletes the image from the storage (AI)
     public static boolean deleteInvoice(Connection connection, String username, LocalDate date) {
         // First, fetch the image URL associated with the invoice record
         String imageUrl = null;
