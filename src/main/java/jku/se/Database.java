@@ -27,6 +27,16 @@ public class Database {
         return DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
     }
 
+    public static void closeConnection(Connection conn) {
+        if (conn != null) {
+            try {
+                conn.close();  // Verbindung schließen
+            } catch (SQLException e) {
+                System.out.println("Fehler beim Schließen der Verbindung: " + e.getMessage());
+            }
+        }
+    }
+
     // uploads the image/pdf of the invoice to the supabase-storage and generates a link to it(AI)
     public static String uploadImage(File imageFile) {
         try {
