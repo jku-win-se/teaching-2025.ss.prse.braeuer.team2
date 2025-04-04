@@ -33,8 +33,6 @@ public class Database {
         }
     }
 
-
-
     public static String uploadImage(File imageFile) {
         try {
             // 🔹 1. Eindeutigen Dateinamen generieren

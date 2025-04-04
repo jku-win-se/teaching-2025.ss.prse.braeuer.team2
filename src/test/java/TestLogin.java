@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -109,10 +110,10 @@ public class TestLogin {
 
     @Test
     public void testAccountLockAfterMaxAttempts() throws SQLException {
-        // Benutzer mit 9 fehlgeschlagenen Versuchen setzen
+        // Setup
         try (Connection conn = Database.getConnection()) {
-            String setupQuery = "UPDATE accounts SET failed_attempts = 9, status = 'ACTIVE'::account_status WHERE email = ?";
-            try (PreparedStatement stmt = conn.prepareStatement(setupQuery)) {
+            String setupSql = "UPDATE accounts SET failed_attempts = 9, status = 'ACTIVE'::account_status WHERE email = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(setupSql)) {
                 stmt.setString(1, "almostblocked@test.com");
                 stmt.executeUpdate();
             }
@@ -120,11 +121,102 @@ public class TestLogin {
 
         StringBuilder userRole = new StringBuilder();
         StringBuilder accountStatus = new StringBuilder();
-
-        // 10. fehlgeschlagener Versuch
         boolean result = Login.validateLogin("almostblocked@test.com", INVALID_PASSWORD, userRole, accountStatus);
 
         assertFalse(result, "Login sollte fehlschlagen");
-        assertEquals(Status.BLOCKED.name(), accountStatus.toString());
+
+        // NEU: Direkte Überprüfung in der Datenbank
+        try (Connection conn = Database.getConnection()) {
+            String checkSql = "SELECT status FROM accounts WHERE email = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(checkSql)) {
+                stmt.setString(1, "almostblocked@test.com");
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        assertEquals("BLOCKED", rs.getString("status"),
+                                "Konto sollte nach 10 Versuchen gesperrt sein");
+                    } else {
+                        fail("Account nicht gefunden");
+                    }
+                }
+            }
+        }
     }
+
+    @Test
+    public void testNineFailedAttempts() throws SQLException {
+        // Setup: Setze failed_attempts = 8
+        try (Connection conn = Database.getConnection()) {
+            String setupSql = "UPDATE accounts SET failed_attempts = 8, status = 'ACTIVE'::account_status WHERE email = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(setupSql)) {
+                stmt.setString(1, "almostblocked@test.com");
+                stmt.executeUpdate();
+            }
+        }
+
+        StringBuilder userRole = new StringBuilder();
+        StringBuilder accountStatus = new StringBuilder();
+        boolean result = Login.validateLogin("almostblocked@test.com", INVALID_PASSWORD, userRole, accountStatus);
+
+        assertFalse(result, "Login sollte fehlschlagen");
+        assertEquals(Status.ACTIVE.name(), accountStatus.toString(), "Konto sollte nach 9 Versuchen noch nicht gesperrt sein");
+    }
+
+    @Test
+    public void testSuccessfulLoginAfterFailedAttempts() throws SQLException {
+        // Setup: Setze failed_attempts = 3
+        try (Connection conn = Database.getConnection()) {
+            String setupSql = "UPDATE accounts SET failed_attempts = 3, status = 'ACTIVE'::account_status WHERE email = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(setupSql)) {
+                stmt.setString(1, USER_EMAIL);
+                stmt.executeUpdate();
+            }
+        }
+
+        StringBuilder userRole = new StringBuilder();
+        StringBuilder accountStatus = new StringBuilder();
+        boolean result = Login.validateLogin(USER_EMAIL, USER_PASSWORD, userRole, accountStatus);
+
+        assertTrue(result, "Login sollte erfolgreich sein");
+        assertEquals(0, getFailedAttempts(USER_EMAIL), "Failed attempts sollten zurückgesetzt werden");
+    }
+
+    private int getFailedAttempts(String email) throws SQLException {
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT failed_attempts FROM accounts WHERE email = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, email);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    return rs.next() ? rs.getInt("failed_attempts") : -1;
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testSqlInjectionAttempt() {
+        String maliciousInput = "admin@test.com' OR '1'='1'; --";
+
+        StringBuilder userRole = new StringBuilder();
+        StringBuilder accountStatus = new StringBuilder();
+        boolean result = Login.validateLogin(maliciousInput, "anypassword", userRole, accountStatus);
+
+        assertFalse(result, "SQL-Injection sollte nicht möglich sein");
+        assertTrue(userRole.toString().isEmpty(), "Bei SQL-Injection sollte keine Rolle zurückgegeben werden");
+    }
+
+    @Test
+    public void testEmptyCredentials() {
+        StringBuilder userRole = new StringBuilder();
+        StringBuilder accountStatus = new StringBuilder();
+
+        boolean result1 = Login.validateLogin("", "password", userRole, accountStatus);
+        boolean result2 = Login.validateLogin("user@test.com", "", userRole, accountStatus);
+        boolean result3 = Login.validateLogin("", "", userRole, accountStatus);
+
+        assertFalse(result1, "Leerer Benutzername sollte fehlschlagen");
+        assertFalse(result2, "Leeres Passwort sollte fehlschlagen");
+        assertFalse(result3, "Leere Credentials sollten fehlschlagen");
+    }
+
+
 }

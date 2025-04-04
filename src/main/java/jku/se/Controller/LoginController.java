@@ -27,7 +27,7 @@ public class LoginController extends Controller {
         String password = txt_password.getText();
 
         if (username.isEmpty() || password.isEmpty()) {
-            showErrorMessage("Bitte geben Sie sowohl Benutzernamen als auch Passwort ein!");
+            showErrorMessage("Bitte Benutzernamen als auch Passwort eingeben!");
             return;
         }
 
@@ -37,11 +37,6 @@ public class LoginController extends Controller {
         if (Login.validateLogin(username, password, userRole, accountStatus)) {
             lbl_message.setText("");
 
-            if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
-                showErrorMessage("Ihr Konto wurde gesperrt. Bitte kontaktieren Sie den Administrator.");
-                return;
-            }
-
             switch (Role.valueOf(userRole.toString().toUpperCase())) {
                 case USER:
                     switchToDashboard("/dashboardUser.fxml");
@@ -49,13 +44,11 @@ public class LoginController extends Controller {
                 case ADMIN:
                     switchToDashboard("/dashboardAdmin.fxml");
                     break;
-                default:
-                    showErrorMessage("Unbekannte Rolle!");
-                    break;
             }
+
         } else {
             if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
-                showErrorMessage("Ihr Konto wurde nach 10 fehlgeschlagenen Versuchen gesperrt.");
+                showErrorMessage("Konto nach 10 fehlgeschlagenen Versuchen gesperrt!");
             } else {
                 showErrorMessage("Benutzername oder Passwort falsch!");
             }
