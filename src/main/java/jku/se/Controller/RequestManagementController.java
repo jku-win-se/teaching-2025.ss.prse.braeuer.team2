@@ -23,21 +23,9 @@ public class RequestManagementController extends Controller {
     }
 
     private void loadAndDisplayInvoices() throws SQLException {
-        String[] filters = FilterPanelController.getFilter();
+        String[] filters = FilterPanelAdminController.getFilter();
         ResultSet resultSet = invoiceService.getFilteredInvoices(filters);
         displayResults(resultSet);
-    }
-    @FXML
-    private void showCurrentMonthInvoices() {
-        try {
-            String[] filters = new String[5];
-            filters[4] = "current_month"; // Date filter in position 4
-
-            ResultSet resultSet = invoiceService.getFilteredInvoices(filters);
-            displayResults(resultSet);
-        } catch (SQLException e) {
-            showAlert("Database Error", "Failed to load current month invoices: " + e.getMessage());
-        }
     }
 
     private void displayResults(ResultSet rs) throws SQLException {
@@ -62,7 +50,7 @@ public class RequestManagementController extends Controller {
         invoiceLink.setOnAction(event -> invoiceService.openInvoiceLink(image));
 
         gridInvoices.add(invoiceLink, 0, row);
-        gridInvoices.add(new Label(String.valueOf(rs.getDouble("betrag"))), 1, row);
+        gridInvoices.add(new Label(String.format("%.2f €", rs.getDouble("betrag"))), 1, row);
         gridInvoices.add(new Label(rs.getString("typ")), 2, row);
         gridInvoices.add(new Label(rs.getString("datum")), 3, row);
         gridInvoices.add(new Label(rs.getString("username")), 4, row);
@@ -81,17 +69,17 @@ public class RequestManagementController extends Controller {
 
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
-        FilterPanelController.clearFilters();
+        FilterPanelAdminController.clearFilters();
         switchScene(event, "adminPanel.fxml");
     }
 
     @FXML
     private void openFilter(javafx.event.ActionEvent event) throws IOException {
-        switchScene(event, "filterPanel.fxml");
+        switchScene(event, "filterPanelAdmin.fxml");
     }
 
     private void handleEditInvoice(int invoiceId) throws IOException {
-        // Bearbeitungslogik hier implementieren
+        /// @Nico
     }
 
     private void showAlert(String title, String message) {
@@ -102,4 +90,3 @@ public class RequestManagementController extends Controller {
         alert.showAndWait();
     }
 }
-

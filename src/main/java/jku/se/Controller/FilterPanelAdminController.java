@@ -6,7 +6,7 @@ import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
 import java.io.IOException;
 
-public class FilterPanelController extends Controller {
+public class FilterPanelAdminController extends Controller {
 
     @FXML private CheckBox checkboxRechnungsID;
     @FXML private TextField textfieldRechnungsID;

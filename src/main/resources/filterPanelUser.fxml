@@ -7,7 +7,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #f4f4f4;"
             xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jku.se.Controller.FilterPanelController">
+            fx:controller="jku.se.Controller.FilterPanelUserController">
 
     <VBox alignment="TOP_LEFT" spacing="10" layoutX="15.0" layoutY="15.0">
         <!-- Titel -->
@@ -23,12 +23,6 @@
         <HBox spacing="10" alignment="CENTER_LEFT">
             <CheckBox fx:id="checkboxTyp" text="Typ" minWidth="100"/>
             <ComboBox fx:id="comboBoxTyp" prefWidth="150.0"/>
-        </HBox>
-
-        <!-- Benutzer Filter -->
-        <HBox spacing="10" alignment="CENTER_LEFT">
-            <CheckBox fx:id="checkboxBenutzer" text="Benutzer" minWidth="100"/>
-            <TextField fx:id="textfieldBenutzer" prefWidth="150.0"/>
         </HBox>
 
         <!-- Status Filter -->

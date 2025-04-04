@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #f4f4f4;"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jku.se.Controller.FilterPanelAdminController">
+
+    <VBox alignment="TOP_LEFT" spacing="10" layoutX="15.0" layoutY="15.0">
+        <!-- Titel -->
+        <Label text="Rechnungen filtern:" style="-fx-font-weight: bold; -fx-padding: 0 0 5 0;"/>
+
+        <!-- Rechnungs-ID Filter -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxRechnungsID" text="Rechnungs-ID" minWidth="100"/>
+            <TextField fx:id="textfieldRechnungsID" prefWidth="150.0"/>
+        </HBox>
+
+        <!-- Typ Filter -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxTyp" text="Typ" minWidth="100"/>
+            <ComboBox fx:id="comboBoxTyp" prefWidth="150.0"/>
+        </HBox>
+
+        <!-- Benutzer Filter -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxBenutzer" text="Benutzer" minWidth="100"/>
+            <TextField fx:id="textfieldBenutzer" prefWidth="150.0"/>
+        </HBox>
+
+        <!-- Status Filter -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxStatus" text="Status" minWidth="100"/>
+            <ComboBox fx:id="comboBoxStatus" prefWidth="150.0"/>
+        </HBox>
+
+        <!-- Aktueller Monat Filter -->
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxCurrentMonth" text="Aktueller Monat" minWidth="100"/>
+        </HBox>
+
+        <!-- Filter Button -->
+        <Button onAction="#applyFilters" text="Filter anwenden" HBox.hgrow="ALWAYS">
+            <padding>
+                <Insets top="5" right="10" bottom="5" left="10"/>
+            </padding>
+        </Button>
+    </VBox>
+</AnchorPane>

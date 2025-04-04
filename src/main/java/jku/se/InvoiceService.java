@@ -43,6 +43,9 @@ public class InvoiceService {
                     "AND EXTRACT(MONTH FROM datum) = EXTRACT(MONTH FROM CURRENT_DATE)";
         }
 
+        // Always add ORDER BY id DESC at the end
+        query += " ORDER BY id DESC";
+
         return query;
     }
 
