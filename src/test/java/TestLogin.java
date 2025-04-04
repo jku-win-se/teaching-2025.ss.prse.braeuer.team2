@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestLogin {
+public class TestLogin { //Tests mit AI erstellt
     private static final String ADMIN_EMAIL = "a@";
     private static final String USER_EMAIL = "u@";
     private static final String ADMIN_PASSWORD = "a";
