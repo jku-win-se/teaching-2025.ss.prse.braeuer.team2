@@ -44,7 +44,6 @@
 
     <!-- Rechnung einreichen Button -->
     <Button fx:id="tile_submit" layoutX="231.0" layoutY="119.0" mnemonicParsing="false" onAction="#openSubmitBill" prefHeight="100.0" prefWidth="239.0" style="-fx-background-color: #3498DB;             -fx-text-fill: white; -fx-font-size: 16px;             -fx-border-radius: 5px; -fx-padding: 10px;" text="➕ Rechnung einreichen" />
-    <Button fx:id="messages" layoutX="14.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleMessageButtonClick" text="🔔" />
     <ListView fx:id="messagePopUp" layoutX="14.0" layoutY="64.0" prefHeight="320.0" prefWidth="474.0" style="-fx-background-color: #3498DB; -fx-padding: 10px; -fx-border-radius: 5px;" visible="false">
         <Label fx:id="messageLabel" style="-fx-text-fill: white;" text=" " />
     </ListView>
