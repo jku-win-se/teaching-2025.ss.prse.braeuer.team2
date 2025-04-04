@@ -10,60 +10,58 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import jku.se.Login;
-import jku.se.Role;
-import jku.se.Status;
 
-public class LoginController extends Controller {
+public class LoginController extends Controller{
+    @FXML
+    private Button btn_login;
 
-    @FXML private Button btn_login;
-    @FXML private TextField txt_username;
-    @FXML private PasswordField txt_password;
-    @FXML private Label lbl_message;
+    @FXML
+    private TextField txt_username;
+
+    @FXML
+    private PasswordField txt_password;
+
+    @FXML
+    private Label lbl_message;
 
     @FXML
     private void btn_loginActionPerformed() throws IOException {
-        String username = txt_username.getText().trim();
+        String username = txt_username.getText();
         String password = txt_password.getText();
 
-        if (username.isEmpty() || password.isEmpty()) {
-            showErrorMessage("Bitte Benutzernamen als auch Passwort eingeben!");
-            return;
-        }
-
-        StringBuilder userRole = new StringBuilder();
-        StringBuilder accountStatus = new StringBuilder();
-
-        if (Login.validateLogin(username, password, userRole, accountStatus)) {
+        if (username.equals("user@gmail.com") && password.equals("user")) {
             lbl_message.setText("");
-
-            switch (Role.valueOf(userRole.toString().toUpperCase())) {
-                case USER:
-                    switchToDashboard("/dashboardUser.fxml");
-                    break;
-                case ADMIN:
-                    switchToDashboard("/dashboardAdmin.fxml");
-                    break;
-            }
-
+            switchToDashboardUser();
+        } else if (username.equals("admin@gmail.com") && password.equals("admin")) {
+            lbl_message.setText("");
+            switchToDashboardAdmin();
+        } else if (username.equals("") && password.equals("")) {
+            lbl_message.setText("");
+            switchToDashboardAdmin();
         } else {
-            if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
-                showErrorMessage("Konto nach 10 fehlgeschlagenen Versuchen gesperrt!");
-            } else {
-                showErrorMessage("Benutzername oder Passwort falsch!");
-            }
+            lbl_message.setText("Benutzername oder Passwort falsch!");
+            lbl_message.setStyle("-fx-text-fill: red;");
         }
     }
 
-    private void switchToDashboard(String fxmlPath) throws IOException {
-        URL fxmlLocation = getClass().getResource(fxmlPath);
+    private void switchToDashboardUser() throws IOException {
+        URL fxmlLocation = getClass().getResource("/dashboardUser.fxml");
+
+        System.out.println("FXML-Pfad: " + fxmlLocation);
+
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
+        Scene scene = new Scene(fxmlLoader.load());
         Stage stage = (Stage) btn_login.getScene().getWindow();
-        stage.setScene(new Scene(fxmlLoader.load()));
+        stage.setScene(scene);
     }
 
-    private void showErrorMessage(String message) {
-        lbl_message.setText(message);
-        lbl_message.setStyle("-fx-text-fill: red;");
+    private void switchToDashboardAdmin() throws IOException {
+        URL fxmlLocation = getClass().getResource("/dashboardAdmin.fxml");
+        System.out.println("FXML-Pfad: " + fxmlLocation);
+
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
+        Scene scene = new Scene(fxmlLoader.load());
+        Stage stage = (Stage) btn_login.getScene().getWindow();
+        stage.setScene(scene);
     }
 }

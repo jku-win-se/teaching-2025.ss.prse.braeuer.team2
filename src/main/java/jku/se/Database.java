@@ -22,17 +22,6 @@ public class Database {
         return DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
     }
 
-    // Methode zum Schließen der Datenbankverbindung
-    public static void closeConnection(Connection conn) {
-        if (conn != null) {
-            try {
-                conn.close();  // Verbindung schließen
-            } catch (SQLException e) {
-                System.out.println("Fehler beim Schließen der Verbindung: " + e.getMessage());
-            }
-        }
-    }
-
     public static String uploadImage(File imageFile) {
         try {
             // 🔹 1. Eindeutigen Dateinamen generieren
