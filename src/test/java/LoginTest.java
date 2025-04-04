@@ -125,7 +125,6 @@ public class LoginTest { //Tests mit AI erstellt
 
         assertFalse(result, "Login sollte fehlschlagen");
 
-        // NEU: Direkte Überprüfung in der Datenbank
         try (Connection conn = Database.getConnection()) {
             String checkSql = "SELECT status FROM accounts WHERE email = ?";
             try (PreparedStatement stmt = conn.prepareStatement(checkSql)) {

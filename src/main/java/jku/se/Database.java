@@ -211,7 +211,7 @@ public class Database {
                 double refund = invoice.getRefund();
 
                 // Insert invoice into the database
-                Database.uploadInvoice(connection, "user", sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
+                Database.uploadInvoice(connection, Login.getCurrentUsername(), sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
 
             } catch (SQLException e) {
                 System.out.println("Fehler bei der Verbindung zur Datenbank: " + e.getMessage());
