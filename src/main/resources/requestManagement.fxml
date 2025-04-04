@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.RequestManagementController">
-    <Label layoutX="259.0" layoutY="31.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Anträge bearbeiten" />
+   <Label layoutX="259.0" layoutY="31.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Anträge bearbeiten" />
    <Button fx:id="btn_back" layoutX="14.0" layoutY="34.0" onAction="#handleBack" text="⬅ Zurück" />
    <Label layoutX="54.0" layoutY="137.0" prefHeight="17.0" prefWidth="570.0" text="Rechnung 2 .... Rechnungsbetrag: 30,90 ... Rechnungstyp: Restaurant  ... Rückerstattungbetrag: 3,00   User01" />
    <Button layoutX="624.0" layoutY="162.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="37.0" text="Edit" />
