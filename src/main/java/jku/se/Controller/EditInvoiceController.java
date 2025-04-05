@@ -17,6 +17,7 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 import static jku.se.Database.*;
@@ -77,15 +78,25 @@ public class EditInvoiceController extends Controller{
         int id = Integer.parseInt(textfieldRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
         Date datum = Date.valueOf(textfieldDatum.getText());
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText());
+        String typString = textfieldTyp.getText();
         String username = textfieldUsername.getText();
-        InvoiceStatus status = InvoiceStatus.valueOf(textfieldStatus.getText());
+        String statusString = textfieldStatus.getText();
         String image = textfieldImage.getText();
         Double refund = Double.valueOf(textfieldRefund.getText());
 
         // Datum validieren
         if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
             showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd");
+            return;
+        }
+
+        if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
+            showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
+            return;
+        }
+
+        if (!Objects.equals(statusString, "ACCEPTED") && !Objects.equals(statusString, "REJECTED") && !Objects.equals(statusString, "PENDING")) {
+            showAlert("Error", "Please enter 'ACCEPTED', 'REJECTED' or 'PENDING'");
             return;
         }
 
@@ -99,6 +110,8 @@ public class EditInvoiceController extends Controller{
             return; // Update wird abgebrochen
         }
 
+        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
+        InvoiceStatus status = InvoiceStatus.valueOf(textfieldStatus.getText());
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
@@ -114,7 +127,7 @@ public class EditInvoiceController extends Controller{
         int id = Integer.parseInt(textfieldRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
         Date datum = Date.valueOf(textfieldDatum.getText());
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText());
+        String typString= textfieldTyp.getText();
 
         // Datum validieren
         if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
@@ -122,11 +135,16 @@ public class EditInvoiceController extends Controller{
             return;
         }
 
+        if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
+            showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
+            return;
+        }
+
         if (betrag < 0) {//negativer Rechnungsbetrag
             showAlert("Error", "Negative Beträge sind nicht erlaubt!");
             return; // Update wird abgebrochen
         }
-
+        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText());
         String username = getInvoiceUsername(id);
         InvoiceStatus status = InvoiceStatus.valueOf(getInvoiceStatus(id));
         String image = getInvoiceImage(id);
