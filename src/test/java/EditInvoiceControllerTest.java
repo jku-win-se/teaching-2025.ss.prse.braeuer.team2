@@ -1,0 +1,157 @@
+import jku.se.Controller.EditInvoiceController;
+import jku.se.Controller.RequestManagementController;
+import jku.se.Database;
+import jku.se.InvoiceStatus;
+import jku.se.InvoiceType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.sql.*;
+
+import static jku.se.Database.updateInvoice;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class EditInvoiceControllerTest {
+
+    private EditInvoiceController editInvoiceController;
+
+    @BeforeEach
+    public void setUp() {
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false); // Optional, wenn du Transaktionen brauchst
+
+            String query = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    int id = rs.getInt("id");
+                    double betrag = rs.getDouble("betrag");
+                    Date datum = rs.getDate("datum");
+                    String typ = rs.getString("typ");
+                    String username = rs.getString("username");
+                    String status = rs.getString("status");
+                    String image = rs.getString("image");
+
+                    System.out.println("Rechnung: " + id + ", Betrag: " + betrag + ", Datum: " + datum + ", Typ: " + typ + ", Username: " + username + ", Status: " + status);
+                    // Du kannst hier auch eine Liste von Rechnungsobjekten befüllen
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @AfterEach
+    public void resetInvoiceToDefault() throws SQLException {
+        try (Connection conn = Database.getConnection()) {
+            conn.setAutoCommit(false);
+            try {
+                String resetQuery = "UPDATE rechnungen SET betrag = ?, datum = ?, typ = ?, username = ?, status = ?, image = ?, refund = ? WHERE id = ?";
+                try (PreparedStatement stmt = conn.prepareStatement(resetQuery)) {
+                    stmt.setDouble(1, 50.0);
+                    stmt.setDate(2, Date.valueOf("2025-03-12"));
+                    stmt.setObject(3, "SUPERMARKET", Types.OTHER);
+                    stmt.setString(4, "user");
+                    stmt.setObject(5, "ACCEPTED", Types.OTHER);
+                    stmt.setString(6, "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg");
+                    stmt.setDouble(7, 2.5);
+                    stmt.setInt(8, 166);
+                    stmt.executeUpdate();
+                }
+            } catch (SQLException e) {
+                System.out.println("Fehler beim Zurücksetzen: " + e.getMessage());
+            }
+        }
+    }
+
+    @Test
+    public void testUpdateInvoiceAmount() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-11"), InvoiceType.SUPERMARKET, "user", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertTrue(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceAmountInvalid() {
+        boolean success = updateInvoice(-30, Date.valueOf("2025-03-11"), InvoiceType.SUPERMARKET, "user", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertFalse(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceDate() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.SUPERMARKET, "user", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertTrue(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceDateInvalid() {//wenn man versucht dies einzugeben, immer fehlermeldung, kann nur so getestet werden
+        assertThrows(IllegalArgumentException.class, () -> {
+            Date.valueOf("2024-12-33");//soll lediglich zeigen, kommt immer fehlermeldung bei falschem datum
+        });
+    }
+
+    @Test
+    public void testUpdateInvoiceType() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertTrue(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceTypeInvalid() {//wenn man versucht dies einzugeben, immer fehlermeldung, kann nur so getestet werden
+                assertThrows(IllegalArgumentException.class, () -> {
+            InvoiceType type = InvoiceType.valueOf("Test");
+        });
+    }
+
+    @Test
+    public void testUpdateInvoiceUser() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertTrue(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceUserInvalid() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "asdf", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertFalse(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceStatus() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.PENDING,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 2.5, 166);
+        assertTrue(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceTypeStatusInvalid() {//wenn man versucht dies einzugeben, immer fehlermeldung, kann nur so getestet werden
+        assertThrows(IllegalArgumentException.class, () -> {
+            InvoiceStatus state = InvoiceStatus.valueOf("Test");
+        });
+    }
+
+    @Test
+    public void testUpdateInvoiceRefund() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.ACCEPTED,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 3.0, 166);
+        assertTrue(success, String.valueOf(true));
+    }
+
+    @Test
+    public void testUpdateInvoiceRefundInvalid() {
+        boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.PENDING,
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 5, 166);
+        assertFalse(success, String.valueOf(true));
+    }
+
+}

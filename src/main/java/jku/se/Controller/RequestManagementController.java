@@ -1,12 +1,19 @@
 package jku.se.Controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import jku.se.Database;
 import jku.se.InvoiceService;
+import jku.se.InvoiceStatus;
+import jku.se.InvoiceType;
+
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class RequestManagementController extends Controller {
 
@@ -79,10 +86,23 @@ public class RequestManagementController extends Controller {
     }
 
     private void handleEditInvoice(int invoiceId) throws IOException {
-        /// @Nico
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/editInvoice.fxml")); // Pfad zur FXML-Datei
+        AnchorPane editPane = loader.load();
+
+        // Holen Sie sich den EditInvoiceController
+        EditInvoiceController controller = loader.getController();
+
+        // Übergabe der Rechnungs-ID an den Controller, damit dieser die Daten laden kann
+        controller.loadInvoiceDetails(invoiceId);
+
+        // Wechsel zu der Edit-Ansicht (ersetze dies mit deinem Szenenwechsel-Mechanismus)
+        Stage stage = (Stage) gridInvoices.getScene().getWindow(); // Hole das aktuelle Fenster (falls du mit einer Stage arbeitest)
+        Scene scene = new Scene(editPane);
+        stage.setScene(scene);
+        stage.show();
     }
 
-    private void showAlert(String title, String message) {
+    private static void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
         alert.setHeaderText(null);
