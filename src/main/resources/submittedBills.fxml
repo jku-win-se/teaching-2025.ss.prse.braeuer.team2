@@ -21,7 +21,7 @@
             <Label style="-fx-font-weight: bold;" text="Typ" GridPane.columnIndex="2" GridPane.rowIndex="0" />
             <Label style="-fx-font-weight: bold;" text="Datum" GridPane.columnIndex="3" GridPane.rowIndex="0" />
             <Label style="-fx-font-weight: bold;" text="Status" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <Label prefHeight="17.0" prefWidth="60.0" style="-fx-font-weight: bold;" text="Aktion" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="60.0" style="-fx-font-weight: bold;" text="Aktion"  GridPane.columnIndex="5" GridPane.rowIndex="0" />
 
             <!-- Spaltenanpassungen -->
             <columnConstraints>
