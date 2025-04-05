@@ -16,19 +16,19 @@
     <!-- Kacheln für wichtige Aktionen -->
     <HBox layoutX="170.0" layoutY="200.0" spacing="15" />
     <VBox layoutX="14.0" layoutY="119.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;     -fx-border-color: #BDC3C7;     -fx-padding: 10px;">
-        <Label style="-fx-font-size: 24;" text="📑 12" />
+        <Label fx:id="labelEingereichteRechnungen" style="-fx-font-size: 24;" text="📑 12" />
         <Label text="Eingereichte Rechnungen" />
     </VBox>
     <VBox layoutX="517.0" layoutY="119.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;     -fx-border-color: #BDC3C7;     -fx-padding: 10px;">
-        <Label style="-fx-font-size: 24;" text="✅ 8" />
+        <Label fx:id="labelGenehmigteRechnungen" style="-fx-font-size: 24;" text="✅ 8" />
         <Label text="Genehmigte Erstattungen" />
     </VBox>
     <VBox layoutX="517.0" layoutY="271.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1; -fx-border-color: #BDC3C7; -fx-padding: 10px;">
-        <Label style="-fx-font-size: 24;" text="⏳ 4" />
+        <Label fx:id="labelOffeneRechnungen" style="-fx-font-size: 24;" text="⏳ 4" />
         <Label text="Offene Erstattungen" />
     </VBox>
     <VBox layoutX="14.0" layoutY="271.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1; -fx-border-color: #BDC3C7; -fx-padding: 10px;">
-        <Label style="-fx-font-size: 24;" text="💶 134,50€" />
+        <Label fx:id="labelSumme" style="-fx-font-size: 24;" text="💶 134,50€" />
         <Label text="Gesamterstattungen" />
     </VBox>
     <Button fx:id="btn_logout" layoutX="608.0" layoutY="30.0" mnemonicParsing="false" onAction="#handleLogout" text="⍈ Logout">
