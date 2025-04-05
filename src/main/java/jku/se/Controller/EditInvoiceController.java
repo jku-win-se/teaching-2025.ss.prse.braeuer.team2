@@ -180,7 +180,7 @@ public class EditInvoiceController extends Controller{
         alert.showAndWait();
     }
 
-    public void setInvoice(int id, double amount, String typ, String date, String user) {
+    public void setInvoice(int id, double amount, String typ, String date, String user) { //Vorausfüllung von fxml daten benötigt
         this.invoiceId = id;
         this.amount = amount;
         this.typ = typ;
