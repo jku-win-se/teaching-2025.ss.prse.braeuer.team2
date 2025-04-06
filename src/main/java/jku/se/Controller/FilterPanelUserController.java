@@ -24,7 +24,6 @@ public class FilterPanelUserController extends Controller {
 
     @FXML
     public void initialize() {
-        // Initialize combo boxes
         if (comboBoxTyp != null) {
             comboBoxTyp.getItems().addAll(
                     InvoiceType.SUPERMARKET.name(),
@@ -42,7 +41,7 @@ public class FilterPanelUserController extends Controller {
     }
 
     public static String[] getFilter() {
-        return activeFilters != null ? activeFilters.clone() : new String[5];
+        return activeFilters.clone();
     }
 
     public static void clearFilters() {
@@ -51,14 +50,6 @@ public class FilterPanelUserController extends Controller {
 
     @FXML
     private void applyFilters(javafx.event.ActionEvent event) throws IOException {
-        // Null checks for all UI components
-        if (checkboxRechnungsID == null || textfieldRechnungsID == null ||
-                checkboxTyp == null || comboBoxTyp == null ||
-                checkboxStatus == null || comboBoxStatus == null ||
-                checkboxCurrentMonth == null) {
-            return;
-        }
-
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
         activeFilters[2] = Login.getCurrentUsername(); // Always filter by current user
@@ -69,23 +60,23 @@ public class FilterPanelUserController extends Controller {
     }
 
     private String getStatusFilterValue() {
-        return checkboxStatus.isSelected() && comboBoxStatus.getValue() != null
-                ? comboBoxStatus.getValue() : null;
+        if (!checkboxStatus.isSelected() || comboBoxStatus.getValue() == null) {
+            return null;
+        }
+        return comboBoxStatus.getValue();
     }
 
     private String getTypFilterValue() {
-        return checkboxTyp.isSelected() && comboBoxTyp.getValue() != null
-                ? comboBoxTyp.getValue() : null;
+        if (!checkboxTyp.isSelected() || comboBoxTyp.getValue() == null) {
+            return null;
+        }
+        return comboBoxTyp.getValue();
     }
 
     private String getFilterValue(CheckBox checkbox, TextField textField) {
-        return checkbox.isSelected() && !textField.getText().isEmpty()
-                ? textField.getText() : null;
-    }
-
-    @FXML
-    private void handleBack(javafx.event.ActionEvent event) throws IOException {
-        clearFilters();
-        switchScene(event, "submittedBills.fxml");
+        if (!checkbox.isSelected() || textField.getText().isEmpty()) {
+            return null;
+        }
+        return textField.getText();
     }
 }

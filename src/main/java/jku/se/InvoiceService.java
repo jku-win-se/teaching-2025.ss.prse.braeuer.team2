@@ -2,6 +2,8 @@ package jku.se;
 
 import java.io.IOException;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class InvoiceService {
 
@@ -13,59 +15,44 @@ public class InvoiceService {
         return stmt.executeQuery();
     }
 
+    // Deepseek Anfang
     private String buildQuery(String[] filters) {
-        String query = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
-        boolean hasWhere = false;
+        final String BASE_QUERY = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
+        StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
+        List<String> whereConditions = new ArrayList<>();
 
-        if (notEmpty(filters[0])) {
-            query += " WHERE id = ?";
-            hasWhere = true;
+        // Filterbedingungen sammeln
+        if (notEmpty(filters[0])) whereConditions.add("id = ?");
+        if (notEmpty(filters[1])) whereConditions.add("typ::text LIKE ?");
+        if (notEmpty(filters[2])) whereConditions.add("username LIKE ?");
+        if (notEmpty(filters[3])) whereConditions.add("status::text = ?");
+        if (notEmpty(filters[4])) whereConditions.add("""
+            EXTRACT(YEAR FROM datum) = EXTRACT(YEAR FROM CURRENT_DATE)
+            AND EXTRACT(MONTH FROM datum) = EXTRACT(MONTH FROM CURRENT_DATE)
+            """);
+
+        // WHERE-Klausel nur hinzufügen wenn mindestens eine Bedingung existiert
+        if (!whereConditions.isEmpty()) {
+            queryBuilder.append(" WHERE ")
+                    .append(String.join(" AND ", whereConditions));
         }
 
-        if (notEmpty(filters[1])) {
-            query += hasWhere ? " AND typ::text LIKE ?" : " WHERE typ::text LIKE ?";
-            hasWhere = true;
-        }
+        queryBuilder.append(" ORDER BY id DESC");
 
-        if (notEmpty(filters[2])) {
-            query += hasWhere ? " AND username LIKE ?" : " WHERE username LIKE ?";
-            hasWhere = true;
-        }
-
-        if (notEmpty(filters[3])) {
-            query += hasWhere ? " AND status::text = ?" : " WHERE status::text = ?";
-            hasWhere = true;
-        }
-
-        if (notEmpty(filters[4])) {
-            query += hasWhere ? " AND " : " WHERE ";
-            query += "EXTRACT(YEAR FROM datum) = EXTRACT(YEAR FROM CURRENT_DATE) " +
-                    "AND EXTRACT(MONTH FROM datum) = EXTRACT(MONTH FROM CURRENT_DATE)";
-        }
-
-        // Always add ORDER BY id DESC at the end
-        query += " ORDER BY id DESC";
-
-        return query;
+        return queryBuilder.toString();
     }
+    // Deepseek Ende
 
     private void setParameters(PreparedStatement stmt, String[] filters) throws SQLException {
         int paramIndex = 1;
 
-        if (notEmpty(filters[0])) {
-            stmt.setInt(paramIndex++, Integer.parseInt(filters[0]));
-        }
-        if (notEmpty(filters[1])) {
-            stmt.setString(paramIndex++, "%" + filters[1] + "%");
-        }
-        if (notEmpty(filters[2])) {
-            stmt.setString(paramIndex++, "%" + filters[2] + "%");
-        }
-        if (notEmpty(filters[3])) {
-            stmt.setString(paramIndex, filters[3]);
-        }
+        if (notEmpty(filters[0])) stmt.setInt(paramIndex++, Integer.parseInt(filters[0]));
+        if (notEmpty(filters[1])) stmt.setString(paramIndex++, "%" + filters[1] + "%");
+        if (notEmpty(filters[2])) stmt.setString(paramIndex++, "%" + filters[2] + "%");
+        if (notEmpty(filters[3])) stmt.setString(paramIndex, filters[3]);
     }
 
+    // Chat GPT Anfang
     public void openInvoiceLink(String link) {
         try {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(link));
@@ -77,4 +64,5 @@ public class InvoiceService {
     private boolean notEmpty(String str) {
         return str != null && !str.isEmpty();
     }
+    // Chat GPT Ende
 }
