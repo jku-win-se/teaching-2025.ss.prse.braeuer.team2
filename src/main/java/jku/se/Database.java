@@ -95,6 +95,125 @@ public class Database {
         return SUPABASE_URL + "/storage/v1/object/public/" + SUPABASE_BUCKET + "/" + filePath;
     }
 
+    public static String getInvoiceUsername(int id) {
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT username FROM rechnungen WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, id);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("username");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getInvoiceStatus(int id) {
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT status FROM rechnungen WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, id);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("status");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getInvoiceImage(int id) {
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT image FROM rechnungen WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, id);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getString("image");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static double getInvoiceRefund(int id) {
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT refund FROM rechnungen WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, id);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getDouble("refund");
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public static boolean updateInvoice(double betrag, Date datum, InvoiceType typ, String username, InvoiceStatus status, String image, double refund, int id){
+        boolean userFound = false;
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT username FROM accounts";
+            try (PreparedStatement stmt = conn.prepareStatement(query);
+                 ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String users = rs.getString("username");
+                        if(username.equals(users)) {
+                        userFound = true; //wenn user gefunden wird
+                    }
+                }
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            if (!userFound) return false; //wenn user nicht in abfrage gefunden wird
+
+            if (typ != InvoiceType.SUPERMARKET && typ != InvoiceType.RESTAURANT){
+                return false;
+            }
+
+            if (betrag < 0) {
+                return false;
+            }
+
+            if(refund != 3.0 && refund != 2.5) {
+                return false;
+            }
+
+            String updateQuery = "UPDATE rechnungen SET betrag = ?, datum = ?, typ = ?, username = ?, status = ?, image = ?, refund = ? WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
+
+                stmt.setDouble(1, betrag);
+                stmt.setDate(2, datum);
+                stmt.setObject(3, typ, Types.OTHER);
+                stmt.setString(4, username);
+                stmt.setObject(5, status, Types.OTHER);
+                stmt.setString(6, image);
+                stmt.setDouble(7, refund);
+                stmt.setInt(8, id);
+                int rows = stmt.executeUpdate();
+                return rows == 1;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
+
     //uploads the invoice data to the table rechnungen (AI)
     public static void uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile, Double refund, SubmitBillController controller) {
         String sqlInsert = "INSERT INTO rechnungen (username, betrag, datum, typ, status, image,refund) VALUES (?, ?, ?, ?, ?, ?,?)";

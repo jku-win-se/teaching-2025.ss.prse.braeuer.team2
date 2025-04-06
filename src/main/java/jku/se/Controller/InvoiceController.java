@@ -2,7 +2,7 @@ package jku.se.Controller;
 
 public class InvoiceController {
     private String filePath;
-    private String status; // Zum Beispiel: "hochgeladen", "fehlgeschlagen", etc.
+    private String status;
     private static String message;
 
     private double amount;
@@ -27,7 +27,6 @@ public class InvoiceController {
         this.amount = amount;
     }
 
-    // Methode zum Abrufen des Betrags
     public double getAmount() {
         return amount;
     }
