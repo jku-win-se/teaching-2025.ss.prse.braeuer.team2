@@ -2,6 +2,6 @@ package jku.se;
 
 public enum InvoiceStatus {
     ACCEPTED,
-    REJECTED,
+    DENIED,
     PENDING,
 }

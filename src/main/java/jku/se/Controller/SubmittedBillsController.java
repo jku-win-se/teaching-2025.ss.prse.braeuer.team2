@@ -1,6 +1,5 @@
 package jku.se.Controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -35,8 +34,8 @@ public class SubmittedBillsController extends Controller {
 
     private void loadUserInvoices() throws SQLException {
         String[] filters = FilterPanelUserController.getFilter();
-        // Ensure we always filter by current user
-        filters[2] = Login.getCurrentUsername();
+
+        filters[2] = Login.getCurrentUsername(); // always filter by current user
 
         ResultSet resultSet = invoiceService.getFilteredInvoices(filters);
         if (resultSet != null) {
@@ -53,14 +52,10 @@ public class SubmittedBillsController extends Controller {
         }
     }
 
-    private void clearGridContent() {
-        gridInvoices.getChildren().removeIf(node ->
-                GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
-    }
-
     private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
         int id = rs.getInt("id");
         double amount = rs.getDouble("betrag");
+        String image = rs.getString("image");
         String type = rs.getString("typ");
         String dateStr = rs.getString("datum");
         String status = rs.getString("status");
@@ -68,20 +63,23 @@ public class SubmittedBillsController extends Controller {
 
         LocalDate invoiceDate = LocalDate.parse(dateStr, dateFormatter);
         LocalDate currentDate = LocalDate.now();
-        boolean isCurrentMonth = invoiceDate.getMonth() == currentDate.getMonth()
-                && invoiceDate.getYear() == currentDate.getYear();
-        boolean showEditButton = isCurrentMonth && !"ACCEPTED".equals(status);
 
-        gridInvoices.add(new Label(String.valueOf(id)), 0, row);
-        gridInvoices.add(new Label(String.format("%.2f €", amount)), 1, row);
-        gridInvoices.add(new Label(type), 2, row);
-        gridInvoices.add(new Label(dateStr), 3, row);
+        Hyperlink invoiceLink = new Hyperlink("Rechnung " + id);
+        invoiceLink.setOnAction(event -> invoiceService.openInvoiceLink(image));
 
+        gridInvoices.add(invoiceLink, 0, row);
+        gridInvoices.add(new Label(String.format("%.2f €", rs.getDouble("betrag"))), 1, row);
+        gridInvoices.add(new Label(rs.getString("typ")), 2, row);
+        gridInvoices.add(new Label(rs.getString("datum")), 3, row);
         Label statusLabel = new Label(status);
         statusLabel.setStyle(getStatusStyle(status));
         gridInvoices.add(statusLabel, 4, row);
 
         HBox actionBox = new HBox();
+
+        boolean isCurrentMonth = invoiceDate.getMonth() == currentDate.getMonth() && invoiceDate.getYear() == currentDate.getYear();
+        boolean showEditButton = isCurrentMonth && !"ACCEPTED".equals(status);
+
         if (showEditButton) {
             Button editBtn = new Button("Edit");
             editBtn.setOnAction(event -> {
@@ -104,20 +102,21 @@ public class SubmittedBillsController extends Controller {
         gridInvoices.add(actionBox, 5, row);
     }
 
+    // Deepseek Anfang
+    private void clearGridContent() {
+        gridInvoices.getChildren().removeIf(node ->
+                GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
+    }
+    // Deepseek Ende
+
     private String getStatusStyle(String status) {
         if (status == null) return "";
-        switch (status) {
-            case "PENDING": return "-fx-text-fill: orange;";
-            case "ACCEPTED": return "-fx-text-fill: green;";
-            case "APPROVED": return "-fx-text-fill: darkgreen;";
-            case "REJECTED": return "-fx-text-fill: red;";
-            default: return "";
-        }
-    }
-
-    private void handleEditInvoice(int invoiceId) {
-        // Implementation for editing invoice
-        System.out.println("Editing invoice: " + invoiceId);
+        return switch (status) {
+            case "ACCEPTED" -> "-fx-text-fill: green;";
+            case "PENDING" -> "-fx-text-fill: orange;";
+            case "DENIED" -> "-fx-text-fill: red;";
+            default -> "";
+        };
     }
 
     @FXML

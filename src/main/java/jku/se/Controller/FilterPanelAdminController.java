@@ -26,10 +26,11 @@ public class FilterPanelAdminController extends Controller {
                 InvoiceType.SUPERMARKET.name(),
                 InvoiceType.RESTAURANT.name()
         );
+
         comboBoxStatus.getItems().addAll(
                 InvoiceStatus.ACCEPTED.name(),
                 InvoiceStatus.PENDING.name(),
-                InvoiceStatus.REJECTED.name()
+                InvoiceStatus.DENIED.name()
         );
     }
 
@@ -53,23 +54,23 @@ public class FilterPanelAdminController extends Controller {
     }
 
     private String getStatusFilterValue() {
-        return checkboxStatus.isSelected() && comboBoxStatus.getValue() != null
-                ? comboBoxStatus.getValue() : null;
+        if (checkboxStatus.isSelected() && comboBoxStatus.getValue() != null) {
+            return comboBoxStatus.getValue();
+        }
+        return null;
     }
 
     private String getTypFilterValue() {
-        return checkboxTyp.isSelected() && comboBoxTyp.getValue() != null
-                ? comboBoxTyp.getValue() : null;
+        if (checkboxTyp.isSelected() && comboBoxTyp.getValue() != null) {
+            return comboBoxTyp.getValue();
+        }
+        return null;
     }
 
     private String getFilterValue(CheckBox checkbox, TextField textField) {
-        return checkbox.isSelected() && !textField.getText().isEmpty()
-                ? textField.getText() : null;
-    }
-
-    @FXML
-    private void handleBack(javafx.event.ActionEvent event) throws IOException {
-        clearFilters();
-        switchScene(event, "requestManagement.fxml");
+        if (checkbox.isSelected() && !textField.getText().isEmpty()) {
+            return textField.getText();
+        }
+        return null;
     }
 }
