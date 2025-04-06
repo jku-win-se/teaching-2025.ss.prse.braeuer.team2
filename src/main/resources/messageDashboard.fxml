@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.MessagesController">
+   <Label layoutX="304.0" layoutY="20.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Messages" />
+   <Button fx:id="btn_back" layoutX="14.0" layoutY="59.0" onAction="#goBack" text="⬅ Zurück" />
+
+   <!-- ScrollPane für das dynamische Hinzufügen von Rechnungen -->
+   <ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="350.0" prefWidth="666.0">
+      <GridPane fx:id="gridMessages" hgap="20.0" prefHeight="17.0" prefWidth="654.0" style="-fx-background-color: transparent;" vgap="10.0">
+         <!-- Spaltenüberschriften (erste Zeile) -->
+         <Label style="-fx-font-weight: bold;" text="NachrichtenId" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+         <Label prefHeight="17.0" prefWidth="83.0" style="-fx-font-weight: bold;" text="RechnungsId" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+         <Label prefHeight="17.0" prefWidth="34.0" style="-fx-font-weight: bold;" text="Text" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+         <Label prefHeight="17.0" prefWidth="211.0" style="-fx-font-weight: bold;" text="Änderungszeitpunkt" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+         <!-- Spaltenanpassungen -->
+         <columnConstraints>
+            <ColumnConstraints percentWidth="17.0" />
+            <ColumnConstraints percentWidth="14.0" />
+            <ColumnConstraints percentWidth="50.0" />
+            <ColumnConstraints percentWidth="20.0" />
+         </columnConstraints>
+
+         <!-- Zeilenanpassungen (für die Daten) -->
+         <rowConstraints>
+            <RowConstraints vgrow="ALWAYS" />
+         </rowConstraints>
+      </GridPane>
+   </ScrollPane>
+</AnchorPane>
