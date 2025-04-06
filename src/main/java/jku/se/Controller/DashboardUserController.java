@@ -5,14 +5,17 @@ import java.sql.SQLException;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-
 import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Login.getCurrentUsername;
+import javafx.scene.control.Label;
+import jku.se.DashboardUser;
+
 
 public class DashboardUserController extends Controller {
 
@@ -20,6 +23,17 @@ public class DashboardUserController extends Controller {
     private Button messages; // Der Button, der die Nachrichten öffnet
 
     private final MessagesController messageController = new MessagesController(); // Dein Service für Nachrichten
+  
+    private Label labelEingereichteRechnungen;
+  
+    @FXML
+    private Label labelGenehmigteRechnungen;
+
+    @FXML
+    private Label labelOffeneRechnungen;
+
+    @FXML
+    private Label labelSumme;
 
     public DashboardUserController() throws SQLException {
     }
@@ -55,16 +69,7 @@ public class DashboardUserController extends Controller {
         }
     }
 
-    @FXML
-    public void initialize() {
-        try {
-            checkForNewMessages();
-        } catch (SQLException e) {
-            showAlert("Database Error", "Failed to check for new messages: " + e.getMessage());
-        }
-    }
-
-    // Diese Methode prüft, ob neue Nachrichten vorhanden sind
+       // Diese Methode prüft, ob neue Nachrichten vorhanden sind
     public void checkForNewMessages() throws SQLException {
         String username = getCurrentUsername(); // Holen des aktuellen Benutzernamens
         boolean hasNewMessages = messageController.hasNewMessages(username);
@@ -75,6 +80,28 @@ public class DashboardUserController extends Controller {
         } else {
             // Setze den Button auf die normale Farbe zurück, wenn keine neuen Nachrichten vorhanden sind
             messages.setStyle("-fx-background-color: lightgray;");
+        }
+    }
+
+    @FXML
+    public void initialize() {
+        try {
+            int anzahl = DashboardUser.getEingereichteRechnungen(); // Methode wie oben
+            labelEingereichteRechnungen.setText("📑 " + anzahl);
+            int genehmigt = DashboardUser.getGenehmigteErstattungen();
+            labelGenehmigteRechnungen.setText("✅ " + genehmigt);
+            int offen = DashboardUser.getOffeneErstattungen();
+            labelOffeneRechnungen.setText("⏳" + offen);
+            double summe = DashboardUser.getGesamterstattungen();
+            labelSumme.setText("💶 " + summe);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+  
+          try {
+            checkForNewMessages();
+        } catch (SQLException e) {
+            showAlert("Database Error", "Failed to check for new messages: " + e.getMessage());
         }
     }
 }
