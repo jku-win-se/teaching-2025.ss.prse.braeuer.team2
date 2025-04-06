@@ -2,18 +2,42 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.SubmittedBillsController">
-    <children>
-        <Label layoutX="230.0" layoutY="24.0" text="📑 Hier sind deine eingereichten Rechnungen" />
-        <Button layoutX="20.0" layoutY="20.0" onAction="#goBackToDashboard" text="⬅ Zurück" />
-      <Label layoutX="65.0" layoutY="79.0" prefHeight="25.0" prefWidth="589.0" text="Rechnung 1 .... Rechnungsbetrag: 15,75 ... Rechnungstyp: Supermarkt ... Rückerstattungbetrag: 2,50            ✅" />
-      <Label layoutX="65.0" layoutY="115.0" prefHeight="17.0" prefWidth="529.0" text="Rechnung 2 .... Rechnungsbetrag: 30,90 ... Rechnungstyp: Restaurant  ... Rückerstattungbetrag: 3,00" />
-      <Button layoutX="614.0" layoutY="140.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="37.0" text="Edit" />
-      <Button layoutX="614.0" layoutY="111.0" mnemonicParsing="false" prefHeight="9.0" prefWidth="37.0" text="Edit" />
-      <ScrollBar layoutX="679.0" orientation="VERTICAL" prefHeight="500.0" prefWidth="15.0" />
-      <Label layoutX="65.0" layoutY="144.0" prefHeight="17.0" prefWidth="529.0" text="Rechnung 3 .... Rechnungsbetrag: 30,90 ... Rechnungstyp: Restaurant  ... Rückerstattungbetrag: 3,00" />
-    </children>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.SubmittedBillsController">
+    <Label layoutX="259.0" layoutY="19.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Eingereichte Rechnungen" />
+    <Button fx:id="btn_back" layoutX="14.0" layoutY="59.0" onAction="#handleBack" text="⬅ Zurück" />
+
+    <!-- ScrollPane für das dynamische Hinzufügen von Rechnungen -->
+    <ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="350.0" prefWidth="666.0">
+        <GridPane fx:id="gridInvoices" hgap="20.0" prefHeight="17.0" prefWidth="654.0" style="-fx-background-color: transparent;" vgap="10.0">
+            <!-- Spaltenüberschriften (erste Zeile) -->
+            <Label style="-fx-font-weight: bold;" text="Rechnungs-ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="73.0" style="-fx-font-weight: bold;" text="Betrag" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label style="-fx-font-weight: bold;" text="Typ" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <Label style="-fx-font-weight: bold;" text="Datum" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+            <Label style="-fx-font-weight: bold;" text="Status" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="60.0" style="-fx-font-weight: bold;" text="Aktion"  GridPane.columnIndex="5" GridPane.rowIndex="0" />
+
+            <!-- Spaltenanpassungen -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="20.0" />
+                <ColumnConstraints percentWidth="15.0" />
+                <ColumnConstraints percentWidth="20.0" />
+                <ColumnConstraints percentWidth="20.0" />
+                <ColumnConstraints percentWidth="15.0" />
+                <ColumnConstraints percentWidth="10.0" />
+            </columnConstraints>
+
+            <!-- Zeilenanpassungen (für die Daten) -->
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" />
+            </rowConstraints>
+        </GridPane>
+    </ScrollPane>
+    <Button fx:id="btn_filter" layoutX="659.0" layoutY="59.0" onAction="#openFilter" text="🔍" />
 </AnchorPane>
