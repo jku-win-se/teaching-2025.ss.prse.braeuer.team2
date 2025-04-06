@@ -180,12 +180,12 @@ public class EditInvoiceController extends Controller{
         alert.showAndWait();
     }
 
-    public void setInvoice(int id, double amount, String typ, String date, String user) { //Vorausfüllung von fxml daten benötigt
+    public void setInvoice(int id, double amount, String typ, String date, String user) { //Wird für Ausfüllung von fxml Spalten benötigt
         this.invoiceId = id;
         this.amount = amount;
         this.typ = typ;
         this.date = date;
-        this.user = user;//wird benötigt wenn die datei gelöscht wird
+        this.user = user; //wird nur benötigt falls die datei gelöscht wird
         textfieldRechnungsID.setText(String.valueOf(id));
         textFieldBetrag.setText(String.valueOf(amount));
         textfieldTyp.setText(String.valueOf(typ));
@@ -204,7 +204,7 @@ public class EditInvoiceController extends Controller{
 
     }
 
-    private boolean isValidDate(String date) {
+    private boolean isValidDate(String date) {//AI
         // Versuche, das Datum im Format yyyy-MM-dd zu parsen
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setLenient(false); // Verhindert, dass ungültige Daten wie der 30. Februar akzeptiert werden
@@ -224,32 +224,26 @@ public class EditInvoiceController extends Controller{
         alert.setHeaderText(null);
         alert.setContentText("Are you sure you want to delete this invoice?");
 
-        // Wenn der Benutzer auf "OK" klickt, den Datensatz löschen
+        // Wenn der Benutzer auf "OK" klickt, soll der Datensatz gelöscht werden
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Der Benutzer hat bestätigt, den Datensatz zu löschen
             String username = textfieldUsername.getText(); // Beispiel, nehme an, du hast das im Textfeld
             LocalDate date = LocalDate.parse(textfieldDatum.getText()); // Beispiel, nehme an, du hast das im Textfeld
-            System.out.println(username);
-            System.out.println(date);
-            System.out.println(getConnection());
             deleteInvoice(getConnection(), username, date);
         }
     }
 
     @FXML
     private void handleDeleteInvoiceUser() throws SQLException {
-        // Bestätigungsdialog anzeigen
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Confirmation");
         alert.setHeaderText(null);
         alert.setContentText("Are you sure you want to delete this invoice?");
 
-        // Wenn der Benutzer auf "OK" klickt, den Datensatz löschen
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-
-            deleteInvoice(getConnection(), user, LocalDate.parse(date));
+            deleteInvoice(getConnection(), user, LocalDate.parse(date));//globale user variable, weil kann bei User nicht aus Textfield hergenommen werden
         }
     }
 

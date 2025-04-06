@@ -164,17 +164,12 @@ public class Database {
     }
     public static boolean updateInvoice(double betrag, Date datum, InvoiceType typ, String username, InvoiceStatus status, String image, double refund, int id){
         boolean userFound = false;
-
         try (Connection conn = Database.getConnection()) {
-
-
             String query = "SELECT username FROM accounts";
             try (PreparedStatement stmt = conn.prepareStatement(query);
                  ResultSet rs = stmt.executeQuery()) {
-
                 while (rs.next()) {
                     String users = rs.getString("username");
-
                         if(username.equals(users)) {
                         userFound = true; //wenn user gefunden wird
                     }
@@ -183,6 +178,8 @@ public class Database {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            if (!userFound) return false; //wenn user nicht in abfrage gefunden wird
 
             if (typ != InvoiceType.SUPERMARKET && typ != InvoiceType.RESTAURANT){
                 return false;
@@ -198,7 +195,7 @@ public class Database {
 
             String updateQuery = "UPDATE rechnungen SET betrag = ?, datum = ?, typ = ?, username = ?, status = ?, image = ?, refund = ? WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
-                // Setze die Parameter für die PreparedStatement
+
                 stmt.setDouble(1, betrag);
                 stmt.setDate(2, datum);
                 stmt.setObject(3, typ, Types.OTHER);
@@ -206,7 +203,7 @@ public class Database {
                 stmt.setObject(5, status, Types.OTHER);
                 stmt.setString(6, image);
                 stmt.setDouble(7, refund);
-                stmt.setInt(8, id);  // Wir setzen die ID, um den richtigen Datensatz zu aktualisieren
+                stmt.setInt(8, id);
                 int rows = stmt.executeUpdate();
                 return rows == 1;
             }

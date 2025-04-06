@@ -86,17 +86,13 @@ public class RequestManagementController extends Controller {
     }
 
     private void handleEditInvoice(int invoiceId) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/editInvoice.fxml")); // Pfad zur FXML-Datei
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/editInvoice.fxml"));
         AnchorPane editPane = loader.load();
-
-        // Holen Sie sich den EditInvoiceController
         EditInvoiceController controller = loader.getController();
 
-        // Übergabe der Rechnungs-ID an den Controller, damit dieser die Daten laden kann
         controller.loadInvoiceDetails(invoiceId);
 
-        // Wechsel zu der Edit-Ansicht (ersetze dies mit deinem Szenenwechsel-Mechanismus)
-        Stage stage = (Stage) gridInvoices.getScene().getWindow(); // Hole das aktuelle Fenster (falls du mit einer Stage arbeitest)
+        Stage stage = (Stage) gridInvoices.getScene().getWindow();
         Scene scene = new Scene(editPane);
         stage.setScene(scene);
         stage.show();
