@@ -95,8 +95,8 @@ public class EditInvoiceController extends Controller{
             return;
         }
 
-        if (!Objects.equals(statusString, "ACCEPTED") && !Objects.equals(statusString, "REJECTED") && !Objects.equals(statusString, "PENDING")) {
-            showAlert("Error", "Please enter 'ACCEPTED', 'REJECTED' or 'PENDING'");
+        if (!Objects.equals(statusString, "ACCEPTED") && !Objects.equals(statusString, "DENIED") && !Objects.equals(statusString, "PENDING")) {
+            showAlert("Error", "Please enter 'ACCEPTED', 'DENIED' or 'PENDING'");
             return;
         }
 
@@ -129,7 +129,7 @@ public class EditInvoiceController extends Controller{
         Date datum = Date.valueOf(textfieldDatum.getText());
         String typString= textfieldTyp.getText();
 
-        // Datum validieren
+        // Datum validieren Abfangen für Tests eigentlich, wird in updateInvoice auch nochmal abgefragt
         if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
             showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd");
             return;

@@ -29,7 +29,7 @@ public class FilterPanelAdminController extends Controller {
         comboBoxStatus.getItems().addAll(
                 InvoiceStatus.ACCEPTED.name(),
                 InvoiceStatus.PENDING.name(),
-                InvoiceStatus.REJECTED.name()
+                InvoiceStatus.DENIED.name()
         );
     }
 

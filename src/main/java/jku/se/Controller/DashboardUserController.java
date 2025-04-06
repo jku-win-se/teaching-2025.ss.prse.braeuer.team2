@@ -23,7 +23,8 @@ public class DashboardUserController extends Controller {
     private Button messages; // Der Button, der die Nachrichten öffnet
 
     private final MessagesController messageController = new MessagesController(); // Dein Service für Nachrichten
-  
+
+    @FXML
     private Label labelEingereichteRechnungen;
   
     @FXML
