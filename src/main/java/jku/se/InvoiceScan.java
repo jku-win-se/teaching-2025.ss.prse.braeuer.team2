@@ -97,6 +97,7 @@ public class InvoiceScan {
         if (lDate == null) {
             controller.displayMessage("Datum konnte nicht gelesen werden.", "red");
             date = controller.requestManualDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            lDate = stringToDate (date);
             System.out.println("Manuell eingegebenes Datum: " + lDate);
         }
 
