@@ -1,16 +1,14 @@
 package jku.se.Controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import jku.se.Database;
-import jku.se.InvoiceStatus;
-import jku.se.InvoiceType;
+import jku.se.*;
 
 import java.io.IOException;
 import java.sql.*;
@@ -24,13 +22,13 @@ import static jku.se.Database.*;
 
 public class EditInvoiceController extends Controller{
     @FXML
-    public TextField textfieldRechnungsID;
+    public Label labelRechnungsID;
     @FXML
-    public TextField textfieldTyp;
+    public ComboBox comboBoxTyp;
     @FXML
     public TextField textfieldUsername;
     @FXML
-    public TextField textfieldStatus;
+    public ComboBox comboBoxStatus;
     @FXML
     public TextField textfieldImage;
     @FXML
@@ -46,21 +44,34 @@ public class EditInvoiceController extends Controller{
     private String typ;
     private String user;
 
+    @FXML
+    public void initialize() {
+        comboBoxTyp.getItems().addAll(
+                InvoiceType.SUPERMARKET.name(),
+                InvoiceType.RESTAURANT.name()
+        );
 
+        comboBoxStatus.getItems().addAll(
+                InvoiceStatus.ACCEPTED.name(),
+                InvoiceStatus.PENDING.name(),
+                InvoiceStatus.DENIED.name()
+        );
+
+    }
     public void loadInvoiceDetails(int invoiceId) {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = getConnection()) {
             String query = "SELECT * FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, invoiceId);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
                     // Befülle die Textfelder mit den Werten der Rechnung
-                    textfieldRechnungsID.setText(String.valueOf(rs.getInt("id")));
+                    labelRechnungsID.setText(String.valueOf(rs.getInt("id")));
                     textFieldBetrag.setText(rs.getString("betrag"));
                     textfieldDatum.setText(rs.getString("datum"));
-                    textfieldTyp.setText(rs.getString("typ"));
+                    comboBoxTyp.setValue(rs.getString("typ"));
                     textfieldUsername.setText(rs.getString("username"));
-                    textfieldStatus.setText(rs.getString("status"));
+                    comboBoxStatus.setValue(rs.getString("status"));
                     textfieldImage.setText(rs.getString("image"));
                     textfieldRefund.setText(rs.getString("refund"));
                 }
@@ -75,19 +86,20 @@ public class EditInvoiceController extends Controller{
     @FXML
     public void saveChanges() {
         // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
-        int id = Integer.parseInt(textfieldRechnungsID.getText());
+        int id = Integer.parseInt(labelRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
-        Date datum = Date.valueOf(textfieldDatum.getText());
-        String typString = textfieldTyp.getText();
+        Date datum = null;
+        String typString = (String) comboBoxTyp.getValue();
         String username = textfieldUsername.getText();
-        String statusString = textfieldStatus.getText();
+        String statusString = (String) comboBoxStatus.getValue();
         String image = textfieldImage.getText();
         Double refund = Double.valueOf(textfieldRefund.getText());
 
-        // Datum validieren
-        if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
-            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd");
-            return;
+        try {
+            datum = Date.valueOf(textfieldDatum.getText());
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
+            return; // Update wird abgebrochen, falls das Datum ungültig ist
         }
 
         if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
@@ -110,45 +122,8 @@ public class EditInvoiceController extends Controller{
             return; // Update wird abgebrochen
         }
 
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
-        InvoiceStatus status = InvoiceStatus.valueOf(textfieldStatus.getText());
-
-        boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
-        if (success) {
-            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert.");
-        } else {
-            showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
-        }
-    }
-
-    @FXML
-    public void saveChangesUser() {//Wenn etwas fehlschlägt, fehlt meistens der Refund, oft Null dann kann nicht updaten
-        // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
-        int id = Integer.parseInt(textfieldRechnungsID.getText());
-        double betrag = Double.parseDouble(textFieldBetrag.getText());
-        Date datum = Date.valueOf(textfieldDatum.getText());
-        String typString= textfieldTyp.getText();
-
-        // Datum validieren Abfangen für Tests eigentlich, wird in updateInvoice auch nochmal abgefragt
-        if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
-            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd");
-            return;
-        }
-
-        if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
-            showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
-            return;
-        }
-
-        if (betrag < 0) {//negativer Rechnungsbetrag
-            showAlert("Error", "Negative Beträge sind nicht erlaubt!");
-            return; // Update wird abgebrochen
-        }
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText());
-        String username = getInvoiceUsername(id);
-        InvoiceStatus status = InvoiceStatus.valueOf(getInvoiceStatus(id));
-        String image = getInvoiceImage(id);
-        double refund = getInvoiceRefund(id);
+        InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
+        InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
@@ -180,18 +155,6 @@ public class EditInvoiceController extends Controller{
         alert.showAndWait();
     }
 
-    public void setInvoice(int id, double amount, String typ, String date, String user) { //Wird für Ausfüllung von fxml Spalten benötigt
-        this.invoiceId = id;
-        this.amount = amount;
-        this.typ = typ;
-        this.date = date;
-        this.user = user; //wird nur benötigt falls die datei gelöscht wird
-        textfieldRechnungsID.setText(String.valueOf(id));
-        textFieldBetrag.setText(String.valueOf(amount));
-        textfieldTyp.setText(String.valueOf(typ));
-        textfieldDatum.setText(String.valueOf(date));
-    }
-
     @FXML
     private void goBackToAllInvoices(javafx.event.ActionEvent event) throws IOException{
         switchScene(event, "requestManagement.fxml");
@@ -204,7 +167,7 @@ public class EditInvoiceController extends Controller{
 
     }
 
-    private boolean isValidDate(String date) {//AI
+    public boolean isValidDate(String date) {//AI
         // Versuche, das Datum im Format yyyy-MM-dd zu parsen
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setLenient(false); // Verhindert, dass ungültige Daten wie der 30. Februar akzeptiert werden
@@ -231,19 +194,6 @@ public class EditInvoiceController extends Controller{
             String username = textfieldUsername.getText(); // Beispiel, nehme an, du hast das im Textfeld
             LocalDate date = LocalDate.parse(textfieldDatum.getText()); // Beispiel, nehme an, du hast das im Textfeld
             deleteInvoice(getConnection(), username, date);
-        }
-    }
-
-    @FXML
-    private void handleDeleteInvoiceUser() throws SQLException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Confirmation");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete this invoice?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteInvoice(getConnection(), user, LocalDate.parse(date));//globale user variable, weil kann bei User nicht aus Textfield hergenommen werden
         }
     }
 
