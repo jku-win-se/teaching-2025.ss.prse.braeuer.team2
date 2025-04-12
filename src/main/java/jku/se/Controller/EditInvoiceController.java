@@ -1,16 +1,14 @@
 package jku.se.Controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import jku.se.Database;
-import jku.se.InvoiceStatus;
-import jku.se.InvoiceType;
+import jku.se.*;
 
 import java.io.IOException;
 import java.sql.*;
@@ -20,25 +18,26 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
+import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.*;
 
 public class EditInvoiceController extends Controller{
     @FXML
-    public TextField textfieldRechnungsID;
+    public Label labelRechnungsID;
     @FXML
-    public TextField textfieldTyp;
+    public ComboBox comboBoxTyp;
     @FXML
     public TextField textfieldUsername;
     @FXML
-    public TextField textfieldStatus;
+    public ComboBox comboBoxStatus;
     @FXML
     public TextField textfieldImage;
     @FXML
-    public TextField textfieldRefund;
+    public Label labelRefund;
     @FXML
     public TextField textFieldBetrag;
     @FXML
-    public TextField textfieldDatum;
+    public DatePicker datePickerDatum;
 
     private int invoiceId;
     private double amount;
@@ -46,23 +45,47 @@ public class EditInvoiceController extends Controller{
     private String typ;
     private String user;
 
+    @FXML
+    public void initialize() {
+        comboBoxTyp.getItems().addAll(
+                InvoiceType.SUPERMARKET.name(),
+                InvoiceType.RESTAURANT.name()
+        );
 
+        comboBoxStatus.getItems().addAll(
+                InvoiceStatus.ACCEPTED.name(),
+                InvoiceStatus.PENDING.name(),
+                InvoiceStatus.DENIED.name()
+        );
+    }
     public void loadInvoiceDetails(int invoiceId) {
-        try (Connection conn = Database.getConnection()) {
+        try (Connection conn = getConnection()) {
             String query = "SELECT * FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, invoiceId);
                 ResultSet rs = stmt.executeQuery();
+
                 if (rs.next()) {
-                    // Befüllt die Textfelder mit den Werten der Rechnung
-                    textfieldRechnungsID.setText(String.valueOf(rs.getInt("id")));
+                    // Befülle die Textfelder mit den Werten der Rechnung
+                    labelRechnungsID.setText(String.valueOf(rs.getInt("id")));
+
                     textFieldBetrag.setText(rs.getString("betrag"));
-                    textfieldDatum.setText(rs.getString("datum"));
-                    textfieldTyp.setText(rs.getString("typ"));
+                    LocalDate choosendate = LocalDate.parse(rs.getString("datum"));
+
+                    //Um das Datumsfeld zu befüllen mit dem erstellten datum
+                    datePickerDatum.setDayCellFactory(picker -> new DateCell() {
+                        @Override
+                        public void updateItem(LocalDate date, boolean empty) {
+                            super.updateItem(date, empty);
+                            setDisable(empty || date.isAfter(LocalDate.now()));
+                        }
+                    });
+                    datePickerDatum.setValue(choosendate);
+                    comboBoxTyp.setValue(rs.getString("typ"));
                     textfieldUsername.setText(rs.getString("username"));
-                    textfieldStatus.setText(rs.getString("status"));
+                    comboBoxStatus.setValue(rs.getString("status"));
                     textfieldImage.setText(rs.getString("image"));
-                    textfieldRefund.setText(rs.getString("refund"));
+                    labelRefund.setText(rs.getString("refund"));
                 }
             }
         } catch (SQLException e) {
@@ -73,45 +96,48 @@ public class EditInvoiceController extends Controller{
 
    
     @FXML
-    public void saveChanges() {
-        // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
-        int id = Integer.parseInt(textfieldRechnungsID.getText());
+    public void saveChanges() throws SQLException {
+        // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
+        int id = Integer.parseInt(labelRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
-        Date datum = Date.valueOf(textfieldDatum.getText());
-        String typString = textfieldTyp.getText();
+        Date datum = null;
+        String typString = (String) comboBoxTyp.getValue();
         String username = textfieldUsername.getText();
-        String statusString = textfieldStatus.getText();
+        String statusString = (String) comboBoxStatus.getValue();
         String image = textfieldImage.getText();
-        Double refund = Double.valueOf(textfieldRefund.getText());
 
-        // Datum validieren
-        if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
-            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd");
+        double refund = 0;
+        if(typString.equals(String.valueOf(InvoiceType.SUPERMARKET))){
+            refund = Refund.getRefundSupermarket();
+        } else {
+            refund = Refund.getRefundRestaurant();
+        }
+
+        try {//Wahrscheinlich nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
+            InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue());
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", "Choose a valid InvoiceType!");
             return;
         }
 
-        if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
-            showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
+        try {//Wahrscheinlich nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
+            InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
+        } catch (IllegalArgumentException ex) {
+            showAlert("Error", "Choose a valid InvoiceStatus!");
             return;
         }
 
-        if (!Objects.equals(statusString, "ACCEPTED") && !Objects.equals(statusString, "DENIED") && !Objects.equals(statusString, "PENDING")) {
-            showAlert("Error", "Please enter 'ACCEPTED', 'DENIED' or 'PENDING'");
-            return;
-        }
-
-        if (refund != 3.0 && refund != 2.5) {//ungültiger Refund
-            showAlert("Error", "Please enter a valid Amount: Either 3.0 OR 2.5!");
-            return;
+        try {
+            datum = Date.valueOf(datePickerDatum.getValue());
+        } catch (IllegalArgumentException exc) {
+            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
+            return; // Update wird abgebrochen, falls das Datum ungültig ist
         }
 
         if (betrag < 0) {//negativer Rechnungsbetrag
             showAlert("Error", "Negative Beträge sind nicht erlaubt!");
             return; // Update wird abgebrochen
         }
-
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText()); //wird erst hier initialisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
-        InvoiceStatus status = InvoiceStatus.valueOf(textfieldStatus.getText());
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
@@ -129,14 +155,14 @@ public class EditInvoiceController extends Controller{
         Date datum = Date.valueOf(textfieldDatum.getText());
         String typString= textfieldTyp.getText();
 
-        // Datum validieren Abfangen für Tests eigentlich, wird in updateInvoice auch nochmal abgefragt
-        if (!isValidDate(String.valueOf(datum))) {//ungültiges Datum
-            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd");
-            return;
-        }
 
         if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
             showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
+            return;
+        }
+
+        if (!Objects.equals(statusString, "ACCEPTED") && !Objects.equals(statusString, "DENIED") && !Objects.equals(statusString, "PENDING")) {
+            showAlert("Error", "Please enter 'ACCEPTED', 'DENIED' or 'PENDING'");
             return;
         }
 
@@ -144,15 +170,18 @@ public class EditInvoiceController extends Controller{
             showAlert("Error", "Negative Beträge sind nicht erlaubt!");
             return; // Update wird abgebrochen
         }
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText());
-        String username = getInvoiceUsername(id);
-        InvoiceStatus status = InvoiceStatus.valueOf(getInvoiceStatus(id));
-        String image = getInvoiceImage(id);
-        double refund = getInvoiceRefund(id);
+
+        InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
+        InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert.");
+            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+                    "\nID: " + id +
+                    "\nBetrag: " + betrag +
+                    "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
+                    "\nStatus: " + status +
+                    "\nRefund: " + refund);
         } else {
             showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
@@ -180,31 +209,13 @@ public class EditInvoiceController extends Controller{
         alert.showAndWait();
     }
 
-    public void setInvoice(int id, double amount, String typ, String date, String user) { //Wird für Ausfüllung von fxml Spalten benötigt
-        this.invoiceId = id;
-        this.amount = amount;
-        this.typ = typ;
-        this.date = date;
-        this.user = user; //wird nur benötigt falls die datei gelöscht wird
-        textfieldRechnungsID.setText(String.valueOf(id));
-        textFieldBetrag.setText(String.valueOf(amount));
-        textfieldTyp.setText(String.valueOf(typ));
-        textfieldDatum.setText(String.valueOf(date));
-    }
-
     @FXML
     private void goBackToAllInvoices(javafx.event.ActionEvent event) throws IOException{
         switchScene(event, "requestManagement.fxml");
 
     }
 
-    @FXML
-    private void goBackToInvoicesUser(javafx.event.ActionEvent event) throws IOException{
-        switchScene(event, "submittedBills.fxml");
-
-    }
-
-    private boolean isValidDate(String date) {//AI
+    public boolean isValidDate(String date) {//AI
         // Versuche, das Datum im Format yyyy-MM-dd zu parsen
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.setLenient(false); // Verhindert, dass ungültige Daten wie der 30. Februar akzeptiert werden
@@ -228,29 +239,11 @@ public class EditInvoiceController extends Controller{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Der Benutzer hat bestätigt, den Datensatz zu löschen
-            String username = textfieldUsername.getText(); 
-            LocalDate date = LocalDate.parse(textfieldDatum.getText()); 
+
+            String username = textfieldUsername.getText();
+            LocalDate date = datePickerDatum.getValue();
             deleteInvoice(getConnection(), username, date);
         }
     }
+   }
 
-    @FXML
-    private void handleDeleteInvoiceUser() throws SQLException {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Confirmation");
-        alert.setHeaderText(null);
-        alert.setContentText("Are you sure you want to delete this invoice?");
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteInvoice(getConnection(), user, LocalDate.parse(date)); //globale user variable, weil kann bei User nicht aus Textfield hergenommen werden
-        }
-    }
-
-    public static EditInvoiceController loadEditInvoiceController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(EditInvoiceController.class.getResource("/editInvoice.fxml"));
-        Parent root = loader.load();  // Lädt die FXML-Datei
-        return loader.getController();  // Gibt den Controller zurück
-    }
-
-}
