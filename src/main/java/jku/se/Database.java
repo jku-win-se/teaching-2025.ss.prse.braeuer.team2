@@ -196,6 +196,12 @@ public class Database {
                 e.printStackTrace();
             }
 
+            System.out.println(userFound);
+            System.out.println(typ);
+            System.out.println(betrag);
+            System.out.println(refund);
+            System.out.println(status);
+
             if (!userFound) return false; //wenn user nicht in abfrage gefunden wird
 
             if (typ != InvoiceType.SUPERMARKET && typ != InvoiceType.RESTAURANT){
