@@ -32,7 +32,7 @@ public class EditInvoiceController extends Controller{
     @FXML
     public TextField textfieldImage;
     @FXML
-    public TextField textfieldRefund;
+    public Label labelRefund;
     @FXML
     public TextField textFieldBetrag;
     @FXML
@@ -73,7 +73,7 @@ public class EditInvoiceController extends Controller{
                     textfieldUsername.setText(rs.getString("username"));
                     comboBoxStatus.setValue(rs.getString("status"));
                     textfieldImage.setText(rs.getString("image"));
-                    textfieldRefund.setText(rs.getString("refund"));
+                    labelRefund.setText(rs.getString("refund"));
                 }
             }
         } catch (SQLException e) {
@@ -84,7 +84,7 @@ public class EditInvoiceController extends Controller{
 
     // Hier kannst du eine Methode zum Speichern der Änderungen hinzufügen, z.B.:
     @FXML
-    public void saveChanges() {
+    public void saveChanges() throws SQLException {
         // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
         int id = Integer.parseInt(labelRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
@@ -93,7 +93,13 @@ public class EditInvoiceController extends Controller{
         String username = textfieldUsername.getText();
         String statusString = (String) comboBoxStatus.getValue();
         String image = textfieldImage.getText();
-        Double refund = Double.valueOf(textfieldRefund.getText());
+        double refund = 0;
+        if(typString.equals(String.valueOf(InvoiceType.SUPERMARKET))){
+            refund = Refund.getRefundSupermarket();
+        } else {
+            refund = Refund.getRefundRestaurant();
+        }
+
 
         try {
             datum = Date.valueOf(textfieldDatum.getText());
@@ -112,11 +118,6 @@ public class EditInvoiceController extends Controller{
             return;
         }
 
-        if (refund != 3.0 && refund != 2.5) {//ungültiger Refund
-            showAlert("Error", "Please enter a valid Amount: Either 3.0 OR 2.5!");
-            return;
-        }
-
         if (betrag < 0) {//negativer Rechnungsbetrag
             showAlert("Error", "Negative Beträge sind nicht erlaubt!");
             return; // Update wird abgebrochen
@@ -127,7 +128,12 @@ public class EditInvoiceController extends Controller{
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert.");
+            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+                    "\nID: " + id +
+                    "\nBetrag: " + betrag +
+                    "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
+                    "\nStatus: " + status +
+                    "\nRefund: " + refund);
         } else {
             showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
@@ -161,12 +167,6 @@ public class EditInvoiceController extends Controller{
 
     }
 
-    @FXML
-    private void goBackToInvoicesUser(javafx.event.ActionEvent event) throws IOException{
-        switchScene(event, "submittedBills.fxml");
-
-    }
-
     public boolean isValidDate(String date) {//AI
         // Versuche, das Datum im Format yyyy-MM-dd zu parsen
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -197,10 +197,10 @@ public class EditInvoiceController extends Controller{
         }
     }
 
-    public static EditInvoiceController loadEditInvoiceController() throws IOException {
+    /*public static EditInvoiceController loadEditInvoiceController() throws IOException {
         FXMLLoader loader = new FXMLLoader(EditInvoiceController.class.getResource("/editInvoice.fxml"));
         Parent root = loader.load();  // Läd die FXML-Datei
         return loader.getController();  // Gibt den Controller zurück
-    }
+    }*/
 
 }
