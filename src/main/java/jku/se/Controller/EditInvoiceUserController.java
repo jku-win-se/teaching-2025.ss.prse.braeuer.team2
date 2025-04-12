@@ -17,6 +17,7 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static jku.se.Database.*;
+import static jku.se.InvoiceScan.isWorkday;
 
 public class EditInvoiceUserController extends Controller{
     @FXML
@@ -63,6 +64,11 @@ public class EditInvoiceUserController extends Controller{
         } catch (IllegalArgumentException exc) {
             showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
             return; // Update wird abgebrochen, falls das Datum ungültig ist
+        }
+
+        if(!isWorkday(datum.toLocalDate())){
+            showAlert("Error", "The chosen date is not a working day!"); //ist kein Arbeitstag
+            return;
         }
 
         String typString = (String) comboBoxTyp.getValue();

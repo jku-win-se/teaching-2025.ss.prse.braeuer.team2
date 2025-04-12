@@ -20,6 +20,7 @@ import java.util.Optional;
 
 import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.*;
+import static jku.se.InvoiceScan.isWorkday;
 
 public class EditInvoiceController extends Controller{
     @FXML
@@ -130,10 +131,15 @@ public class EditInvoiceController extends Controller{
             return;
         }
 
-        try {
+        try {//datumsbefüllung
             datum = Date.valueOf(datePickerDatum.getValue());
         } catch (IllegalArgumentException e) {
             datum = Date.valueOf(datePickerDatum.getValue());
+        }
+
+        if(!isWorkday(datum.toLocalDate())){
+            showAlert("Error", "The chosen date is not a working day!"); //ist kein Arbeitstag
+            return;
         }
 
         if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
