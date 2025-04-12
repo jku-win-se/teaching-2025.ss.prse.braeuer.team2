@@ -68,6 +68,7 @@ public class EditInvoiceController extends Controller{
                 if (rs.next()) {
                     // Befülle die Textfelder mit den Werten der Rechnung
                     labelRechnungsID.setText(String.valueOf(rs.getInt("id")));
+
                     textFieldBetrag.setText(rs.getString("betrag"));
                     LocalDate choosendate = LocalDate.parse(rs.getString("datum"));
 
@@ -93,7 +94,7 @@ public class EditInvoiceController extends Controller{
         }
     }
 
-    // Hier kannst du eine Methode zum Speichern der Änderungen hinzufügen, z.B.:
+   
     @FXML
     public void saveChanges() throws SQLException {
         // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
@@ -132,6 +133,28 @@ public class EditInvoiceController extends Controller{
             showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
             return; // Update wird abgebrochen, falls das Datum ungültig ist
         }
+
+        if (betrag < 0) {//negativer Rechnungsbetrag
+            showAlert("Error", "Negative Beträge sind nicht erlaubt!");
+            return; // Update wird abgebrochen
+        }
+
+        boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
+        if (success) {
+            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert.");
+        } else {
+            showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
+        }
+    }
+
+    @FXML
+    public void saveChangesUser() {//Wenn etwas fehlschlägt, fehlt meistens der Refund, oft Null dann kann nicht updaten
+        // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
+        int id = Integer.parseInt(textfieldRechnungsID.getText());
+        double betrag = Double.parseDouble(textFieldBetrag.getText());
+        Date datum = Date.valueOf(textfieldDatum.getText());
+        String typString= textfieldTyp.getText();
+
 
         if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
             showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
@@ -216,9 +239,11 @@ public class EditInvoiceController extends Controller{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Der Benutzer hat bestätigt, den Datensatz zu löschen
+
             String username = textfieldUsername.getText();
             LocalDate date = datePickerDatum.getValue();
             deleteInvoice(getConnection(), username, date);
         }
     }
    }
+
