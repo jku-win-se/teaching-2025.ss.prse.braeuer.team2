@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
+import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.*;
 
 public class EditInvoiceController extends Controller{
@@ -36,7 +37,7 @@ public class EditInvoiceController extends Controller{
     @FXML
     public TextField textFieldBetrag;
     @FXML
-    public TextField textfieldDatum;
+    public DatePicker datePickerDatum;
 
     private int invoiceId;
     private double amount;
@@ -56,7 +57,6 @@ public class EditInvoiceController extends Controller{
                 InvoiceStatus.PENDING.name(),
                 InvoiceStatus.DENIED.name()
         );
-
     }
     public void loadInvoiceDetails(int invoiceId) {
         try (Connection conn = getConnection()) {
@@ -64,11 +64,22 @@ public class EditInvoiceController extends Controller{
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, invoiceId);
                 ResultSet rs = stmt.executeQuery();
+
                 if (rs.next()) {
                     // Befülle die Textfelder mit den Werten der Rechnung
                     labelRechnungsID.setText(String.valueOf(rs.getInt("id")));
                     textFieldBetrag.setText(rs.getString("betrag"));
-                    textfieldDatum.setText(rs.getString("datum"));
+                    LocalDate choosendate = LocalDate.parse(rs.getString("datum"));
+
+                    //Um das Datumsfeld zu befüllen mit dem erstellten datum
+                    datePickerDatum.setDayCellFactory(picker -> new DateCell() {
+                        @Override
+                        public void updateItem(LocalDate date, boolean empty) {
+                            super.updateItem(date, empty);
+                            setDisable(empty || date.isAfter(LocalDate.now()));
+                        }
+                    });
+                    datePickerDatum.setValue(choosendate);
                     comboBoxTyp.setValue(rs.getString("typ"));
                     textfieldUsername.setText(rs.getString("username"));
                     comboBoxStatus.setValue(rs.getString("status"));
@@ -93,6 +104,7 @@ public class EditInvoiceController extends Controller{
         String username = textfieldUsername.getText();
         String statusString = (String) comboBoxStatus.getValue();
         String image = textfieldImage.getText();
+
         double refund = 0;
         if(typString.equals(String.valueOf(InvoiceType.SUPERMARKET))){
             refund = Refund.getRefundSupermarket();
@@ -100,10 +112,23 @@ public class EditInvoiceController extends Controller{
             refund = Refund.getRefundRestaurant();
         }
 
+        try {//Wahrscheinlich nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
+            InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue());
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", "Choose a valid InvoiceType!");
+            return;
+        }
+
+        try {//Wahrscheinlich nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
+            InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
+        } catch (IllegalArgumentException ex) {
+            showAlert("Error", "Choose a valid InvoiceStatus!");
+            return;
+        }
 
         try {
-            datum = Date.valueOf(textfieldDatum.getText());
-        } catch (IllegalArgumentException e) {
+            datum = Date.valueOf(datePickerDatum.getValue());
+        } catch (IllegalArgumentException exc) {
             showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
             return; // Update wird abgebrochen, falls das Datum ungültig ist
         }
@@ -191,16 +216,9 @@ public class EditInvoiceController extends Controller{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Der Benutzer hat bestätigt, den Datensatz zu löschen
-            String username = textfieldUsername.getText(); // Beispiel, nehme an, du hast das im Textfeld
-            LocalDate date = LocalDate.parse(textfieldDatum.getText()); // Beispiel, nehme an, du hast das im Textfeld
+            String username = textfieldUsername.getText();
+            LocalDate date = datePickerDatum.getValue();
             deleteInvoice(getConnection(), username, date);
         }
     }
-
-    /*public static EditInvoiceController loadEditInvoiceController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(EditInvoiceController.class.getResource("/editInvoice.fxml"));
-        Parent root = loader.load();  // Läd die FXML-Datei
-        return loader.getController();  // Gibt den Controller zurück
-    }*/
-
-}
+   }

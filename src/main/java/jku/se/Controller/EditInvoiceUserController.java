@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
+import jku.se.Refund;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -33,7 +34,7 @@ public class EditInvoiceUserController extends Controller{
     @FXML
     public TextField textFieldBetrag;
     @FXML
-    public TextField textfieldDatum;
+    public DatePicker datePickerDatum;
 
     private int invoiceId;
     private double amount;
@@ -51,16 +52,15 @@ public class EditInvoiceUserController extends Controller{
     }
 
     @FXML
-    public void saveChangesUser() throws IOException {
+    public void saveChangesUser() throws IOException, SQLException {
         // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
         int id = Integer.parseInt(labelRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
         Date datum = null;
 
-
         try {
-            datum = Date.valueOf(textfieldDatum.getText());
-        } catch (IllegalArgumentException e) {
+            datum = Date.valueOf(datePickerDatum.getValue());
+        } catch (IllegalArgumentException exc) {
             showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
             return; // Update wird abgebrochen, falls das Datum ungültig ist
         }
@@ -77,11 +77,21 @@ public class EditInvoiceUserController extends Controller{
         String username = getInvoiceUsername(id);
         InvoiceStatus status = InvoiceStatus.valueOf(getInvoiceStatus(id));
         String image = getInvoiceImage(id);
-        double refund = getInvoiceRefund(id);
+        double refund = 0;
+        if(typString.equals(String.valueOf(InvoiceType.SUPERMARKET))){
+            refund = Refund.getRefundSupermarket();
+        } else {
+            refund = Refund.getRefundRestaurant();
+        }
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert.");
+            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+                    "\nID: " + id +
+                    "\nBetrag: " + betrag +
+                    "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
+                    "\nStatus: " + status +
+                    "\nRefund: " + refund);
         } else {
             showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
@@ -118,7 +128,16 @@ public class EditInvoiceUserController extends Controller{
         labelRechnungsID.setText(String.valueOf(id));
         textFieldBetrag.setText(String.valueOf(amount));
         comboBoxTyp.setValue(String.valueOf(typ));
-        textfieldDatum.setText(String.valueOf(date));
+        //Um das Datumsfeld zu befüllen mit dem erstellten datum
+        LocalDate choosendate = LocalDate.parse(this.date);
+            datePickerDatum.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    setDisable(empty || date.isAfter(LocalDate.now()));
+                }
+            });
+            datePickerDatum.setValue(choosendate);
     }
 
     @FXML
@@ -138,12 +157,6 @@ public class EditInvoiceUserController extends Controller{
         if (result.isPresent() && result.get() == ButtonType.OK) {
             deleteInvoice(getConnection(), user, LocalDate.parse(date));//globale user variable, weil kann bei User nicht aus Textfield hergenommen werden
         }
-    }
-
-    public static EditInvoiceController loadEditInvoiceController() throws IOException {
-        FXMLLoader loader = new FXMLLoader(EditInvoiceController.class.getResource("/editInvoice.fxml"));
-        Parent root = loader.load();  // Läd die FXML-Datei
-        return loader.getController();  // Gibt den Controller zurück
     }
 
 }
