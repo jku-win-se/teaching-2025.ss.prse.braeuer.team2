@@ -139,6 +139,12 @@ public class SubmitBillController extends Controller {
                     // Try parsing the input from the text field into a LocalDate object
                     LocalDate parsedDate = LocalDate.parse(dateInput.getText(), formatter);
 
+                    //Check if the entered date is not in the future
+                    if (!InvoiceScan.isDateInThePastOrToday(parsedDate)) {
+                        displayMessage("Datum darf nicht in der Zukunft liegen.", "red");
+                        return;
+                    }
+
                     // Check if the entered date is within the current month
                     if (!InvoiceScan.isWithinCurrentMonth(parsedDate)){
                         displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");

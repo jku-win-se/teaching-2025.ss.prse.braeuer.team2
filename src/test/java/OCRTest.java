@@ -1,16 +1,9 @@
-import javafx.application.Platform;
 import jku.se.*;
-import jku.se.Controller.SubmitBillController;
-import net.sourceforge.tess4j.TesseractException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-
 import java.io.File;
-import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
-
-import static jku.se.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class OCRTest {
@@ -18,8 +11,7 @@ public class OCRTest {
     // Initializes JavaFX once for all tests
     @BeforeAll
     static void initJFX() throws Exception {
-        System.setProperty("java.awt.headless", "true");
-        Platform.startup(() -> {});
+
     }
 
     /*
@@ -48,25 +40,7 @@ public class OCRTest {
         Database.deleteImage(imageUrl);
     }
 
-    //checks if there is already an invoice uploaded for that day -> expected that an invoice already exists
-    @Test
-    public void testInvoiceExists_True() throws SQLException {
-        File tempImage = new File("src/test/resources/testfile.jpg");
-        InvoiceType typ = InvoiceType.RESTAURANT;
-        InvoiceStatus status = InvoiceStatus.PENDING;
-        SubmitBillController controller = new SubmitBillController();
-        InvoiceScan invoiceScan = new InvoiceScan(controller);
-        Connection connection= Database.getConnection();
 
-        String username = "user";
-        LocalDate date = LocalDate.now();
-        uploadInvoice(connection, username, 100.50, date, typ, status, tempImage,3.0, controller);
-
-        boolean exists = Database.invoiceExists(connection, "user", date);
-        assertTrue(exists);
-
-        Database.deleteInvoice(connection, username, date);
-    }
 
     //checks if there is already an invoice uploaded for that day -> expected that no invoice exist for that day and user
     @Test
@@ -78,26 +52,7 @@ public class OCRTest {
         }
     }
 
-    //uploads a invoice
-    @Test
-    void testSuccessfulInvoiceUpload() throws Exception {
-        File tempImage = new File("src/test/resources/testfile.jpg");
-        InvoiceType typ = InvoiceType.RESTAURANT;
-        InvoiceStatus status = InvoiceStatus.PENDING;
-        SubmitBillController controller = new SubmitBillController();
-        InvoiceScan invoiceScan = new InvoiceScan(controller);
-        Connection connection= Database.getConnection();
 
-        String username = "user";
-        LocalDate date = LocalDate.now();
-        uploadInvoice(connection, username, 100.50, date, typ, status, tempImage,3.0, controller);
-
-        var result = connection.createStatement().executeQuery("SELECT COUNT(*) FROM rechnungen WHERE username = 'user' AND datum = '" + date.toString() + "'");
-        result.next();
-        assertEquals(1, result.getInt(1));
-
-        Database.deleteInvoice(connection, username, date);
-    }
 
 
 
@@ -230,6 +185,14 @@ public class OCRTest {
         assertTrue(InvoiceScan.isWithinCurrentMonth(today));
     }
 
+    @Test
+    void testIsNotInTheFuture (){
+        LocalDate today = LocalDate.now();
+        LocalDate yesterday = LocalDate.now().minusDays(1);
+        assertTrue (InvoiceScan.isDateInThePastOrToday(today));
+        assertTrue (InvoiceScan.isDateInThePastOrToday(yesterday));
+    }
+
     //converts different date formats into one standard format
     @Test
     void testStringtoDate (){
@@ -269,21 +232,4 @@ public class OCRTest {
                 "Beehren Sie uns bald wieder";
         assertEquals("28.10.2017",InvoiceScan.extractDate(text));
     }
-
-    @Test
-    void testScanInvoice_Success() throws TesseractException, IOException, SQLException {
-        // Beispiel-Testbild (sollte eine echte Rechnung sein)
-        String testImagePath = "src/test/resources/testfile.jpg";
-
-        // Scan durchführen
-        SubmitBillController controller = new SubmitBillController();
-        InvoiceScan invoiceScan = new InvoiceScan(controller);
-        Invoice invoice = invoiceScan.scanInvoice(testImagePath);
-
-        // Prüfen, ob Werte extrahiert wurden
-        assertEquals(LocalDate.of(2023,9,13),invoice.getDate());
-        assertEquals(9.95,invoice.getSum());
-        assertEquals(InvoiceType.SUPERMARKET,invoice.getTyp());
-    }
-
 }

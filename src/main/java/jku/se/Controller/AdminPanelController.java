@@ -21,4 +21,9 @@ public class AdminPanelController extends Controller{
     private void openStatistics(ActionEvent event) throws IOException {
         switchScene(event, "statistics.fxml");
     }
+
+    @FXML
+    public void openRefund(ActionEvent event) throws IOException {
+        switchScene(event, "refund.fxml");
+    }
 }
