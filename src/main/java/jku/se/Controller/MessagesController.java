@@ -57,7 +57,7 @@ public class MessagesController extends Controller{
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
         int messageId = rs.getInt("id");
         int id = rs.getInt("rechnung_id");
-        String text = rs.getString("text"); // oder wie deine Spalte für das Erstellungsdatum heißt
+        String text = rs.getString("text");
         String date = rs.getString("created_at");
 
         gridMessages.add(new Label(String.valueOf(messageId)), 0, row);

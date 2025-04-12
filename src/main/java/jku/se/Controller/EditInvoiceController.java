@@ -54,7 +54,7 @@ public class EditInvoiceController extends Controller{
                 stmt.setInt(1, invoiceId);
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) {
-                    // Befülle die Textfelder mit den Werten der Rechnung
+                    // Befüllt die Textfelder mit den Werten der Rechnung
                     textfieldRechnungsID.setText(String.valueOf(rs.getInt("id")));
                     textFieldBetrag.setText(rs.getString("betrag"));
                     textfieldDatum.setText(rs.getString("datum"));
@@ -71,10 +71,10 @@ public class EditInvoiceController extends Controller{
         }
     }
 
-    // Hier kannst du eine Methode zum Speichern der Änderungen hinzufügen, z.B.:
+   
     @FXML
     public void saveChanges() {
-        // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
+        // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
         int id = Integer.parseInt(textfieldRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
         Date datum = Date.valueOf(textfieldDatum.getText());
@@ -110,7 +110,7 @@ public class EditInvoiceController extends Controller{
             return; // Update wird abgebrochen
         }
 
-        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
+        InvoiceType typ = InvoiceType.valueOf(textfieldTyp.getText()); //wird erst hier initialisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
         InvoiceStatus status = InvoiceStatus.valueOf(textfieldStatus.getText());
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
@@ -123,7 +123,7 @@ public class EditInvoiceController extends Controller{
 
     @FXML
     public void saveChangesUser() {//Wenn etwas fehlschlägt, fehlt meistens der Refund, oft Null dann kann nicht updaten
-        // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
+        // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
         int id = Integer.parseInt(textfieldRechnungsID.getText());
         double betrag = Double.parseDouble(textFieldBetrag.getText());
         Date datum = Date.valueOf(textfieldDatum.getText());
@@ -228,8 +228,8 @@ public class EditInvoiceController extends Controller{
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             // Der Benutzer hat bestätigt, den Datensatz zu löschen
-            String username = textfieldUsername.getText(); // Beispiel, nehme an, du hast das im Textfeld
-            LocalDate date = LocalDate.parse(textfieldDatum.getText()); // Beispiel, nehme an, du hast das im Textfeld
+            String username = textfieldUsername.getText(); 
+            LocalDate date = LocalDate.parse(textfieldDatum.getText()); 
             deleteInvoice(getConnection(), username, date);
         }
     }
@@ -243,13 +243,13 @@ public class EditInvoiceController extends Controller{
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            deleteInvoice(getConnection(), user, LocalDate.parse(date));//globale user variable, weil kann bei User nicht aus Textfield hergenommen werden
+            deleteInvoice(getConnection(), user, LocalDate.parse(date)); //globale user variable, weil kann bei User nicht aus Textfield hergenommen werden
         }
     }
 
     public static EditInvoiceController loadEditInvoiceController() throws IOException {
         FXMLLoader loader = new FXMLLoader(EditInvoiceController.class.getResource("/editInvoice.fxml"));
-        Parent root = loader.load();  // Läd die FXML-Datei
+        Parent root = loader.load();  // Lädt die FXML-Datei
         return loader.getController();  // Gibt den Controller zurück
     }
 
