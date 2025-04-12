@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.RefundController">
+   <Button fx:id="btn_back" layoutX="14.0" layoutY="14.0" onAction="#handleBack" text="⬅ Zurück" />
+
+    <Label layoutX="202.0" layoutY="237.0" text="Refund Supermarkt (€):" />
+    <TextField fx:id="refundSupermarket" layoutX="346.0" layoutY="233.0" />
+
+    <Label layoutX="202.0" layoutY="199.0" text="Refund Restaurant (€):" />
+    <TextField fx:id="refundRestaurant" layoutX="346.0" layoutY="195.0" />
+
+    <Button layoutX="379.0" layoutY="271.0" onAction="#updateRefunds" text="Aktualisieren" />
+</AnchorPane>
