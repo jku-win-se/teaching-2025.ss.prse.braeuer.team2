@@ -8,8 +8,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.Objects;
 
-import static jku.se.Database.updateInvoice;
+import static jku.se.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EditInvoiceControllerTest {
@@ -154,4 +156,49 @@ public class EditInvoiceControllerTest {
         assertFalse(success, String.valueOf(true));
     }
 
+    @Test
+    public void testDeleteInvoiceWithoutPicture() throws SQLException {//Soll fehlschlagen weil Rechnung 196 kein Foto hat
+        int idToDelete = 196; // Beispiel-ID, stelle sicher, dass sie existiert
+
+        // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
+        try (Connection conn = Database.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM rechnungen WHERE id = ?")) {
+            checkStmt.setInt(1, idToDelete);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    fail("Rechnung mit ID " + idToDelete + " existiert nicht und kann daher nicht gelöscht werden.");
+                }
+            }
+        } catch (SQLException e) {
+            fail("Fehler beim Vorabcheck: " + e.getMessage());
+        }
+
+        // Schritt 2: Rechnung löschen
+        boolean deleted = deleteInvoice(getConnection(), getInvoiceUsername(idToDelete), getInvoiceDate(idToDelete));
+        assertFalse(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
+
+    }
+
+    @Test
+    public void testDeleteInvoice() throws SQLException {
+        int idToDelete = 208; // Beispiel-ID, stelle sicher, dass sie existiert
+
+        // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
+        try (Connection conn = Database.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM rechnungen WHERE id = ?")) {
+            checkStmt.setInt(1, idToDelete);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    fail("Rechnung mit ID " + idToDelete + " existiert nicht und kann daher nicht gelöscht werden.");
+                }
+            }
+        } catch (SQLException e) {
+            fail("Fehler beim Vorabcheck: " + e.getMessage());
+        }
+
+        // Schritt 2: Rechnung löschen
+        boolean deleted = deleteInvoice(getConnection(), getInvoiceUsername(idToDelete), getInvoiceDate(idToDelete));
+        assertFalse(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
+
+    }
 }
