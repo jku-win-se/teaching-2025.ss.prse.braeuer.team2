@@ -7,10 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
-import jku.se.Database;
-import jku.se.InvoiceService;
-import jku.se.InvoiceStatus;
-import jku.se.InvoiceType;
+import jku.se.*;
 
 import java.io.IOException;
 import java.sql.*;
@@ -49,6 +46,7 @@ public class RequestManagementController extends Controller {
                 GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
     }
 
+    /*
     private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
         int id = rs.getInt("id");
         String image = rs.getString("image");
@@ -72,6 +70,36 @@ public class RequestManagementController extends Controller {
             }
         });
         gridInvoices.add(editButton, 6, row);
+    }*/
+
+    private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
+        int id = rs.getInt("id");
+        String image = rs.getString("image");
+        String invoiceSubmitter = rs.getString("username"); // The user who submitted the invoice
+        String currentUser = Login.getUsername();//getCurrentUserEmail();
+
+        Hyperlink invoiceLink = new Hyperlink("Rechnung " + id);
+        invoiceLink.setOnAction(event -> invoiceService.openInvoiceLink(image));
+
+        gridInvoices.add(invoiceLink, 0, row);
+        gridInvoices.add(new Label(String.format("%.2f €", rs.getDouble("betrag"))), 1, row);
+        gridInvoices.add(new Label(rs.getString("typ")), 2, row);
+        gridInvoices.add(new Label(rs.getString("datum")), 3, row);
+        gridInvoices.add(new Label(invoiceSubmitter), 4, row);
+        gridInvoices.add(new Label(rs.getString("status")), 5, row);
+
+        // Only add the edit button if the current user is NOT the submitter
+        if (!currentUser.equals(invoiceSubmitter)) {
+            Button editButton = new Button("Edit");
+            editButton.setOnAction(event -> {
+                try {
+                    handleEditInvoice(id);
+                } catch (IOException e) {
+                    showAlert("Error", "Failed to edit invoice: " + e.getMessage());
+                }
+            });
+            gridInvoices.add(editButton, 6, row);
+        }
     }
 
     @FXML
