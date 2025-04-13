@@ -1,42 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="228.0" prefWidth="300.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.FilterPanelUserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="320.0" prefWidth="300.0" style="-fx-background-color: #f4f4f4;"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jku.se.Controller.FilterPanelUserController">
 
-    <VBox alignment="TOP_LEFT" layoutX="15.0" layoutY="15.0" spacing="10">
+    <VBox alignment="TOP_LEFT" spacing="10" layoutX="15.0" layoutY="15.0">
         <!-- Titel -->
-        <Label style="-fx-font-weight: bold; -fx-padding: 0 0 5 0;" text="Rechnungen filtern:" />
+        <Label text="Rechnungen filtern:" style="-fx-font-weight: bold; -fx-padding: 0 0 5 0;"/>
 
         <!-- Rechnungs-ID Filter -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <CheckBox fx:id="checkboxRechnungsID" minWidth="100" text="Rechnungs-ID" />
-            <TextField fx:id="textfieldRechnungsID" prefWidth="150.0" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxRechnungsID" text="Rechnungs-ID" minWidth="100"/>
+            <TextField fx:id="textfieldRechnungsID" prefWidth="150.0"/>
         </HBox>
 
         <!-- Typ Filter -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <CheckBox fx:id="checkboxTyp" minWidth="100" text="Typ" />
-            <ComboBox fx:id="comboBoxTyp" prefWidth="150.0" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxTyp" text="Typ" minWidth="100"/>
+            <ComboBox fx:id="comboBoxTyp" prefWidth="150.0"/>
         </HBox>
 
         <!-- Status Filter -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <CheckBox fx:id="checkboxStatus" minWidth="100" text="Status" />
-            <ComboBox fx:id="comboBoxStatus" prefWidth="150.0" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxStatus" text="Status" minWidth="100"/>
+            <ComboBox fx:id="comboBoxStatus" prefWidth="150.0"/>
         </HBox>
 
         <!-- Aktueller Monat Filter -->
-        <HBox alignment="CENTER_LEFT" spacing="10">
-            <CheckBox fx:id="checkboxCurrentMonth" minWidth="100" text="Aktueller Monat" />
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <CheckBox fx:id="checkboxCurrentMonth" text="Aktueller Monat" minWidth="100"/>
         </HBox>
 
         <!-- Filter Button -->
-        <Button onAction="#applyFilters" prefHeight="27.0" prefWidth="260.0" text="Filter anwenden" HBox.hgrow="ALWAYS">
+        <Button onAction="#applyFilters" text="Filter anwenden" HBox.hgrow="ALWAYS">
             <padding>
-                <Insets bottom="5" left="10" right="10" top="5" />
+                <Insets top="5" right="10" bottom="5" left="10"/>
             </padding>
         </Button>
     </VBox>
