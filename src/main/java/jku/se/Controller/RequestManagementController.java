@@ -76,7 +76,7 @@ public class RequestManagementController extends Controller {
         int id = rs.getInt("id");
         String image = rs.getString("image");
         String invoiceSubmitter = rs.getString("username"); // The user who submitted the invoice
-        String currentUser = Login.getUsername();//getCurrentUserEmail();
+        String currentUser = Login.getUsername(); // CurrentUser;
 
         Hyperlink invoiceLink = new Hyperlink("Rechnung " + id);
         invoiceLink.setOnAction(event -> invoiceService.openInvoiceLink(image));
