@@ -21,9 +21,4 @@ public class AdminPanelController extends Controller{
     private void openStatistics(ActionEvent event) throws IOException {
         switchScene(event, "statistics.fxml");
     }
-
-    @FXML
-    private void handleBack(javafx.event.ActionEvent event) throws IOException {
-        switchScene(event, "dashboardAdmin.fxml");
-    }
 }

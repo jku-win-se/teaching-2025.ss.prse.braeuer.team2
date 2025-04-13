@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.AdminPanelController">
-    <Button fx:id="btn_back" layoutX="14.0" layoutY="35.0" onAction="#handleBack" prefHeight="30.0" prefWidth="78.0" text="⬅ Zurück" />
+
     <!-- Überschrift -->
     <Label layoutX="250.0" layoutY="30.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Admin Dashboard" />
 
