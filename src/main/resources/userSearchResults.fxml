@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/19"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jku.se.Controller.UserSearchResultsController"
+            prefHeight="500.0" prefWidth="600.0" style="-fx-padding: 20;">
+
+    <VBox spacing="15" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+        <Label text="Benutzerdetails" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+        <GridPane hgap="10" vgap="10">
+            <!-- Zeile 0 -->
+            <Label text="Vorname:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <Label fx:id="firstNameLabel" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+            <!-- Zeile 1 -->
+            <Label text="Nachname:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lastNameLabel" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+
+            <!-- Zeile 2 -->
+            <Label text="Benutzername:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <Label fx:id="usernameLabel" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+            <!-- Zeile 3 -->
+            <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+            <Label fx:id="emailLabel" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+
+            <!-- Zeile 4 -->
+            <Label text="Rolle:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+            <Label fx:id="roleLabel" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+
+            <!-- Zeile 5 -->
+            <Label text="Status:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+            <Label fx:id="statusLabel" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+
+            <!-- Zeile 6 -->
+            <Label text="Fehlversuche:" GridPane.columnIndex="0" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+            <Label fx:id="failedAttemptsLabel" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+
+            <!-- Zeile 7 -->
+            <Label text="Erstellt am:" GridPane.columnIndex="0" GridPane.rowIndex="7" style="-fx-font-weight: bold;"/>
+            <Label fx:id="createdAtLabel" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+        </GridPane>
+
+        <HBox spacing="10" alignment="CENTER_RIGHT">
+            <Button fx:id="closeButton" text="Schließen"
+                    style="-fx-background-color: #7734db; -fx-text-fill: white; -fx-padding: 8 15;"
+                    onAction="#handleClose"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
