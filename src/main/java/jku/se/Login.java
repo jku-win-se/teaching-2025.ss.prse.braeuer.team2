@@ -91,6 +91,8 @@ public class Login {
         return currentUserStatus;
     }
 
+    public static String getUsername() {return currentUsername;}
+
     public static void logout() {
         currentUsername = null;
         currentUserEmail = null;
