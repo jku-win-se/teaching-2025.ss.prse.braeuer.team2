@@ -181,7 +181,7 @@ public class EditInvoiceControllerTest {
 
     @Test
     public void testDeleteInvoice() throws SQLException {
-        int idToDelete = 207; // Beispiel-ID, stelle sicher, dass sie existiert
+        int idToDelete = 209; // Beispiel-ID, stelle sicher, dass sie existiert
 
         // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
         try (Connection conn = Database.getConnection();
@@ -198,7 +198,7 @@ public class EditInvoiceControllerTest {
 
         // Schritt 2: Rechnung löschen
         boolean deleted = deleteInvoice(getConnection(), getInvoiceUsername(idToDelete), getInvoiceDate(idToDelete));
-        assertFalse(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
+        assertTrue(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
 
     }
 }
