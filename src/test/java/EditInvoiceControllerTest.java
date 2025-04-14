@@ -145,7 +145,7 @@ public class EditInvoiceControllerTest {
     @Test
     public void testUpdateInvoiceRefund() {
         boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.ACCEPTED,
-                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 3.0, 166);
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", getInvoiceRefund(166), 166);
         assertTrue(success, String.valueOf(true));
     }
 
@@ -181,7 +181,7 @@ public class EditInvoiceControllerTest {
 
     @Test
     public void testDeleteInvoice() throws SQLException {
-        int idToDelete = 208; // Beispiel-ID, stelle sicher, dass sie existiert
+        int idToDelete = 207;
 
         // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
         try (Connection conn = Database.getConnection();
@@ -198,7 +198,7 @@ public class EditInvoiceControllerTest {
 
         // Schritt 2: Rechnung löschen
         boolean deleted = deleteInvoice(getConnection(), getInvoiceUsername(idToDelete), getInvoiceDate(idToDelete));
-        assertFalse(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
+        assertTrue(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
 
     }
 }
