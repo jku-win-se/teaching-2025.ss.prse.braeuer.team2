@@ -112,6 +112,23 @@ public class Database {
         return null;
     }
 
+    public static LocalDate getInvoiceDate(int id) {
+        try (Connection conn = Database.getConnection()) {
+            String query = "SELECT datum FROM rechnungen WHERE id = ?";
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setInt(1, id);
+                try (ResultSet rs = stmt.executeQuery()) {
+                    if (rs.next()) {
+                        return rs.getDate("datum").toLocalDate();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static String getInvoiceStatus(int id) {
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT status FROM rechnungen WHERE id = ?";
@@ -189,7 +206,7 @@ public class Database {
                 return false;
             }
 
-            if(refund != 3.0 && refund != 2.5) {
+            if(refund != getInvoiceRefund(id)) {//falls beim test eine andere zahl eingegeben wird, soll false zurückgegeben werden
                 return false;
             }
 

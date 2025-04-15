@@ -55,15 +55,12 @@ public class MessagesController extends Controller{
     }
 
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
-        int messageId = rs.getInt("id");
-        int id = rs.getInt("rechnung_id");
+
         String text = rs.getString("text");
         String date = rs.getString("created_at");
 
-        gridMessages.add(new Label(String.valueOf(messageId)), 0, row);
-        gridMessages.add(new Label(String.valueOf(id)), 1, row);
-        gridMessages.add(new Label(text), 2, row);
-        gridMessages.add(new Label(date), 3, row);
+        gridMessages.add(new Label(text), 0, row);
+        gridMessages.add(new Label(date), 1, row);
     }
 
     public ResultSet getAllMessages() throws SQLException {

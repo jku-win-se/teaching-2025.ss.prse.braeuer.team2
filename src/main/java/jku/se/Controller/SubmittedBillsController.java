@@ -80,14 +80,14 @@ public class SubmittedBillsController extends Controller {
         boolean isCurrentMonth = invoiceDate.getMonth() == currentDate.getMonth() && invoiceDate.getYear() == currentDate.getYear();
         boolean showEditButton = isCurrentMonth && !"ACCEPTED".equals(status);
 
-        if (showEditButton) {
+        if (showEditButton) {//lädt den EditInvoiceUser Fxml mit den aktuellen werten
             Button editBtn = new Button("Edit");
             editBtn.setOnAction(event -> {
                 try {
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/editInvoiceUser.fxml"));
                     Parent root = loader.load();
 
-                    EditInvoiceController controller = loader.getController();
+                    EditInvoiceUserController controller = loader.getController();
                     controller.setInvoice(id, amount, type, dateStr, user);
 
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
