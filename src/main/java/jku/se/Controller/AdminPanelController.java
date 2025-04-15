@@ -25,6 +25,7 @@ public class AdminPanelController extends Controller{
     @FXML
     public void openRefund(ActionEvent event) throws IOException {
         switchScene(event, "refund.fxml");
+    }
 
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
