@@ -108,14 +108,14 @@ public class EditInvoiceController extends Controller{
 
         // Prüfen, ob NUR gültige Zahlen drin ist (z.B. 12, 12.0, 12.34)
         if (!input.matches("\\d+(\\.\\d{1,2})?")) {
-            showAlert("Fehler", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
+            showAlert("Fehler", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
             return;
         }
 
         try {
             betrag = Double.parseDouble(textFieldBetrag.getText());
         } catch (NumberFormatException exc) {
-            showAlert("Error", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
+            showAlert("Error", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
             return;
         }
 
