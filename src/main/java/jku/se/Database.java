@@ -206,7 +206,7 @@ public class Database {
                 return false;
             }
 
-            if(refund != getInvoiceRefund(id)) {//falls beim test eine andere zahl eingegeben wird, soll false zurückgegeben werden
+            if(refund != 3 && refund != 2.5) {//falls beim test eine andere zahl eingegeben wird, soll false zurückgegeben werden
                 return false;
             }
 

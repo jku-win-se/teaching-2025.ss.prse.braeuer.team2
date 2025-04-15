@@ -103,7 +103,22 @@ public class EditInvoiceController extends Controller{
     public void saveChanges() throws SQLException {
         // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
         int id = Integer.parseInt(labelRechnungsID.getText());
-        double betrag = Double.parseDouble(textFieldBetrag.getText());
+        double betrag = 0;
+        String input = textFieldBetrag.getText().replace(",", ".");
+
+        // Prüfen, ob NUR gültige Zahlen drin ist (z.B. 12, 12.0, 12.34)
+        if (!input.matches("\\d+(\\.\\d{1,2})?")) {
+            showAlert("Fehler", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
+            return;
+        }
+
+        try {
+            betrag = Double.parseDouble(textFieldBetrag.getText());
+        } catch (NumberFormatException exc) {
+            showAlert("Error", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
+            return;
+        }
+
         Date datum = null;
         String typString = (String) comboBoxTyp.getValue();
         String username = textfieldUsername.getText();
@@ -157,8 +172,8 @@ public class EditInvoiceController extends Controller{
             return; // Update wird abgebrochen
         }
 
-        InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
-        InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
+        typ = InvoiceType.valueOf((String) comboBoxTyp.getValue()); //wird erst hier initilisiert, weil sonst davor die fehlermeldung kommt und nicht das PopUp, deswegen oben als String für das PopUp deklariert
+        status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
@@ -171,6 +186,7 @@ public class EditInvoiceController extends Controller{
         } else {
             showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
+        System.out.println(success);
     }
 
 
