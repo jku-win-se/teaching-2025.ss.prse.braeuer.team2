@@ -5,11 +5,11 @@ import java.time.LocalDate;
 
 public class Refund {
 
-    public static double getCurrentSupermarketRefund() throws SQLException {
+    public static double getRefundSupermarket() throws SQLException {
         return getRefundForDate(LocalDate.now(), "supermarket");
     }
 
-    public static double getCurrentRestaurantRefund() throws SQLException {
+    public static double getRefundRestaurant() throws SQLException {
         return getRefundForDate(LocalDate.now(), "restaurant");
     }
 

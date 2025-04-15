@@ -114,6 +114,9 @@ public class InvoiceScan {
         }
 
         Invoice invoice = controller.requestManualAll(lDate,sum,type, status);
+        if (invoice == null){
+            return null;
+        }
         lDate = invoice.getDate();
         sum = invoice.getSum();
         type = invoice.getTyp();

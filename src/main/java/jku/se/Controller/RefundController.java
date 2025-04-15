@@ -6,7 +6,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import jku.se.Database;
 import jku.se.Refund;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -58,8 +57,8 @@ public class RefundController extends Controller {
     }
 
     private void refreshRefundValues() throws SQLException {
-        refundRestaurant.setText(String.format("%.2f", Refund.getCurrentRestaurantRefund()));
-        refundSupermarket.setText(String.format("%.2f", Refund.getCurrentSupermarketRefund()));
+        refundRestaurant.setText(String.format("%.2f", Refund.getRefundRestaurant()));
+        refundSupermarket.setText(String.format("%.2f", Refund.getRefundSupermarket()));
     }
 
     public void updateRefunds(ActionEvent actionEvent) {
