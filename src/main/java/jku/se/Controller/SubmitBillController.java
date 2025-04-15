@@ -276,11 +276,14 @@ public class SubmitBillController extends Controller {
     public Invoice requestManualAll(LocalDate defaultDate, double defaultAmount, InvoiceType defaultType, InvoiceStatus defaultStatus) {
         CountDownLatch latch = new CountDownLatch(1);
         Invoice[] resultInvoice = new Invoice[1];
+        displayMessage(" ","green");
 
         Platform.runLater(() -> {
             Stage stage = new Stage();
             stage.setTitle("Rechnungsdaten bearbeiten");
-            stage.setOnCloseRequest(event -> event.consume()); // Verhindert Schließen ohne Validierung
+            stage.setOnCloseRequest(event -> {
+                displayMessage("Abgebrochen Rechnung wurde nicht hochgeladen","red");
+            });
 
             // UI-Elemente
             Label errorLabel = new Label();
@@ -299,6 +302,12 @@ public class SubmitBillController extends Controller {
             RadioButton restaurantRadio = new RadioButton("Restaurant");
             Label typeError = new Label();
             typeError.setTextFill(Color.RED);
+
+
+            Button cancelButton = new Button("Abbrechen");
+            cancelButton.setOnAction(e -> {
+                displayMessage("Abgebrochen Rechnung wurde nicht hochgeladen","red");
+            });
 
             // Default-Werte setzen
             if (defaultDate != null) {
@@ -427,12 +436,7 @@ public class SubmitBillController extends Controller {
                 }
             });
 
-            Button cancelButton = new Button("Abbrechen");
-            cancelButton.setOnAction(e -> {
-                resultInvoice[0] = null;
-                stage.close();
-                latch.countDown();
-            });
+
 
             // Layout
             VBox layout = new VBox(10,
