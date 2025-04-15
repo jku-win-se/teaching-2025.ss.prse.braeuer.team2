@@ -55,6 +55,7 @@ public class Invoice {
     public void setRefund(double refund) {
         this.refund = refund;
     }
+
     public double getRefund() {
         return refund;
     }

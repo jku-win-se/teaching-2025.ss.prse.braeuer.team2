@@ -26,5 +26,6 @@
       </font>
    </Button>
    <Button fx:id="btn_statistics" layoutX="255.0" layoutY="309.0" onAction="#openStatistics" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="📊 Statistiken" />
+   <Button fx:id="btn_manage_refund" layoutX="255.0" layoutY="376.0" onAction="#openRefund" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="Erstattung bearbeiten" />
 
 </AnchorPane>

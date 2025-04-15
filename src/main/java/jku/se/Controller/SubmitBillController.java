@@ -1,11 +1,15 @@
 package jku.se.Controller;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.concurrent.CountDownLatch;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.function.Supplier;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -13,18 +17,18 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.event.ActionEvent;
 import javafx.util.Duration;
-import jku.se.Database;
-import jku.se.InvoiceScan;
-import jku.se.InvoiceType;
+import jku.se.*;
+
+import static jku.se.Database.invoiceExists;
 
 public class SubmitBillController extends Controller {
 
@@ -138,6 +142,12 @@ public class SubmitBillController extends Controller {
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
                     // Try parsing the input from the text field into a LocalDate object
                     LocalDate parsedDate = LocalDate.parse(dateInput.getText(), formatter);
+
+                    //Check if the entered date is not in the future
+                    if (!InvoiceScan.isDateInThePastOrToday(parsedDate)) {
+                        displayMessage("Datum darf nicht in der Zukunft liegen.", "red");
+                        return;
+                    }
 
                     // Check if the entered date is within the current month
                     if (!InvoiceScan.isWithinCurrentMonth(parsedDate)){
@@ -262,4 +272,193 @@ public class SubmitBillController extends Controller {
 
         return selectedType[0];
     }
+
+    public Invoice requestManualAll(LocalDate defaultDate, double defaultAmount, InvoiceType defaultType, InvoiceStatus defaultStatus) {
+        CountDownLatch latch = new CountDownLatch(1);
+        Invoice[] resultInvoice = new Invoice[1];
+
+        Platform.runLater(() -> {
+            Stage stage = new Stage();
+            stage.setTitle("Rechnungsdaten bearbeiten");
+            stage.setOnCloseRequest(event -> event.consume()); // Verhindert Schließen ohne Validierung
+
+            // UI-Elemente
+            Label errorLabel = new Label();
+            errorLabel.setTextFill(Color.RED);
+
+            TextField dateField = new TextField();
+            Label dateError = new Label();
+            dateError.setTextFill(Color.RED);
+
+            TextField amountField = new TextField();
+            Label amountError = new Label();
+            amountError.setTextFill(Color.RED);
+
+            ToggleGroup typeGroup = new ToggleGroup();
+            RadioButton supermarketRadio = new RadioButton("Supermarkt");
+            RadioButton restaurantRadio = new RadioButton("Restaurant");
+            Label typeError = new Label();
+            typeError.setTextFill(Color.RED);
+
+            // Default-Werte setzen
+            if (defaultDate != null) {
+                dateField.setText(defaultDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy")));
+            }
+            if (defaultAmount > 0) {
+                amountField.setText(String.format("%.2f", defaultAmount));
+            }
+            if (defaultType != null) {
+                if (defaultType == InvoiceType.SUPERMARKET) supermarketRadio.setSelected(true);
+                else if (defaultType == InvoiceType.RESTAURANT) restaurantRadio.setSelected(true);
+            }
+
+            // Validierungsmethoden
+            Supplier<Boolean> validateDate = () -> {
+                try {
+                    if (dateField.getText().trim().isEmpty()) {
+                        dateError.setText("Datum ist erforderlich");
+                        return false;
+                    }
+
+                    LocalDate date = LocalDate.parse(dateField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+
+                    if (!InvoiceScan.isDateInThePastOrToday(date)) {
+                        dateError.setText("Datum darf nicht in der Zukunft liegen");
+                        return false;
+                    }
+                    if (!InvoiceScan.isWithinCurrentMonth(date)) {
+                        dateError.setText("Datum muss im aktuellen Monat liegen");
+                        return false;
+                    }
+                    if (!InvoiceScan.isWorkday(date)) {
+                        dateError.setText("Kein Arbeitstag (Wochenende/Feiertag)");
+                        return false;
+                    }
+
+                    // NEU: Prüfung auf existierende Rechnung
+                    try (Connection connection = Database.getConnection()) {
+                        if (invoiceExists(connection, Login.getCurrentUsername(), date)) {
+                            dateError.setText("Rechnung für dieses Datum existiert bereits");
+                            return false;
+                        }
+                    } catch (SQLException e) {
+                        dateError.setText("Datenbankfehler bei der Prüfung");
+                        return false;
+                    }
+
+
+
+                    dateError.setText("");
+                    return true;
+                } catch (DateTimeParseException e) {
+                    dateError.setText("Ungültiges Format (DD.MM.YYYY)");
+                    return false;
+                }
+            };
+
+            Supplier<Boolean> validateAmount = () -> {
+                try {
+                    if (amountField.getText().trim().isEmpty()) {
+                        amountError.setText("Betrag ist erforderlich");
+                        return false;
+                    }
+
+                    double amount = Double.parseDouble(amountField.getText().replace(',', '.'));
+                    if (amount <= 0) {
+                        amountError.setText("Betrag muss positiv sein");
+                        return false;
+                    }
+
+                    amountError.setText("");
+                    return true;
+                } catch (NumberFormatException e) {
+                    amountError.setText("Ungültiger Betrag (z.B. 12.99)");
+                    return false;
+                }
+            };
+
+            Supplier<Boolean> validateType = () -> {
+                if (!supermarketRadio.isSelected() && !restaurantRadio.isSelected()) {
+                    typeError.setText("Bitte Typ auswählen");
+                    return false;
+                }
+                typeError.setText("");
+                return true;
+            };
+
+            // Event-Handler
+            dateField.setOnAction(e -> validateDate.get());
+            amountField.setOnAction(e -> validateAmount.get());
+
+            Button saveButton = new Button("Speichern");
+            saveButton.setOnAction(e -> {
+                boolean dateValid = validateDate.get();
+                boolean amountValid = validateAmount.get();
+                boolean typeValid = validateType.get();
+
+                if (dateValid && amountValid && typeValid) {
+                    try {
+                        LocalDate newDate = LocalDate.parse(dateField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+                        double newAmount = Double.parseDouble(amountField.getText().replace(',', '.'));
+                        InvoiceType newType = supermarketRadio.isSelected() ? InvoiceType.SUPERMARKET : InvoiceType.RESTAURANT;
+
+                        // Änderungsprüfung
+                        boolean changed = (defaultDate != null && !defaultDate.equals(newDate)) ||
+                                (defaultAmount != newAmount) ||
+                                (defaultType != newType);
+
+                        InvoiceStatus status;
+
+                        if (!changed && defaultStatus == InvoiceStatus.ACCEPTED) {
+                            status = InvoiceStatus.ACCEPTED;
+                        } else {
+                            status = InvoiceStatus.PENDING;
+                        }
+                        double refund = Refund.refundCalculation(newAmount, newType, newDate);
+                        resultInvoice[0] = new Invoice(newDate, newAmount, newType, status, refund);
+
+                        stage.close();
+                        latch.countDown();
+                    } catch (Exception ex) {
+                        errorLabel.setText("Fehler bei der Verarbeitung: " + ex.getMessage());
+                    }
+                } else {
+                    errorLabel.setText("Bitte korrigieren Sie die markierten Felder");
+                }
+            });
+
+            Button cancelButton = new Button("Abbrechen");
+            cancelButton.setOnAction(e -> {
+                resultInvoice[0] = null;
+                stage.close();
+                latch.countDown();
+            });
+
+            // Layout
+            VBox layout = new VBox(10,
+                    new VBox(5, new Label("Datum (DD.MM.YYYY):"), dateField, dateError),
+                    new VBox(5, new Label("Betrag:"), amountField, amountError),
+                    new VBox(5, new Label("Rechnungstyp:"),
+                            new HBox(10, supermarketRadio, restaurantRadio), typeError),
+                    errorLabel,
+                    new HBox(10, saveButton, cancelButton)
+            );
+            layout.setPadding(new Insets(15));
+            layout.setAlignment(Pos.CENTER);
+
+            stage.setScene(new Scene(layout, 400, 350));
+            stage.show();
+        });
+
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return null;
+        }
+
+        return resultInvoice[0];
+    }
+
+
 }
