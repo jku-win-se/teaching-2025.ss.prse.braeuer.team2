@@ -32,4 +32,8 @@ public class AdminPanelController extends Controller{
         switchScene(event, "dashboardAdmin.fxml");
 
     }
+
+    public void openExportData(ActionEvent event) throws IOException {
+        switchScene(event, "exportData.fxml");
+    }
 }
