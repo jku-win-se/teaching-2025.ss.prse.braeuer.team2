@@ -113,6 +113,12 @@ public class InvoiceScan {
             type = controller.requestManualType();
         }
 
+        Invoice invoice = controller.requestManualAll(lDate,sum,type, status);
+        lDate = invoice.getDate();
+        sum = invoice.getSum();
+        type = invoice.getTyp();
+        status = invoice.getStatus();
+
         //calculate refund
         double refund = Refund.refundCalculation(sum,type, lDate);
 

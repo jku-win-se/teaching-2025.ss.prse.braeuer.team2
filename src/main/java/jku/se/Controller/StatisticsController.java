@@ -2,6 +2,7 @@ package jku.se.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.NumberAxis;
@@ -11,10 +12,19 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBoundsType;
 import javafx.stage.FileChooser;
 import jku.se.Database;
+
+
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.sql.Connection;
@@ -244,71 +254,73 @@ public class StatisticsController extends Controller {
     private void loadPieChartData(String selectedMetric) {
         pieChart.getData().clear();
 
-        // Get selected type filter
         String selectedType = typeSelector.getValue();
         boolean filterRestaurant = selectedType.equals("Restaurant");
         boolean filterSupermarkt = selectedType.equals("Supermarkt");
 
-        // Modify SQL query based on filter and stat selector
         String sql = "";
         if (selectedMetric.equals("Rückvergütung pro Monat")) {
             sql = """
-    SELECT
-        typ,
-        SUM(r.refund) AS anzahl_rechnungen
-    FROM
-        rechnungen r
-    WHERE
-        r.status = 'ACCEPTED'
-        """ + (filterRestaurant ? "AND r.typ = 'RESTAURANT'" : "") +
+            SELECT
+                typ,
+                SUM(r.refund) AS anzahl_rechnungen
+            FROM
+                rechnungen r
+            WHERE
+                r.status = 'ACCEPTED'
+                """ + (filterRestaurant ? "AND r.typ = 'RESTAURANT'" : "") +
                     (filterSupermarkt ? "AND r.typ = 'SUPERMARKET'" : "") + """
-    GROUP BY
-        r.typ;
-    """;
+            GROUP BY
+                r.typ;
+        """;
         } else if (selectedMetric.equals("Anzahl Rechnungen pro Monat")) {
             sql = """
-    SELECT
-        typ,
-        COUNT(*) AS anzahl_rechnungen
-    FROM
-        rechnungen r
-    WHERE
-        r.status = 'ACCEPTED'
-        """ + (filterRestaurant ? "AND r.typ = 'RESTAURANT'" : "") +
+            SELECT
+                typ,
+                COUNT(*) AS anzahl_rechnungen
+            FROM
+                rechnungen r
+            WHERE
+                r.status = 'ACCEPTED'
+                """ + (filterRestaurant ? "AND r.typ = 'RESTAURANT'" : "") +
                     (filterSupermarkt ? "AND r.typ = 'SUPERMARKET'" : "") + """
-    GROUP BY
-        r.typ;
-    """;
+            GROUP BY
+                r.typ;
+        """;
         } else {
             sql = """
-    SELECT
-        typ,
-        AVG(anzahl_rechnungen) AS anzahl_rechnungen
-    FROM
-        (SELECT
-            r.typ,
-            COUNT(*) AS anzahl_rechnungen
-        FROM
-            rechnungen r
-        WHERE
-            r.status = 'ACCEPTED'
-            """ + (filterRestaurant ? "AND r.typ = 'RESTAURANT'" : "") +
+            SELECT
+                typ,
+                AVG(anzahl_rechnungen) AS anzahl_rechnungen
+            FROM
+                (SELECT
+                    r.typ,
+                    COUNT(*) AS anzahl_rechnungen
+                FROM
+                    rechnungen r
+                WHERE
+                    r.status = 'ACCEPTED'
+                    """ + (filterRestaurant ? "AND r.typ = 'RESTAURANT'" : "") +
                     (filterSupermarkt ? "AND r.typ = 'SUPERMARKET'" : "") + """
-        GROUP BY
-            r.username, r.typ) AS subquery
-    GROUP BY
-        typ;
-    """;
+                GROUP BY
+                    r.username, r.typ) AS subquery
+            GROUP BY
+                typ;
+        """;
         }
 
         try (Connection conn = Database.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            // Define fixed colors for each type
             Map<String, String> typeColors = new HashMap<>();
-            typeColors.put("RESTAURANT", "-fx-pie-color: #272498FF;");  // Orange
-            typeColors.put("SUPERMARKET", "-fx-pie-color: #1976d2;"); // Blue
+            typeColors.put("RESTAURANT", "-fx-pie-color: #272498FF;");
+            typeColors.put("SUPERMARKET", "-fx-pie-color: #1976d2;");
+
+            pieChart.setLabelLineLength(0);
+            pieChart.setLabelsVisible(false); // Wir nutzen eigene Labels
+            pieChart.setLegendVisible(false);
+            pieChart.setPadding(new Insets(0));
 
             while (rs.next()) {
                 String typ = rs.getString("typ");
@@ -318,20 +330,93 @@ public class StatisticsController extends Controller {
                 data.setName(typ + " (" + (int) anzahlRechnungen + ")");
                 pieChart.getData().add(data);
 
-                // Apply the predefined color based on type
-                if (typ != null && typeColors.containsKey(typ)) {
-                    data.getNode().setStyle(typeColors.get(typ) +
-                            " -fx-font-size: 14px; -fx-font-weight: bold;");
-                }
-
+                // Tooltip
                 Tooltip tooltip = new Tooltip(data.getName());
                 Tooltip.install(data.getNode(), tooltip);
             }
+
+            // Farben setzen (nachdem Daten geladen wurden)
+            for (PieChart.Data data : pieChart.getData()) {
+                String typ = data.getName().split(" ")[0]; // z. B. "RESTAURANT"
+                if (typeColors.containsKey(typ)) {
+                    data.getNode().setStyle(typeColors.get(typ));
+                }
+            }
+
+            // Eigene Labels zeichnen
+            addPieChartLabels(pieChart);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+
+    private void addPieChartLabels(PieChart chart) {
+
+
+
+        double total = chart.getData().stream().mapToDouble(PieChart.Data::getPieValue).sum();
+        double startAngle = 0;
+
+        double centerX = chart.getLayoutX() + chart.getPrefWidth() / 2;
+        double centerY = chart.getLayoutY() + chart.getPrefHeight() / 2;
+
+        double innerRadius = Math.min(chart.getPrefWidth(), chart.getPrefHeight()) / 2.0;        // Segmentrand
+        double labelRadius = innerRadius + 30;  // Etwas außerhalb
+
+        Pane parent = (Pane) chart.getParent();
+
+        // Überprüfen, ob es nur ein Segment gibt
+        if (chart.getData().size() == 1) {
+            parent.getChildren().removeIf(node ->
+                    ("pie-label".equals(node.getId()) || "pie-line".equals(node.getId())));
+            return; // Keine Labels hinzufügen, wenn nur ein Segment vorhanden ist
+        }
+
+        // 🧹 Alte Labels & Linien entfernen
+        parent.getChildren().removeIf(node ->
+                ("pie-label".equals(node.getId()) || "pie-line".equals(node.getId())));
+
+        for (PieChart.Data data : chart.getData()) {
+            double angle = (data.getPieValue() / total) * 360;
+            double midAngle = Math.toRadians(startAngle + angle / 2);
+
+            int percent = (int) ((data.getPieValue() / total) * 100);
+            String shortLabel = abbreviate(data.getName());
+            String labelText = shortLabel + " (" + percent + "%)";
+
+            double labelX = centerX + labelRadius * Math.cos(midAngle);
+            double labelY = centerY + labelRadius * Math.sin(midAngle);
+
+            Text label = new Text(labelText);
+            label.setId("pie-label");
+            label.setFill(Color.BLACK);
+            label.setStyle("-fx-font-size: 12px; -fx-font-weight: bold;");
+            label.setLayoutX(labelX - label.prefWidth(-1) / 2);
+            label.setLayoutY(labelY);
+            parent.getChildren().addAll(label);
+            startAngle += angle;
+        }
+    }
+
+
+
+    // Hilfsmethode zum Kürzen
+    private String abbreviate(String name) {
+        switch (name.toUpperCase()) {
+            case "SUPERMARKET":
+                return "SUP";
+            case "RESTAURANT":
+                return "RES";
+            default:
+                return name.length() <= 3 ? name : name.substring(0, 3).toUpperCase();
+        }
+    }
+
+
+
+
 
     private void resetYAxis(double maxYValue) {
         int stepSize = calculateStepSize(maxYValue);
@@ -473,44 +558,6 @@ public class StatisticsController extends Controller {
                 showAlert("Export Error", "Failed to export PDF: " + e.getMessage());
             }
         }
-    }
-
-
-    // Hilfsmethode für Tabellenkopf
-    private void drawTableHeader(PDPageContentStream contentStream, float x, float y, float width) throws IOException {
-        float colWidth = width / 2;
-        contentStream.setNonStrokingColor(200, 200, 200); // Grauer Hintergrund
-
-        // Header-Zellen zeichnen
-        contentStream.addRect(x, y - 15, colWidth, 20);
-        contentStream.addRect(x + colWidth, y - 15, colWidth, 20);
-        contentStream.fill();
-
-        contentStream.setNonStrokingColor(0, 0, 0); // Schwarzer Text
-        contentStream.beginText();
-        contentStream.newLineAtOffset(x + 5, y - 10);
-        contentStream.showText("Month");
-        contentStream.newLineAtOffset(colWidth, 0);
-        contentStream.showText("Value");
-        contentStream.endText();
-    }
-
-    // Hilfsmethode für Tabellenzeilen
-    private void drawTableRow(PDPageContentStream contentStream, float x, float y, float width,
-                              String month, String value) throws IOException {
-        float colWidth = width / 2;
-
-        contentStream.beginText();
-        contentStream.newLineAtOffset(x + 5, y);
-        contentStream.showText(month);
-        contentStream.newLineAtOffset(colWidth, 0);
-        contentStream.showText(value);
-        contentStream.endText();
-
-        // Unterstrich für jede Zeile
-        contentStream.moveTo(x, y - 5);
-        contentStream.lineTo(x + width, y - 5);
-        contentStream.stroke();
     }
 
     // Helper method to show alerts

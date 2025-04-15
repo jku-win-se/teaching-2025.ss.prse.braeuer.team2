@@ -1,63 +1,108 @@
 package jku.se.Controller;
 
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import jku.se.Database;
 import jku.se.Refund;
-
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.function.UnaryOperator;
 
-public class RefundController extends Controller{
+public class RefundController extends Controller {
 
     @FXML
     private TextField refundRestaurant;
-
     @FXML
     private TextField refundSupermarket;
 
     @FXML
-    private void handleBack (ActionEvent event) throws IOException {
+    private void handleBack(ActionEvent event) throws IOException {
         switchScene(event, "adminPanel.fxml");
     }
 
     @FXML
     public void initialize() throws SQLException {
-        refundRestaurant.setText("" + Refund.getRefundRestaurant());
-        refundSupermarket.setText("" + Refund.getRefundSupermarket());
+        // Double-Validierung für beide Textfelder
+        setupDoubleValidation(refundRestaurant);
+        setupDoubleValidation(refundSupermarket);
+
+        // Aktuelle Werte anzeigen
+        refreshRefundValues();
     }
 
-    public void updateRefunds(ActionEvent actionEvent) throws SQLException {
-        LocalDate date = LocalDate.now();
-        double refRestaurant = 0.0;
-        double refSupermarket = 0.0;
+    private void setupDoubleValidation(TextField textField) {
+        // Formatter für Double-Eingaben mit Komma/Punkt
+        DecimalFormat format = new DecimalFormat("#.0#");
 
-        // Versuche, die Eingabewerte in double umzuwandeln
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            if (change.getControlNewText().isEmpty()) {
+                return change;
+            }
+
+            try {
+                format.parse(change.getControlNewText());
+                return change;
+            } catch (ParseException e) {
+                return null;
+            }
+        };
+
+        textField.setTextFormatter(new TextFormatter<>(filter));
+    }
+
+    private void refreshRefundValues() throws SQLException {
+        refundRestaurant.setText(String.format("%.2f", Refund.getCurrentRestaurantRefund()));
+        refundSupermarket.setText(String.format("%.2f", Refund.getCurrentSupermarketRefund()));
+    }
+
+    public void updateRefunds(ActionEvent actionEvent) {
         try {
-            refRestaurant = Double.parseDouble(refundRestaurant.getText());
-            refSupermarket = Double.parseDouble(refundSupermarket.getText());
+            // Werte parsen mit Komma/Punkt-Unterstützung
+            double restaurantValue = parseDoubleValue(refundRestaurant.getText());
+            double supermarketValue = parseDoubleValue(refundSupermarket.getText());
 
-            // Rückerstattungsbeträge aktualisieren
-            Refund.setRefundSupermarket(refSupermarket, date);
-            Refund.setRefundRestaurant(refRestaurant, date);
+            if (restaurantValue < 0 || supermarketValue < 0) {
+                showAlert("Ungültige Werte", "Beträge müssen positiv sein.", Alert.AlertType.ERROR);
+                return;
+            }
 
-            // Erfolgsnachricht anzeigen (Label oder Alert)
-            showAlert("Erfolgreich!", "Die Rückerstattungsbeträge wurden erfolgreich aktualisiert.", Alert.AlertType.INFORMATION);
+            // Bestätigungsdialog
+            Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+            confirmation.setTitle("Bestätigung");
+            confirmation.setHeaderText("Rückerstattungssätze aktualisieren");
+            confirmation.setContentText(String.format(
+                    "Neue Werte:\nSupermarkt: %.2f€\nRestaurant: %.2f€\n\nFortfahren?",
+                    supermarketValue, restaurantValue));
+
+            if (confirmation.showAndWait().orElseThrow() == ButtonType.OK) {
+                Refund.setDailyRefunds(supermarketValue, restaurantValue, LocalDate.now());
+                showAlert("Erfolg", "Rückerstattungssätze wurden aktualisiert.", Alert.AlertType.INFORMATION);
+                refreshRefundValues();
+            }
 
         } catch (NumberFormatException e) {
-            // Fehlerhafte Eingabe behandeln
-            showAlert("Fehler", "Bitte geben Sie gültige Zahlen für die Rückerstattungsbeträge ein.", Alert.AlertType.ERROR);
+            showAlert("Eingabefehler", "Ungültige Zahleneingabe. Bitte Zahlen im Format 12.34 oder 12,34 eingeben.", Alert.AlertType.ERROR);
         } catch (SQLException e) {
-            // Fehler bei der Datenbankverbindung oder dem SQL-Update behandeln
-            showAlert("Datenbankfehler", "Es gab ein Problem beim Speichern der Rückerstattung. Bitte versuchen Sie es später.", Alert.AlertType.ERROR);
+            showAlert("Datenbankfehler", "Fehler beim Speichern: " + e.getMessage(), Alert.AlertType.ERROR);
+            e.printStackTrace();
+        } catch (Exception e) {
+            showAlert("Fehler", "Unbekannter Fehler: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 
-    // Methode zur Anzeige eines Alerts
+    private double parseDoubleValue(String input) throws NumberFormatException {
+        // Ersetze Komma durch Punkt für die Parsing
+        String normalized = input.replace(',', '.');
+        return Double.parseDouble(normalized);
+    }
+
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
