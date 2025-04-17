@@ -28,12 +28,13 @@ import static jku.se.Database.getConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jku.se.InvoicesTotal;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-public class ExportDataController {
+public class ExportDataController extends Controller{
 
     @FXML
     private DatePicker datumExport;
     private LocalDate datum;
     private double totalRefund;
+    private double refundToPay;
     private List<InvoiceExport> invoices;
 
     @FXML
@@ -94,7 +95,7 @@ public class ExportDataController {
 
         List<InvoiceExport> invoices = new ArrayList<>();
         totalRefund = 0.0;
-
+        refundToPay = 0.0;
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setInt(1, year);
@@ -112,20 +113,25 @@ public class ExportDataController {
 
                 invoices.add(new InvoiceExport(date, sum, type, status, refund, id, user));
                 totalRefund += refund;
+
+                if (status == InvoiceStatus.ACCEPTED || status == InvoiceStatus.PENDING) {//Alle rausfiltern, die denied sind
+                    refundToPay += refund;
+                }
             }
         }
 
-        return new InvoicesTotal(invoices, totalRefund);
+        return new InvoicesTotal(invoices, totalRefund, refundToPay);
     }
 
-    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, Path filePath) throws IOException {
+    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, double refundToPay, Path filePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-
         mapper.registerModule(new JavaTimeModule());
-        // Erstelle ein Map-Objekt, das sowohl die Rechnungen als auch die Refund-Summe enthält
-        Map<String, Object> exportData = new HashMap<>();
+
+        // Erstelle ein Map-Objekt, das sowohl die Rechnungen als auch die Refund-Summen enthält
+        Map<String, Object> exportData = new LinkedHashMap<>();
         exportData.put("invoices", invoices);
         exportData.put("totalRefund", totalRefund);
+        exportData.put("refundToPay", refundToPay);
 
         // Schreibe die Daten in die JSON-Datei
         mapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), exportData);
@@ -142,10 +148,14 @@ public class ExportDataController {
             InvoicesTotal invoiceData = getInvoicesForMonth(year, month); // z.B. April 2025
             String monthName = getMonthName(month).toLowerCase();
             Path path = Path.of("invoices-" + monthName + "-" + year + ".json");
-            exportInvoicesToJson(invoiceData.getInvoices(), invoiceData.getTotalRefund(), path);
+            exportInvoicesToJson(invoiceData.getInvoices(), invoiceData.getTotalRefund(), invoiceData.getRefundToPay(), path);
             showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + path.toAbsolutePath());
         } catch (Exception e) {
             showAlert("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());
         }
+    }
+
+    public void goBackAdminPanel(ActionEvent event) throws IOException {
+        switchScene(event,"adminPanel.fxml");
     }
 }

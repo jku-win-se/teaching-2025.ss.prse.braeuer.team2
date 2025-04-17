@@ -91,7 +91,7 @@
     "date" : [ 2025, 4, 14 ],
     "sum" : 63.04,
     "typ" : "SUPERMARKET",
-    "status" : "PENDING",
+    "status" : "DENIED",
     "refund" : 2.5,
     "id" : 225,
     "user" : "admin"
@@ -112,5 +112,6 @@
     "id" : 224,
     "user" : "admin"
   } ],
-  "totalRefund" : 38.0
+  "totalRefund" : 38.0,
+  "refundToPay" : 35.5
 }
