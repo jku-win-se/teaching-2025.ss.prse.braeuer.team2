@@ -1,11 +1,12 @@
 package jku.se.Controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import jku.se.Login;
 import jku.se.Refund;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -21,6 +22,19 @@ public class RefundController extends Controller {
     @FXML
     private TextField refundSupermarket;
 
+
+    @FXML
+    private TableView<Refund> refundTable;
+    @FXML
+    private TableColumn<Refund, LocalDate> dateColumn;
+    @FXML
+    private TableColumn<Refund, Double> restaurantColumn;
+    @FXML
+    private TableColumn<Refund, Double> supermarketColumn;
+    @FXML
+    private TableColumn<Refund, Double> adminColumn;
+
+
     @FXML
     private void handleBack(ActionEvent event) throws IOException {
         switchScene(event, "adminPanel.fxml");
@@ -34,6 +48,9 @@ public class RefundController extends Controller {
 
         // Aktuelle Werte anzeigen
         refreshRefundValues();
+
+        // Tabelle initialisieren
+        setupRefundTable();
     }
 
     private void setupDoubleValidation(TextField textField) {
@@ -63,7 +80,6 @@ public class RefundController extends Controller {
 
     public void updateRefunds(ActionEvent actionEvent) {
         try {
-            // Werte parsen mit Komma/Punkt-Unterstützung
             double restaurantValue = parseDoubleValue(refundRestaurant.getText());
             double supermarketValue = parseDoubleValue(refundSupermarket.getText());
 
@@ -72,7 +88,6 @@ public class RefundController extends Controller {
                 return;
             }
 
-            // Bestätigungsdialog
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
             confirmation.setTitle("Bestätigung");
             confirmation.setHeaderText("Rückerstattungssätze aktualisieren");
@@ -81,9 +96,12 @@ public class RefundController extends Controller {
                     supermarketValue, restaurantValue));
 
             if (confirmation.showAndWait().orElseThrow() == ButtonType.OK) {
-                Refund.setDailyRefunds(supermarketValue, restaurantValue, LocalDate.now());
+                Refund.setDailyRefunds(supermarketValue, restaurantValue, LocalDate.now(), Login.getCurrentUsername());
                 showAlert("Erfolg", "Rückerstattungssätze wurden aktualisiert.", Alert.AlertType.INFORMATION);
-                refreshRefundValues();
+
+                // Beide Methoden aufrufen, um Textfelder UND Tabelle zu aktualisieren
+                refreshRefundValues();  // Aktualisiert die Textfelder
+                refreshTableData();      // Aktualisiert die Tabelle
             }
 
         } catch (NumberFormatException e) {
@@ -108,5 +126,25 @@ public class RefundController extends Controller {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+
+    private void setupRefundTable() throws SQLException {
+        // Spalten mit den Refund-Properties verbinden
+        dateColumn.setCellValueFactory(new PropertyValueFactory<>("changeDate"));
+        restaurantColumn.setCellValueFactory(new PropertyValueFactory<>("restaurant"));
+        supermarketColumn.setCellValueFactory(new PropertyValueFactory<>("supermarket"));
+        adminColumn.setCellValueFactory(new PropertyValueFactory<>("admin"));
+
+        // Daten laden und in der Tabelle anzeigen
+        refreshTableData();
+
+        // Spalten automatisch anpassen
+        refundTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    }
+
+    private void refreshTableData() throws SQLException {
+        ObservableList<Refund> refundData = FXCollections.observableArrayList(Refund.getAllRefunds());
+        refundTable.setItems(refundData);
     }
 }
