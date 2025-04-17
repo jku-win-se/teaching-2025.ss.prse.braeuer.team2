@@ -1,5 +1,6 @@
 import jku.se.Controller.EditInvoiceController;
 import jku.se.Controller.RequestManagementController;
+import jku.se.Controller.SubmitBillController;
 import jku.se.Database;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
@@ -7,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -158,7 +160,7 @@ public class EditInvoiceControllerTest {
 
     @Test
     public void testDeleteInvoiceWithoutPicture() throws SQLException {//Soll fehlschlagen weil Rechnung 196 kein Foto hat
-        int idToDelete = 196; // Beispiel-ID, stelle sicher, dass sie existiert
+        int idToDelete = TestMethoden.uploadInvoiceWithoutImage(Database.getConnection(),"user",2.0,LocalDate.of(1999,01,04));
 
         // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
         try (Connection conn = Database.getConnection();
@@ -181,7 +183,8 @@ public class EditInvoiceControllerTest {
 
     @Test
     public void testDeleteInvoice() throws SQLException {
-        int idToDelete = 209; // Beispiel-ID, stelle sicher, dass sie existiert
+
+        int idToDelete = TestMethoden.uploadInvoice(Database.getConnection(),"user",2.0,LocalDate.of(1999,01,03)); // Beispiel-ID, stelle sicher, dass sie existiert
 
         // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
         try (Connection conn = Database.getConnection();
