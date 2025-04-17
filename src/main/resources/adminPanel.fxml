@@ -12,20 +12,21 @@
     <Label layoutX="250.0" layoutY="30.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Admin Dashboard" />
 
     <!-- Menü-Container -->
-    <VBox layoutX="231.0" layoutY="154.0" prefHeight="155.0" prefWidth="246.0" spacing="20" style="-fx-alignment: center; -fx-padding: 20px;">
+    <VBox layoutX="231.0" layoutY="72.0" prefHeight="387.0" prefWidth="246.0" spacing="20" style="-fx-alignment: center; -fx-padding: 20px;">
 
         <!-- Button für User suchen -->
         <Button fx:id="btn_search_user" onAction="#openUserSearch" prefHeight="45.0" prefWidth="199.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="🔍 User suchen" />
 
         <!-- Button für Anträge bearbeiten -->
         <Button fx:id="btn_manage_requests" onAction="#openRequestManagement" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="📜 Anträge bearbeiten" />
+      <Button fx:id="btn_statistics" onAction="#openStatistics" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="📊 Statistiken" />
+      <Button fx:id="btn_manage_refund" onAction="#openRefund" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="Erstattung bearbeiten" />
+      <Button fx:id="btn_dataExport" onAction="#openExportData" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="📤 Export Daten" />
     </VBox>
    <Button fx:id="btn_logout" layoutX="608.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLogout" text="⍈ Logout">
       <font>
          <Font size="14.0" />
       </font>
    </Button>
-   <Button fx:id="btn_statistics" layoutX="255.0" layoutY="309.0" onAction="#openStatistics" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="📊 Statistiken" />
-   <Button fx:id="btn_manage_refund" layoutX="255.0" layoutY="376.0" onAction="#openRefund" prefHeight="45.0" prefWidth="197.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="Erstattung bearbeiten" />
 
 </AnchorPane>
