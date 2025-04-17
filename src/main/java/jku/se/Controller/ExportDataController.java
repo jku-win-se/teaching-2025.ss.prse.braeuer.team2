@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.util.StringConverter;
-import jku.se.Invoice;
 import jku.se.InvoiceExport;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
@@ -17,20 +16,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.format.TextStyle;
+import java.util.*;
 
 import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
 import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.getConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jku.se.InvoicesTotal;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class ExportDataController {
 
     @FXML
     private DatePicker datumExport;
     private LocalDate datum;
+    private double totalRefund;
+    private List<InvoiceExport> invoices;
 
     @FXML
     public void initialize() {
@@ -52,7 +56,7 @@ public class ExportDataController {
                     return null;
                 }
                 YearMonth ym = YearMonth.parse(string, formatter);
-                return ym.atDay(1); // gibt z. B. 2025-04-01 zurück
+                return ym.atDay(1); // gibt z.B. 2025-04-01 zurück
             }
         });
 
@@ -69,8 +73,18 @@ public class ExportDataController {
         datumExport.setValue(LocalDate.now().withDayOfMonth(1));
     }
 
+    public String getMonthName(int month) {
+        // Konvertiere die Monatszahl in den Monatsnamen
+        Month m = Month.of(month);
+        return m.getDisplayName(TextStyle.FULL, Locale.ENGLISH);  // "March", "April", etc.
+    }
 
-    public List<InvoiceExport> getInvoicesForMonth(int year, int month) throws SQLException {
+
+    public double getTotalRefund() {
+        return totalRefund;
+    }
+
+    public InvoicesTotal getInvoicesForMonth(int year, int month) throws SQLException {
         String sql = """
         SELECT id, datum, username, betrag, typ, status, refund 
         FROM rechnungen
@@ -79,14 +93,16 @@ public class ExportDataController {
     """;
 
         List<InvoiceExport> invoices = new ArrayList<>();
+        totalRefund = 0.0;
 
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, year);
             stmt.setInt(2, month);
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
-                LocalDate date = datum;
+                LocalDate date = rs.getDate("datum").toLocalDate();
                 double sum = rs.getDouble("betrag");
                 InvoiceType type = InvoiceType.valueOf(rs.getString("typ"));       // wenn du ENUM hast
                 InvoiceStatus status = InvoiceStatus.valueOf(rs.getString("status")); // ENUM
@@ -95,29 +111,38 @@ public class ExportDataController {
                 String user = rs.getString("username");
 
                 invoices.add(new InvoiceExport(date, sum, type, status, refund, id, user));
+                totalRefund += refund;
             }
         }
 
-        return invoices;
+        return new InvoicesTotal(invoices, totalRefund);
     }
 
-    public void exportInvoicesToJson(List<InvoiceExport> invoices, Path filePath) throws IOException {
+    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, Path filePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), invoices);
+
+        mapper.registerModule(new JavaTimeModule());
+        // Erstelle ein Map-Objekt, das sowohl die Rechnungen als auch die Refund-Summe enthält
+        Map<String, Object> exportData = new HashMap<>();
+        exportData.put("invoices", invoices);
+        exportData.put("totalRefund", totalRefund);
+
+        // Schreibe die Daten in die JSON-Datei
+        mapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), exportData);
     }
 
     @FXML
     public void ExportButtonClicked(ActionEvent actionEvent) {
-        ExportDataController controller = new ExportDataController();
-
         datumExport.setShowWeekNumbers(false);
         LocalDate selected = datumExport.getValue();
         int year = selected.getYear();
         int month = selected.getMonthValue();
         try {
-            List<InvoiceExport> invoices = controller.getInvoicesForMonth(year, month); // z.B. April 2025
-            Path path = Path.of("invoices-" + month + "-" + year + ".json");
-            controller.exportInvoicesToJson(invoices, path);
+
+            InvoicesTotal invoiceData = getInvoicesForMonth(year, month); // z.B. April 2025
+            String monthName = getMonthName(month).toLowerCase();
+            Path path = Path.of("invoices-" + monthName + "-" + year + ".json");
+            exportInvoicesToJson(invoiceData.getInvoices(), invoiceData.getTotalRefund(), path);
             showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + path.toAbsolutePath());
         } catch (Exception e) {
             showAlert("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());

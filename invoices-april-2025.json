@@ -1,0 +1,116 @@
+{
+  "invoices" : [ {
+    "date" : [ 2025, 4, 1 ],
+    "sum" : 7.6,
+    "typ" : "RESTAURANT",
+    "status" : "ACCEPTED",
+    "refund" : 3.0,
+    "id" : 185,
+    "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 1 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "ACCEPTED",
+    "refund" : 0.0,
+    "id" : 222,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 2 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "ACCEPTED",
+    "refund" : 2.5,
+    "id" : 215,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 2 ],
+    "sum" : 100.0,
+    "typ" : "SUPERMARKET",
+    "status" : "PENDING",
+    "refund" : 3.0,
+    "id" : 187,
+    "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 3 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "PENDING",
+    "refund" : 2.5,
+    "id" : 217,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 4 ],
+    "sum" : 20.3,
+    "typ" : "RESTAURANT",
+    "status" : "PENDING",
+    "refund" : 3.0,
+    "id" : 210,
+    "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 5 ],
+    "sum" : 52.0,
+    "typ" : "RESTAURANT",
+    "status" : "PENDING",
+    "refund" : 2.5,
+    "id" : 190,
+    "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 7 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "ACCEPTED",
+    "refund" : 2.5,
+    "id" : 223,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 8 ],
+    "sum" : 2.0,
+    "typ" : "RESTAURANT",
+    "status" : "PENDING",
+    "refund" : 3.0,
+    "id" : 196,
+    "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 10 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "PENDING",
+    "refund" : 5.0,
+    "id" : 219,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 11 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "PENDING",
+    "refund" : 2.5,
+    "id" : 218,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 14 ],
+    "sum" : 63.04,
+    "typ" : "SUPERMARKET",
+    "status" : "PENDING",
+    "refund" : 2.5,
+    "id" : 225,
+    "user" : "admin"
+  }, {
+    "date" : [ 2025, 4, 14 ],
+    "sum" : 120.0,
+    "typ" : "RESTAURANT",
+    "status" : "ACCEPTED",
+    "refund" : 3.0,
+    "id" : 205,
+    "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 15 ],
+    "sum" : 85.0,
+    "typ" : "RESTAURANT",
+    "status" : "PENDING",
+    "refund" : 3.0,
+    "id" : 224,
+    "user" : "admin"
+  } ],
+  "totalRefund" : 38.0
+}

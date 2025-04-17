@@ -9,6 +9,7 @@ module com.example.lunchify {
     requires java.desktop;
     requires org.apache.pdfbox;
     requires com.fasterxml.jackson.databind;
+    requires com.fasterxml.jackson.datatype.jsr310;
 
     exports jku.se; // Alle Klassen im jku.se Package exportieren
     opens jku.se.Controller to javafx.fxml; // Controller für javafx.fxml öffnen
