@@ -83,11 +83,11 @@ public class MessagesController extends Controller{
             stmt.setInt(1, id);
             int rows = stmt.executeUpdate();
             if (rows > 0) {
-                showAlertSuccess("Erfolg", "Nachricht erfolgreich gelöscht.");
+                //showAlertSuccess("Erfolg", "Nachricht erfolgreich gelöscht.");
+                loadAndDisplayMessages(); // Nach dem Löschen die Liste neu laden
             } else {
                 showAlert("Fehler", "Die Nachricht konnte nicht gelöscht werden, da sie bereits gelöscht wurde.");
             }
-
         } catch (SQLException e) {
             showAlert("Fehler", "Nachricht konnte nicht gelöscht werden: " + e.getMessage());
         }
