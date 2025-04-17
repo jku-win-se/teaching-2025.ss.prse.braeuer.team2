@@ -17,20 +17,20 @@
     "user" : "admin"
   }, {
     "date" : [ 2025, 4, 2 ],
-    "sum" : 10.94,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 215,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 4, 2 ],
     "sum" : 100.0,
     "typ" : "SUPERMARKET",
     "status" : "PENDING",
     "refund" : 3.0,
     "id" : 187,
     "user" : "user"
+  }, {
+    "date" : [ 2025, 4, 2 ],
+    "sum" : 10.94,
+    "typ" : "SUPERMARKET",
+    "status" : "ACCEPTED",
+    "refund" : 2.5,
+    "id" : 215,
+    "user" : "admin"
   }, {
     "date" : [ 2025, 4, 3 ],
     "sum" : 10.94,
@@ -107,11 +107,11 @@
     "date" : [ 2025, 4, 15 ],
     "sum" : 85.0,
     "typ" : "RESTAURANT",
-    "status" : "PENDING",
+    "status" : "ACCEPTED",
     "refund" : 3.0,
     "id" : 224,
     "user" : "admin"
   } ],
   "totalRefund" : 38.0,
-  "refundToPay" : 35.5
+  "refundToPay" : 14.0
 }

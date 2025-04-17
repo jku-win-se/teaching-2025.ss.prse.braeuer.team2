@@ -114,7 +114,7 @@ public class ExportDataController extends Controller{
                 invoices.add(new InvoiceExport(date, sum, type, status, refund, id, user));
                 totalRefund += refund;
 
-                if (status == InvoiceStatus.ACCEPTED || status == InvoiceStatus.PENDING) {//Alle rausfiltern, die denied sind
+                if (status == InvoiceStatus.ACCEPTED) {//Alle rausfiltern, die denied sind
                     refundToPay += refund;
                 }
             }
