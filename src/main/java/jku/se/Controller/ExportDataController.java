@@ -178,12 +178,36 @@ public class ExportDataController extends Controller{
         int year = selected.getYear();
         int month = selected.getMonthValue();
         try {
-
             InvoicesTotal invoiceData = getInvoicesForMonth(year, month);
+
+            // FileChooser öffnen
+            javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
+            fileChooser.setTitle("Exportiere Rechnungen als JSON");
+
+            // Standard-Dateiname
             String monthName = getMonthName(month).toLowerCase();
-            Path path = Path.of("invoices-" + monthName + "-" + year + ".json");
-            exportInvoicesToJson(invoiceData.getInvoices(), invoiceData.getTotalRefund(), invoiceData.getRefundToPay(), path, year, month);
-            showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + path.toAbsolutePath());
+            fileChooser.setInitialFileName("invoices-" + monthName + "-" + year + ".json");
+
+            // Dateityp-Filter (nur JSON-Dateien anzeigen)
+            fileChooser.getExtensionFilters().add(new javafx.stage.FileChooser.ExtensionFilter("JSON Files", "*.json"));
+
+            // Fenster anzeigen (achte auf richtige Stage)
+            java.io.File file = fileChooser.showSaveDialog(datumExport.getScene().getWindow());
+
+            if (file != null) {
+                // Exportieren, wenn User einen Speicherort gewählt hat
+                exportInvoicesToJson(
+                        invoiceData.getInvoices(),
+                        invoiceData.getTotalRefund(),
+                        invoiceData.getRefundToPay(),
+                        file.toPath(),  // Pfad vom FileChooser
+                        year,
+                        month
+                );
+                showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + file.getAbsolutePath());
+            } else {
+                // User hat abgebrochen -> keine Fehlermeldung, einfach ignorieren
+            }
         } catch (Exception e) {
             showAlert("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());
         }
