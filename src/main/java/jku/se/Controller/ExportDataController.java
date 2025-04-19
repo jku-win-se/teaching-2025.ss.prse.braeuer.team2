@@ -5,9 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.util.StringConverter;
-import jku.se.InvoiceExport;
-import jku.se.InvoiceStatus;
-import jku.se.InvoiceType;
+import jku.se.*;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -26,7 +24,6 @@ import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
 import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.getConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jku.se.InvoicesTotal;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class ExportDataController extends Controller{
 
@@ -74,7 +71,7 @@ public class ExportDataController extends Controller{
         datumExport.setValue(LocalDate.now().withDayOfMonth(1));
     }
 
-    public String getMonthName(int month) {
+    public static String getMonthName(int month) {
         // Konvertiere die Monatszahl in den Monatsnamen
         Month m = Month.of(month);
         return m.getDisplayName(TextStyle.FULL, Locale.ENGLISH);  // "March", "April", etc.
@@ -123,17 +120,54 @@ public class ExportDataController extends Controller{
         return new InvoicesTotal(invoices, totalRefund, refundToPay);
     }
 
-    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, double refundToPay, Path filePath) throws IOException {
+    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, double refundToPay, Path filePath, int year, int month) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
-        // Erstelle ein Map-Objekt, das sowohl die Rechnungen als auch die Refund-Summen enthält
-        Map<String, Object> exportData = new LinkedHashMap<>();
-        exportData.put("invoices", invoices);
-        exportData.put("totalRefund", totalRefund);
-        exportData.put("refundToPay", refundToPay);
+        ExportData exportData = new ExportData();
 
-        // Schreibe die Daten in die JSON-Datei
+        // Metadata
+        Map<String, Object> metadata = new LinkedHashMap<>();
+        metadata.put("exportDate", LocalDate.now().toString());
+        metadata.put("month", getMonthName(month));
+        metadata.put("year", year);
+        metadata.put("totalInvoices", invoices.size());
+        metadata.put("currency", "EUR");
+        exportData.metadata = metadata;
+
+        // Summary
+        double totalAmount = invoices.stream().mapToDouble(InvoiceExport::getSum).sum();
+        Map<String, Object> summary = new LinkedHashMap<>();
+        summary.put("totalAmount", totalAmount);
+        summary.put("totalRefund", totalRefund);
+        summary.put("refundToPay", refundToPay);
+        exportData.summary = summary;
+
+        // User-spezifische Gruppierung
+        Map<String, UserInvoices> userMap = new LinkedHashMap<>();
+
+        for (InvoiceExport inv : invoices) {
+            String user = inv.getUser();
+            userMap.putIfAbsent(user, new UserInvoices(user));
+            UserInvoices ui = userMap.get(user);
+
+            Map<String, Object> invoiceMap = new LinkedHashMap<>();
+            invoiceMap.put("id", inv.getId());
+            invoiceMap.put("date", inv.getDate());
+            invoiceMap.put("amount", inv.getSum());
+            invoiceMap.put("type", inv.getTyp().name());
+            invoiceMap.put("status", inv.getStatus().name());
+            invoiceMap.put("refund", inv.getRefund());
+
+            ui.invoices.add(invoiceMap);
+            ui.totalInvoices++;
+            ui.totalAmount += inv.getSum();
+            ui.totalRefund += inv.getRefund();
+        }
+
+        exportData.users = new ArrayList<>(userMap.values());
+
+        // JSON schreiben
         mapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), exportData);
     }
 
@@ -145,10 +179,10 @@ public class ExportDataController extends Controller{
         int month = selected.getMonthValue();
         try {
 
-            InvoicesTotal invoiceData = getInvoicesForMonth(year, month); // z.B. April 2025
+            InvoicesTotal invoiceData = getInvoicesForMonth(year, month);
             String monthName = getMonthName(month).toLowerCase();
             Path path = Path.of("invoices-" + monthName + "-" + year + ".json");
-            exportInvoicesToJson(invoiceData.getInvoices(), invoiceData.getTotalRefund(), invoiceData.getRefundToPay(), path);
+            exportInvoicesToJson(invoiceData.getInvoices(), invoiceData.getTotalRefund(), invoiceData.getRefundToPay(), path, year, month);
             showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + path.toAbsolutePath());
         } catch (Exception e) {
             showAlert("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());
@@ -157,5 +191,29 @@ public class ExportDataController extends Controller{
 
     public void goBackAdminPanel(ActionEvent event) throws IOException {
         switchScene(event,"adminPanel.fxml");
+    }
+
+    // Benutzerdaten für das JSON
+    public static class UserInvoices {
+        public String username;
+        public int totalInvoices;
+        public double totalAmount;
+        public double totalRefund;
+        public List<Map<String, Object>> invoices;
+
+        public UserInvoices(String username) {
+            this.username = username;
+            this.invoices = new ArrayList<>();
+            this.totalAmount = 0.0;
+            this.totalRefund = 0.0;
+            this.totalInvoices = 0;
+        }
+    }
+
+    // Gesamtes Export-Objekt
+    public static class ExportData {
+        public Map<String, Object> metadata;
+        public Map<String, Object> summary;
+        public List<UserInvoices> users;
     }
 }

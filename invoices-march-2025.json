@@ -1,165 +1,167 @@
 {
-  "invoices" : [ {
-    "date" : [ 2025, 3, 11 ],
-    "sum" : 2.0,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 165,
-    "user" : "admin"
+  "metadata" : {
+    "exportDate" : "2025-04-19",
+    "month" : "March",
+    "year" : 2025,
+    "totalInvoices" : 20,
+    "currency" : "EUR"
+  },
+  "summary" : {
+    "totalAmount" : 698.68,
+    "totalRefund" : 54.0,
+    "refundToPay" : 46.0
+  },
+  "users" : [ {
+    "username" : "admin",
+    "totalInvoices" : 10,
+    "totalAmount" : 264.78999999999996,
+    "totalRefund" : 26.5,
+    "invoices" : [ {
+      "id" : 165,
+      "date" : [ 2025, 3, 11 ],
+      "amount" : 2.0,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 167,
+      "date" : [ 2025, 3, 13 ],
+      "amount" : 13.35,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 169,
+      "date" : [ 2025, 3, 16 ],
+      "amount" : 35.55,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 171,
+      "date" : [ 2025, 3, 18 ],
+      "amount" : 21.99,
+      "type" : "SUPERMARKET",
+      "status" : "PENDING",
+      "refund" : 2.5
+    }, {
+      "id" : 173,
+      "date" : [ 2025, 3, 20 ],
+      "amount" : 11.4,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 175,
+      "date" : [ 2025, 3, 22 ],
+      "amount" : 31.6,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 177,
+      "date" : [ 2025, 3, 24 ],
+      "amount" : 72.3,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 179,
+      "date" : [ 2025, 3, 26 ],
+      "amount" : 23.45,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 181,
+      "date" : [ 2025, 3, 28 ],
+      "amount" : 19.95,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 183,
+      "date" : [ 2025, 3, 30 ],
+      "amount" : 33.2,
+      "type" : "SUPERMARKET",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    } ]
   }, {
-    "date" : [ 2025, 3, 12 ],
-    "sum" : 30.0,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 166,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 13 ],
-    "sum" : 13.35,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 167,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 15 ],
-    "sum" : 65.0,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 168,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 16 ],
-    "sum" : 35.55,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 169,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 17 ],
-    "sum" : 16.0,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 170,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 18 ],
-    "sum" : 21.99,
-    "typ" : "SUPERMARKET",
-    "status" : "PENDING",
-    "refund" : 2.5,
-    "id" : 171,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 19 ],
-    "sum" : 39.7,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 172,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 20 ],
-    "sum" : 11.4,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 173,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 21 ],
-    "sum" : 27.8,
-    "typ" : "RESTAURANT",
-    "status" : "PENDING",
-    "refund" : 3.0,
-    "id" : 174,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 22 ],
-    "sum" : 31.6,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 175,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 23 ],
-    "sum" : 49.99,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 176,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 24 ],
-    "sum" : 72.3,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 177,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 25 ],
-    "sum" : 15.0,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 178,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 26 ],
-    "sum" : 23.45,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 179,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 27 ],
-    "sum" : 59.1,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 180,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 28 ],
-    "sum" : 19.95,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 3.0,
-    "id" : 181,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 29 ],
-    "sum" : 88.8,
-    "typ" : "RESTAURANT",
-    "status" : "PENDING",
-    "refund" : 2.5,
-    "id" : 182,
-    "user" : "user"
-  }, {
-    "date" : [ 2025, 3, 30 ],
-    "sum" : 33.2,
-    "typ" : "SUPERMARKET",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 183,
-    "user" : "admin"
-  }, {
-    "date" : [ 2025, 3, 31 ],
-    "sum" : 42.5,
-    "typ" : "RESTAURANT",
-    "status" : "ACCEPTED",
-    "refund" : 2.5,
-    "id" : 184,
-    "user" : "user"
-  } ],
-  "totalRefund" : 54.0,
-  "refundToPay" : 54.0
+    "username" : "user",
+    "totalInvoices" : 10,
+    "totalAmount" : 433.89000000000004,
+    "totalRefund" : 27.5,
+    "invoices" : [ {
+      "id" : 166,
+      "date" : [ 2025, 3, 12 ],
+      "amount" : 30.0,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 168,
+      "date" : [ 2025, 3, 15 ],
+      "amount" : 65.0,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 170,
+      "date" : [ 2025, 3, 17 ],
+      "amount" : 16.0,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 172,
+      "date" : [ 2025, 3, 19 ],
+      "amount" : 39.7,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 174,
+      "date" : [ 2025, 3, 21 ],
+      "amount" : 27.8,
+      "type" : "RESTAURANT",
+      "status" : "PENDING",
+      "refund" : 3.0
+    }, {
+      "id" : 176,
+      "date" : [ 2025, 3, 23 ],
+      "amount" : 49.99,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    }, {
+      "id" : 178,
+      "date" : [ 2025, 3, 25 ],
+      "amount" : 15.0,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 180,
+      "date" : [ 2025, 3, 27 ],
+      "amount" : 59.1,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 3.0
+    }, {
+      "id" : 182,
+      "date" : [ 2025, 3, 29 ],
+      "amount" : 88.8,
+      "type" : "RESTAURANT",
+      "status" : "PENDING",
+      "refund" : 2.5
+    }, {
+      "id" : 184,
+      "date" : [ 2025, 3, 31 ],
+      "amount" : 42.5,
+      "type" : "RESTAURANT",
+      "status" : "ACCEPTED",
+      "refund" : 2.5
+    } ]
+  } ]
 }
