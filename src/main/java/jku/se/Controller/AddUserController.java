@@ -2,62 +2,92 @@ package jku.se.Controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.event.ActionEvent;
 import jku.se.Database;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import static jku.se.Controller.RequestManagementController.showAlert;
-
-public class AddUserController {
+public class AddUserController extends Controller {
+    @FXML private TextField firstNameField;
+    @FXML private TextField lastNameField;
     @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private PasswordField confirmPasswordField;
     @FXML private ComboBox<String> roleComboBox;
-    @FXML private ComboBox<String> statusComboBox;
 
     @FXML
     public void initialize() {
-        roleComboBox.getItems().addAll("ADMIN", "USER", "MANAGER");
-        statusComboBox.getItems().addAll("ACTIVE", "INACTIVE");
+        // Initialize role dropdown with only ADMIN and USER
+        roleComboBox.getItems().addAll("USER", "ADMIN");
+        roleComboBox.getSelectionModel().selectFirst();
     }
 
     @FXML
-    private void handleSave() {
+    private void handleSave(ActionEvent event) {
         if (validateInput()) {
             try (Connection conn = Database.getConnection()) {
-                String query = "INSERT INTO accounts (username, email, password, role, status) " +
-                        "VALUES (?, ?, ?, ?::user_role, ?::account_status)";
-                PreparedStatement stmt = conn.prepareStatement(query);
+                String query = "INSERT INTO accounts (first_name, last_name, username, email, password, role, status, failed_attempts) " +
+                        "VALUES (?, ?, ?, ?, ?, ?::account_type, 'ACTIVE'::account_status, 0)";
 
-                stmt.setString(1, usernameField.getText());
-                stmt.setString(2, emailField.getText());
-                stmt.setString(3, passwordField.getText());
-                stmt.setString(4, roleComboBox.getValue());
-                stmt.setString(5, statusComboBox.getValue());
+                PreparedStatement stmt = conn.prepareStatement(query);
+                stmt.setString(1, firstNameField.getText());
+                stmt.setString(2, lastNameField.getText());
+                stmt.setString(3, usernameField.getText());
+                stmt.setString(4, emailField.getText());
+                stmt.setString(5, passwordField.getText());
+                stmt.setString(6, roleComboBox.getValue());
 
                 int affectedRows = stmt.executeUpdate();
                 if (affectedRows > 0) {
-                    // Close the dialog
-                    usernameField.getScene().getWindow().hide();
+                    showAlert(Alert.AlertType.INFORMATION, "Success", "User created successfully");
+                    switchScene(event, "jku/se/View/userOverviewDashboard.fxml");
                 }
-            } catch (SQLException e) {
-                showAlert("Database Error", "Failed to add user: " + e.getMessage());
+            } catch (Exception e) {
+                showAlert(Alert.AlertType.ERROR, "Error", "Failed to create user: " + e.getMessage());
             }
         }
     }
 
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        try {
+            switchScene(event, "userOverviewDashboard.fxml");
+        } catch (IOException e) {
+            showAlert(Alert.AlertType.ERROR, "Navigation Error", "Could not return to user overview");
+        }
+    }
+
     private boolean validateInput() {
-        // Implement validation logic
+        if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
+                usernameField.getText().isEmpty() || emailField.getText().isEmpty() ||
+                passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()) {
+
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "All fields are required");
+            return false;
+        }
+
+        if (!passwordField.getText().equals(confirmPasswordField.getText())) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Passwords do not match");
+            return false;
+        }
+
+        if (passwordField.getText().length() < 8) {
+            showAlert(Alert.AlertType.ERROR, "Validation Error", "Password must be at least 8 characters");
+            return false;
+        }
+
         return true;
     }
 
-    @FXML
-    private void handleCancel() {
-        usernameField.getScene().getWindow().hide();
+    private void showAlert(Alert.AlertType alertType, String title, String message) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
-
-
 }

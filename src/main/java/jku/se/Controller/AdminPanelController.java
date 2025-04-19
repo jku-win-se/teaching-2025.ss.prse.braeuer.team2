@@ -8,8 +8,8 @@ import javafx.event.ActionEvent;
 public class AdminPanelController extends Controller{
 
     @FXML
-    private void openUserSearch(ActionEvent event) throws IOException {
-        switchScene(event, "userSearch.fxml");
+    private void openUserOverviewDashboard(ActionEvent event) throws IOException {
+        switchScene(event, "userOverviewDashboard.fxml");
     }
 
     @FXML

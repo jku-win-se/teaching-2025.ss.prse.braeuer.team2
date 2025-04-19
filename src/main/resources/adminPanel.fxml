@@ -15,7 +15,7 @@
     <VBox layoutX="231.0" layoutY="154.0" prefHeight="155.0" prefWidth="246.0" spacing="20" style="-fx-alignment: center; -fx-padding: 20px;">
 
         <!-- Button für User suchen -->
-        <Button fx:id="btn_search_user" onAction="#openUserSearch" prefHeight="45.0" prefWidth="199.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="🔍 User suchen" />
+        <Button fx:id="btn_search_user" onAction="#openUserOverviewDashboard" prefHeight="45.0" prefWidth="199.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="👤 User anzeigen" />
 
         <!-- Button für Anträge bearbeiten -->
         <Button fx:id="btn_manage_requests" onAction="#openRequestManagement" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="📜 Anträge bearbeiten" />

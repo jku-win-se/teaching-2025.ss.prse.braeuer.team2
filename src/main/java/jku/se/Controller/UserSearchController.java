@@ -54,6 +54,6 @@ public class UserSearchController extends Controller {
 
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
-        switchScene(event, "adminPanel.fxml");
+        switchScene(event, "userOverviewDashboard.fxml");
     }
 }
