@@ -93,6 +93,10 @@ public class Login {
 
     public static String getUsername() {return currentUsername;}
 
+    public static int getMaxFailedAttempts() {
+        return MAX_FAILED_ATTEMPTS;
+    }
+
     public static void logout() {
         currentUsername = null;
         currentUserEmail = null;

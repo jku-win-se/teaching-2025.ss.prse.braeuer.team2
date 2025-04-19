@@ -1,23 +1,16 @@
 package jku.se.Controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
-import jku.se.Database;
+import jku.se.UserManagement;
 import jku.se.Role;
 import jku.se.Status;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Optional;
+
+import static jku.se.Controller.RequestManagementController.showAlert;
 
 public class UserSearchResultsController extends Controller {
 
@@ -30,7 +23,7 @@ public class UserSearchResultsController extends Controller {
     @FXML private TextField failedAttemptsField;
     @FXML private Label createdAtLabel;
 
-    private String originalUsername;
+    private String currentUsername;
 
     @FXML
     public void initialize() {
@@ -43,91 +36,75 @@ public class UserSearchResultsController extends Controller {
     }
 
     public void loadUserData(String username) {
-        this.originalUsername = username;
-        try (Connection conn = Database.getConnection()) {
-            String query = "SELECT first_name, last_name, username, email, " +
-                    "role::text, status::text, failed_attempts, \"createdAt\" " +
-                    "FROM accounts WHERE username = ?";
-
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, username);
-
-            ResultSet rs = stmt.executeQuery();
-
-            if (rs.next()) {
-                firstNameField.setText(rs.getString("first_name"));
-                lastNameField.setText(rs.getString("last_name"));
-                usernameLabel.setText(rs.getString("username"));
-                emailField.setText(rs.getString("email"));
-
-                // Set dropdown values
-                roleComboBox.setValue(rs.getString("role"));
-                statusComboBox.setValue(rs.getString("status"));
-
-                failedAttemptsField.setText(String.valueOf(rs.getInt("failed_attempts")));
-
-                // Format date
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-                createdAtLabel.setText(dateFormat.format(rs.getTimestamp("createdAt")));
+        this.currentUsername = username;
+        try {
+            UserManagement.User user = UserManagement.getUser(username);
+            if (user != null) {
+                firstNameField.setText(user.firstName);
+                lastNameField.setText(user.lastName);
+                usernameLabel.setText(user.username);
+                emailField.setText(user.email);
+                roleComboBox.setValue(user.role);
+                statusComboBox.setValue(user.status);
+                failedAttemptsField.setText(String.valueOf(user.failedAttempts));
+                createdAtLabel.setText(user.createdAt);
             } else {
-                showAlert(AlertType.WARNING, "Not Found", "User not found");
+                showAlert("Error", "User not found");
             }
         } catch (SQLException e) {
-            showAlert(AlertType.ERROR, "Database Error", "Error loading data: " + e.getMessage());
+            showAlert("Database Error", "Error loading user data: " + e.getMessage());
         }
     }
 
     @FXML
-    private void handleSave() {
-        try (Connection conn = Database.getConnection()) {
-            String query = "UPDATE accounts SET " +
-                    "first_name = ?, last_name = ?, email = ?, " +
-                    "role = ?::account_type, status = ?::account_status, " +
-                    "failed_attempts = ? WHERE username = ?";
+    private void handleUpdate() {
+        try {
+            UserManagement.User user = new UserManagement.User();
+            user.firstName = firstNameField.getText();
+            user.lastName = lastNameField.getText();
+            user.username = usernameLabel.getText();
+            user.email = emailField.getText();
+            user.role = roleComboBox.getValue();
+            user.status = statusComboBox.getValue();
+            user.failedAttempts = Integer.parseInt(failedAttemptsField.getText());
 
-            PreparedStatement stmt = conn.prepareStatement(query);
-            stmt.setString(1, firstNameField.getText());
-            stmt.setString(2, lastNameField.getText());
-            stmt.setString(3, emailField.getText());
-            stmt.setString(4, roleComboBox.getValue());
-            stmt.setString(5, statusComboBox.getValue());
-            stmt.setInt(6, Integer.parseInt(failedAttemptsField.getText()));
-            stmt.setString(7, originalUsername);
+            boolean success = UserManagement.updateUser(user);
 
-            int updated = stmt.executeUpdate();
-            if (updated > 0) {
-                showAlert(AlertType.INFORMATION, "Success", "Data saved successfully");
+            if (success) {
+                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                successAlert.setTitle("Success");
+                successAlert.setHeaderText(null);
+                successAlert.setContentText("User updated successfully");
+                successAlert.showAndWait();
                 closeWindow();
             }
-        } catch (NumberFormatException e) {
-            showAlert(AlertType.ERROR, "Error", "Failed attempts must be a number");
         } catch (SQLException e) {
-            showAlert(AlertType.ERROR, "Database Error", "Save failed: " + e.getMessage());
+            showAlert("Database Error", "Failed to update user: " + e.getMessage());
+        } catch (NumberFormatException e) {
+            showAlert("Input Error", "Failed attempts must be a number");
         }
     }
 
     @FXML
     private void handleDelete() {
-        Alert confirmation = new Alert(AlertType.CONFIRMATION);
-        confirmation.setTitle("Delete User");
-        confirmation.setHeaderText("Are you sure you want to delete this user?");
-        confirmation.setContentText("This action cannot be undone.");
+        Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmation.setTitle("Confirm Deletion");
+        confirmation.setHeaderText("Delete User");
+        confirmation.setContentText("Are you sure you want to delete this user?");
 
         Optional<ButtonType> result = confirmation.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
-            try (Connection conn = Database.getConnection()) {
-                String query = "DELETE FROM accounts WHERE username = ?";
-
-                PreparedStatement stmt = conn.prepareStatement(query);
-                stmt.setString(1, originalUsername);
-
-                int deleted = stmt.executeUpdate();
-                if (deleted > 0) {
-                    showAlert(AlertType.INFORMATION, "Success", "User deleted successfully");
+            try {
+                if (UserManagement.deleteUser(currentUsername)) {
+                    Alert success = new Alert(Alert.AlertType.INFORMATION);
+                    success.setTitle("Success");
+                    success.setHeaderText(null);
+                    success.setContentText("User deleted successfully");
+                    success.showAndWait();
                     closeWindow();
                 }
             } catch (SQLException e) {
-                showAlert(AlertType.ERROR, "Database Error", "Delete failed: " + e.getMessage());
+                showAlert("Database Error", "Failed to delete user: " + e.getMessage());
             }
         }
     }
@@ -139,13 +116,5 @@ public class UserSearchResultsController extends Controller {
 
     private void closeWindow() {
         ((Stage) usernameLabel.getScene().getWindow()).close();
-    }
-
-    private void showAlert(AlertType type, String title, String message) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
     }
 }

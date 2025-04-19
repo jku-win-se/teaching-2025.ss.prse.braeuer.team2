@@ -40,24 +40,24 @@
             <!-- Row 7 -->
             <Label style="-fx-font-weight: bold;" text="Created At:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
             <Label fx:id="createdAtLabel" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-         <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-            <RowConstraints />
-         </rowConstraints>
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+                <RowConstraints />
+            </rowConstraints>
         </GridPane>
 
         <HBox alignment="CENTER_RIGHT" spacing="10">
-            <Button onAction="#handleSave" prefHeight="33.0" prefWidth="65.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 8 15;" text="Save" />
+            <Button onAction="#handleUpdate" prefHeight="33.0" prefWidth="73.0" style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 8 15;" text="Update" />
             <Button onAction="#handleDelete" style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-padding: 8 15;" text="Delete" />
             <Button onAction="#handleClose" style="-fx-background-color: #7734db; -fx-text-fill: white; -fx-padding: 8 15;" text="Close" />
         </HBox>
