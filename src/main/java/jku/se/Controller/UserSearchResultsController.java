@@ -85,6 +85,6 @@ public class UserSearchResultsController implements Initializable {
     @FXML
     private void handleClose() {
         Stage stage = (Stage) usernameLabel.getScene().getWindow();
-        stage.close();
+        stage.close(); 
     }
 }
