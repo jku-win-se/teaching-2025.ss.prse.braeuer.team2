@@ -42,19 +42,20 @@ public class RefundController extends Controller {
 
     @FXML
     public void initialize() throws SQLException {
-        // Double-Validierung für beide Textfelder
+        // Set up double (decimal number) validation for both input fields:
+        // Ensures users can only enter valid numeric values
         setupDoubleValidation(refundRestaurant);
         setupDoubleValidation(refundSupermarket);
 
-        // Aktuelle Werte anzeigen
+        // Load and display the current refund values for restaurant and supermarket
         refreshRefundValues();
 
-        // Tabelle initialisieren
+        // Initialize the TableView that displays historical refund data
         setupRefundTable();
     }
 
+    // Sets up validation for a TextField to only allow decimal numbers (with comma or dot) (AI)
     private void setupDoubleValidation(TextField textField) {
-        // Formatter für Double-Eingaben mit Komma/Punkt
         DecimalFormat format = new DecimalFormat("#.0#");
 
         UnaryOperator<TextFormatter.Change> filter = change -> {
@@ -73,21 +74,26 @@ public class RefundController extends Controller {
         textField.setTextFormatter(new TextFormatter<>(filter));
     }
 
+    // Refreshes the input fields to show the current refund values from the database (AI)
     private void refreshRefundValues() throws SQLException {
         refundRestaurant.setText(String.format("%.2f", Refund.getRefundRestaurant()));
         refundSupermarket.setText(String.format("%.2f", Refund.getRefundSupermarket()));
     }
 
+    // Called when the update button is clicked – updates the refund values in the database
     public void updateRefunds(ActionEvent actionEvent) {
         try {
+            // Parse the values from the input fields
             double restaurantValue = parseDoubleValue(refundRestaurant.getText());
             double supermarketValue = parseDoubleValue(refundSupermarket.getText());
 
+            // Validate that both values are positive
             if (restaurantValue < 0 || supermarketValue < 0) {
                 showAlert("Ungültige Werte", "Beträge müssen positiv sein.", Alert.AlertType.ERROR);
                 return;
             }
 
+            // Show confirmation dialog to the user
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
             confirmation.setTitle("Bestätigung");
             confirmation.setHeaderText("Rückerstattungssätze aktualisieren");
@@ -95,13 +101,14 @@ public class RefundController extends Controller {
                     "Neue Werte:\nSupermarkt: %.2f€\nRestaurant: %.2f€\n\nFortfahren?",
                     supermarketValue, restaurantValue));
 
+            // If user confirms, save the new values
             if (confirmation.showAndWait().orElseThrow() == ButtonType.OK) {
                 Refund.setDailyRefunds(supermarketValue, restaurantValue, LocalDate.now(), Login.getCurrentUsername());
                 showAlert("Erfolg", "Rückerstattungssätze wurden aktualisiert.", Alert.AlertType.INFORMATION);
 
-                // Beide Methoden aufrufen, um Textfelder UND Tabelle zu aktualisieren
-                refreshRefundValues();  // Aktualisiert die Textfelder
-                refreshTableData();      // Aktualisiert die Tabelle
+                // Refresh both the input fields and the table view
+                refreshRefundValues();
+                refreshTableData();
             }
 
         } catch (NumberFormatException e) {
@@ -114,35 +121,37 @@ public class RefundController extends Controller {
         }
     }
 
+    // Converts a string input to a double, supporting both comma and dot as decimal separators
     private double parseDoubleValue(String input) throws NumberFormatException {
-        // Ersetze Komma durch Punkt für die Parsing
         String normalized = input.replace(',', '.');
         return Double.parseDouble(normalized);
     }
 
+    // Utility method to show an alert popup with the specified title, message, and type
     private void showAlert(String title, String message, Alert.AlertType type) {
         Alert alert = new Alert(type);
         alert.setTitle(title);
-        alert.setHeaderText(null);
+        alert.setHeaderText(null); // No header
         alert.setContentText(message);
         alert.showAndWait();
     }
 
-
+    // Initializes and sets up the refund history table
     private void setupRefundTable() throws SQLException {
-        // Spalten mit den Refund-Properties verbinden
+        // Link table columns to properties in the Refund class
         dateColumn.setCellValueFactory(new PropertyValueFactory<>("changeDate"));
         restaurantColumn.setCellValueFactory(new PropertyValueFactory<>("restaurant"));
         supermarketColumn.setCellValueFactory(new PropertyValueFactory<>("supermarket"));
         adminColumn.setCellValueFactory(new PropertyValueFactory<>("admin"));
 
-        // Daten laden und in der Tabelle anzeigen
+        // Load data from the database and display it in the table
         refreshTableData();
 
-        // Spalten automatisch anpassen
+        // Automatically resize columns to fit the table width
         refundTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
     }
 
+    // Loads all refund records from the database and populates the TableView
     private void refreshTableData() throws SQLException {
         ObservableList<Refund> refundData = FXCollections.observableArrayList(Refund.getAllRefunds());
         refundTable.setItems(refundData);
