@@ -627,13 +627,4 @@ public class StatisticsController extends Controller {
             }
         }
     }
-
-    // Shows a simple alert dialog with a given title and message (AI)
-    private void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
