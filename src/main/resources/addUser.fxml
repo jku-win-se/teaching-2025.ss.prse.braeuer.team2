@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;"
+            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="jku.se.Controller.AddUserController">
+
+    <VBox alignment="CENTER" spacing="20" AnchorPane.topAnchor="20" AnchorPane.bottomAnchor="20"
+          AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+
+        <Label text="Create New User" style="-fx-font-weight: bold; -fx-font-size: 24;">
+            <font>
+                <Font name="System Bold" size="24.0" />
+            </font>
+        </Label>
+
+        <GridPane hgap="10" vgap="15">
+            <!-- Row 0 -->
+            <Label text="First Name:" GridPane.columnIndex="0" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="firstNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" prefWidth="250"/>
+
+            <!-- Row 1 -->
+            <Label text="Last Name:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" prefWidth="250"/>
+
+            <!-- Row 2 -->
+            <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="2" prefWidth="250"/>
+
+            <!-- Row 3 -->
+            <Label text="Email:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+            <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="3" prefWidth="250"/>
+
+            <!-- Row 4 -->
+            <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+            <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="4" prefWidth="250"/>
+
+            <!-- Row 5 -->
+            <Label text="Confirm Password:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+            <PasswordField fx:id="confirmPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="5" prefWidth="250"/>
+
+            <!-- Row 6 -->
+            <Label text="Role:" GridPane.columnIndex="0" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+            <ComboBox fx:id="roleComboBox" GridPane.columnIndex="1" GridPane.rowIndex="6" prefWidth="250"/>
+        </GridPane>
+
+        <HBox spacing="20" alignment="CENTER">
+            <Button text="Save" onAction="#handleSave"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;"/>
+            <Button text="Cancel" onAction="#handleCancel"
+                    style="-fx-background-color: #f44336; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 20;"/>
+        </HBox>
+    </VBox>
+</AnchorPane>
