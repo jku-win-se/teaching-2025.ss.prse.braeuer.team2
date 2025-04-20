@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.*;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;
@@ -112,8 +113,17 @@ public class InvoiceScan {
             type = controller.requestManualType();
         }
 
+        Invoice invoice = controller.requestManualAll(lDate,sum,type, status);
+        if (invoice == null){
+            return null;
+        }
+        lDate = invoice.getDate();
+        sum = invoice.getSum();
+        type = invoice.getTyp();
+        status = invoice.getStatus();
+
         //calculate refund
-        double refund = Refund.refundCalculation(sum,type);
+        double refund = Refund.refundCalculation(sum,type, lDate);
 
 
         // Return an invoice with the extracted information
@@ -121,6 +131,7 @@ public class InvoiceScan {
         System.out.println(lDate);
         System.out.println(sum);
         System.out.println(type);
+        System.out.println(refund);
         return new Invoice(lDate, sum, type,status,refund);
     }
 
@@ -247,6 +258,10 @@ public class InvoiceScan {
         return date.getYear() == today.getYear() && date.getMonth() == today.getMonth();
     }
 
+    public static boolean isDateInThePastOrToday(LocalDate date) {
+        // Überprüft, ob das Datum in der Vergangenheit oder heute liegt
+        return !date.isAfter(LocalDate.now());
+    }
 
     /*
         SUM

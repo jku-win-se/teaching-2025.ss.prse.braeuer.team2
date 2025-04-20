@@ -13,7 +13,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
 import static jku.se.Controller.RequestManagementController.showAlert;
+import static jku.se.Database.getConnection;
 import static jku.se.Login.getCurrentUsername;
 
 public class MessagesController extends Controller{
@@ -21,7 +24,7 @@ public class MessagesController extends Controller{
     @FXML
     private GridPane gridMessages;
 
-    private final Connection connection = Database.getConnection();
+    private final Connection connection = getConnection();
 
     public MessagesController() throws SQLException {
     }
@@ -55,15 +58,39 @@ public class MessagesController extends Controller{
     }
 
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
-        int messageId = rs.getInt("id");
-        int id = rs.getInt("rechnung_id");
+
+        int id = rs.getInt("id");
         String text = rs.getString("text");
         String date = rs.getString("created_at");
+        String delete = "delete";
 
-        gridMessages.add(new Label(String.valueOf(messageId)), 0, row);
-        gridMessages.add(new Label(String.valueOf(id)), 1, row);
-        gridMessages.add(new Label(text), 2, row);
-        gridMessages.add(new Label(date), 3, row);
+        gridMessages.add(new Label(text), 0, row);
+        gridMessages.add(new Label(date), 1, row);
+        Button deleteButton = new Button("Delete");
+        deleteButton.setOnAction(event -> {
+            try {
+                deleteMessage(id);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
+        gridMessages.add(deleteButton, 2, row);
+    }
+
+    private void deleteMessage(int id) throws SQLException {
+        String query = "DELETE FROM message WHERE id = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, id);
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                //showAlertSuccess("Erfolg", "Nachricht erfolgreich gelöscht.");
+                loadAndDisplayMessages(); // Nach dem Löschen die Liste neu laden
+            } else {
+                showAlert("Fehler", "Die Nachricht konnte nicht gelöscht werden, da sie bereits gelöscht wurde.");
+            }
+        } catch (SQLException e) {
+            showAlert("Fehler", "Nachricht konnte nicht gelöscht werden: " + e.getMessage());
+        }
     }
 
     public ResultSet getAllMessages() throws SQLException {

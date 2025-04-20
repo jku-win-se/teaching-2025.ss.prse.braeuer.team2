@@ -8,8 +8,8 @@ import javafx.event.ActionEvent;
 public class AdminPanelController extends Controller{
 
     @FXML
-    private void openUserSearch(ActionEvent event) throws IOException {
-        switchScene(event, "userSearch.fxml");
+    private void openUserOverviewDashboard(ActionEvent event) throws IOException {
+        switchScene(event, "userOverviewDashboard.fxml");
     }
 
     @FXML
@@ -20,5 +20,20 @@ public class AdminPanelController extends Controller{
     @FXML
     private void openStatistics(ActionEvent event) throws IOException {
         switchScene(event, "statistics.fxml");
+    }
+
+    @FXML
+    public void openRefund(ActionEvent event) throws IOException {
+        switchScene(event, "refund.fxml");
+    }
+
+    @FXML
+    private void handleBack (javafx.event.ActionEvent event) throws IOException {
+        switchScene(event, "dashboardAdmin.fxml");
+
+    }
+
+    public void openExportData(ActionEvent event) throws IOException {
+        switchScene(event, "exportData.fxml");
     }
 }

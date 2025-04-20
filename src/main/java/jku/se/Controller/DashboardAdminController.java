@@ -15,4 +15,6 @@ public class DashboardAdminController extends Controller{
     private void openAdminPanel(ActionEvent event) throws IOException {
         switchScene(event, "adminPanel.fxml");
     }
+
+
 }

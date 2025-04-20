@@ -2,21 +2,25 @@ package jku.se;
 
 import java.time.LocalDate;
 
-public class Invoice {
+public class InvoiceExport {
 
     private LocalDate date;
     private double sum;
     private InvoiceType typ;
     private InvoiceStatus status;
     private double refund;
+    private int id;
+    private String user;
 
     // Konstruktor zum Erstellen einer neuen Invoice
-    public Invoice(LocalDate date, double sum, InvoiceType typ, InvoiceStatus status, double refund) {
+    public InvoiceExport(LocalDate date, double sum, InvoiceType typ, InvoiceStatus status, double refund, int id, String user) {
         this.date = date;
         this.sum = sum;
         this.typ = typ;
         this.status = status;
         this.refund = refund;
+        this.id = id;
+        this.user = user;
     }
 
     // Getter and Setter
@@ -59,6 +63,11 @@ public class Invoice {
     public double getRefund() {
         return refund;
     }
+
+    public int getId(){return id;}
+    public void setId(int id){this.id = id;}
+    public String getUser() {return user;}
+    public void setUser(String user){this.user = user;}
 
     //A method to output the invoice information as a string
     @Override
