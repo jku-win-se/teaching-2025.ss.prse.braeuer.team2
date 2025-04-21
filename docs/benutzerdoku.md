@@ -77,6 +77,32 @@ Der Benutzer kann die bearbeitete Rechnung speichern.
 
 
 
+### Edit Invoices User:
+![Screenshot 2025-04-21 191949](https://github.com/user-attachments/assets/ff0e5445-5e29-4293-a1ac-ed14765f36f5)
+
+#### 1.) RechnungsID:
+Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
+
+#### 2.) Betrag:
+Der Benutzer kann den Betrag der Rechnung bearbeiten.
+
+#### 3.) Datum: 
+Der Benutzer sieht und kann das Rechnungsdatum bearbeiten.
+
+#### 4.) Typ: 
+Der Benutzer kann den Typ der Rechnung auswählen ("SUPERMARKET" oder "RESTAURANT").
+
+#### 5.) Back: 
+Der Benutzer kann zur vorherigen Seite zurückkehren.
+
+#### 6.) Delete: 
+Der Benutzer kann die Rechnung löschen.
+
+#### 7.) Save: 
+Der Benutzer kann die bearbeitete Rechnung speichern.
+
+
+
 ### Export Data Admin:
 ![Screenshot 2025-04-21 190509](https://github.com/user-attachments/assets/8dd72ad1-a8d7-4e90-9133-a4674c2c791c)
 
@@ -85,5 +111,6 @@ Der Benutzer (Admin) kann den Monat und das Jahr auswählen, für den er die Dat
 
 #### 2.) JSON Export: 
 Der Admin kann die Daten im JSON-Format exportieren. Durch den Export im JSON-Format erhält der Admin eine strukturierte und maschinenlesbare Datei, die für die Weiterverarbeitung oder Analyse in anderen Systemen genutzt werden kann. Der Nutzer kann sich den Speicherort selber aussuchen. Es wird unter dem Format "invoices-Monatsnamen-Jahr.json" abgespeichert.
+
 
 
