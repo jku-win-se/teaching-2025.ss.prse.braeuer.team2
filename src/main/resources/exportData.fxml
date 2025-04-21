@@ -18,11 +18,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <Button layoutX="242.0" layoutY="266.0" mnemonicParsing="false" onAction="#goBackAdminPanel" prefHeight="25.0" prefWidth="121.0" text="Back">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
+      <Button layoutX="31.0" layoutY="37.0" mnemonicParsing="false" onAction="#goBackAdminPanel" prefHeight="25.0" prefWidth="87.0" text="⬅ Zurück" />
    </children>
 
 </AnchorPane>
