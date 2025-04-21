@@ -75,3 +75,15 @@ Der Benutzer kann die Rechnung löschen.
 #### 11.)Save: 
 Der Benutzer kann die bearbeitete Rechnung speichern.
 
+
+
+### Export Data Admin:
+![Screenshot 2025-04-21 190509](https://github.com/user-attachments/assets/8dd72ad1-a8d7-4e90-9133-a4674c2c791c)
+
+#### 1.) Monatsauswahl
+Der Benutzer (Admin) kann den Monat und das Jahr auswählen, für den er die Daten exportieren möchte (z.B. „April 2025“). Das erleichtert es, gezielt den gewünschten Zeitraum für den Export festzulegen. Es wird ein Tagesfeld auch angezeigt, aber dies ist nicht relevant, es zählt nur das Monat in dem sich der ausgewählte Tag befindet. Ob der 1. April oder der 30. April ausgewählt wird, ändert nichts am Ergebnis, es werden in beiden Fällen alle eingereichten Rechnungen für den Monat April ausgegeben.
+
+#### 2.) JSON Export: 
+Der Admin kann die Daten im JSON-Format exportieren. Durch den Export im JSON-Format erhält der Admin eine strukturierte und maschinenlesbare Datei, die für die Weiterverarbeitung oder Analyse in anderen Systemen genutzt werden kann.
+
+
