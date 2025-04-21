@@ -113,4 +113,19 @@ Der Benutzer (Admin) kann den Monat und das Jahr auswählen, für den er die Dat
 Der Admin kann die Daten im JSON-Format exportieren. Durch den Export im JSON-Format erhält der Admin eine strukturierte und maschinenlesbare Datei, die für die Weiterverarbeitung oder Analyse in anderen Systemen genutzt werden kann. Der Nutzer kann sich den Speicherort selber aussuchen. Es wird unter dem Format "invoices-Monatsnamen-Jahr.json" abgespeichert.
 
 
+### Messages User:
+![Screenshot 2025-04-21 192311](https://github.com/user-attachments/assets/962c9c25-6c9f-4da2-89cb-50bde1805c59)
+
+#### 1.) Text und Änderungszeitpunkt: 
+Der Benutzer sieht eine Liste von Nachrichten, die verschiedene Änderungen an Rechnungen betreffen. Jede Nachricht beschreibt eine Änderung des Status einer Rechnung, wie z.B. eine Änderung von "PENDING" auf "ACCEPTED" oder das Einreichen einer neuen Rechnung. Jede Nachricht enthält die Rechnungs-ID, den Betrag, den Refund und den Status.
+
+Der Benutzer sieht den Zeitstempel, wann die jeweilige Änderung vorgenommen wurde. Das hilft, den Verlauf der Änderungen nachzuvollziehen.
+
+#### 2.) Zurück: 
+Der Benutzer kann zur vorherigen Seite zurückkehren, um weitere Änderungen vorzunehmen oder die Übersicht zu verlassen.
+
+#### 3.) Delete: 
+Der Benutzer kann jede Nachricht löschen. Dies ermöglicht es, den Verlauf zu bereinigen, wenn beispielsweise veraltete oder irrelevante Nachrichten entfernt werden sollen.
+
+
 
