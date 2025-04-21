@@ -121,11 +121,11 @@ Der Benutzer sieht eine Liste von Nachrichten, die verschiedene Änderungen an R
 
 Der Benutzer sieht den Zeitstempel, wann die jeweilige Änderung vorgenommen wurde. Das hilft, den Verlauf der Änderungen nachzuvollziehen.
 
-#### 2.) Zurück: 
-Der Benutzer kann zur vorherigen Seite zurückkehren, um weitere Änderungen vorzunehmen oder die Übersicht zu verlassen.
-
-#### 3.) Delete: 
+#### 2.) Delete: 
 Der Benutzer kann jede Nachricht löschen. Dies ermöglicht es, den Verlauf zu bereinigen, wenn beispielsweise veraltete oder irrelevante Nachrichten entfernt werden sollen.
+
+#### 3.) Zurück: 
+Der Benutzer kann zur vorherigen Seite zurückkehren, um weitere Änderungen vorzunehmen oder die Übersicht zu verlassen.
 
 
 
