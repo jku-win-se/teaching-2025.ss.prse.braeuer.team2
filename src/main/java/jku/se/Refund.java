@@ -54,7 +54,6 @@ public class Refund {
         }
     }
 
-
     // Inserts or updates the refund rates for a specific date (AI)
     public static void setDailyRefunds(double supermarket, double restaurant, LocalDate date, String currentUsername) throws SQLException {
         // SQL query using UPSERT: inserts new values or updates existing ones if the date already exists

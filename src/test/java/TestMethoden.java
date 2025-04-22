@@ -1,3 +1,4 @@
+import javafx.scene.chart.NumberAxis;
 import jku.se.Controller.SubmitBillController;
 import jku.se.Database;
 import jku.se.InvoiceScan;
@@ -155,4 +156,27 @@ public class TestMethoden {
 
         return invoiceId;
     }
+
+    // Returns an abbreviation for a given category name (AI)
+    public static String abbreviate (String name) {
+        switch (name.toUpperCase()) {
+            case "SUPERMARKET":
+                return "SUP";
+            case "RESTAURANT":
+                return "RES";
+            default:
+                return name.length() <= 3 ? name : name.substring(0, 3).toUpperCase();
+        }
+    }
+
+
+    // Determines the tick step size based on the maximum Y value (AI)
+    public static int calculateStepSize(double maxYValue) {
+        if (maxYValue <= 50) return 5;
+        else if (maxYValue <= 100) return 10;
+        else if (maxYValue <= 500) return 20;
+        else if (maxYValue <= 1000) return 50;
+        else return 100; // Default step size for larger values
+    }
+
 }
