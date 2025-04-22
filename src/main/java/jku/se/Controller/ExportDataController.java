@@ -28,7 +28,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 public class ExportDataController extends Controller{
 
     @FXML
-    private DatePicker datumExport;
+    public DatePicker datumExport;
     private LocalDate datum;
     private double totalRefund;
     private double refundToPay;

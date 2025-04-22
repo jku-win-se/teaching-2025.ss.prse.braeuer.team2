@@ -16,12 +16,12 @@
    <ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="350.0" prefWidth="742.0">
       <GridPane fx:id="gridMessages" hgap="20.0" prefHeight="19.0" prefWidth="671.0" style="-fx-background-color: transparent;" vgap="10.0">
          <Label alignment="CENTER" prefHeight="17.0" prefWidth="531.0" style="-fx-font-weight: bold;" text="Text" GridPane.rowIndex="0" />
-         <Label prefHeight="17.0" prefWidth="126.0" style="-fx-font-weight: bold;" text="Änderungszeitpunkt" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+         <Label prefHeight="17.0" prefWidth="127.0" style="-fx-font-weight: bold;" text="Änderungszeitpunkt" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
          <!-- Spaltenanpassungen -->
          <columnConstraints>
-            <ColumnConstraints percentWidth="86.0" />
-            <ColumnConstraints percentWidth="19.0" />
+            <ColumnConstraints percentWidth="85.0" />
+            <ColumnConstraints percentWidth="20.0" />
          </columnConstraints>
 
          <!-- Zeilenanpassungen (für die Daten) -->
