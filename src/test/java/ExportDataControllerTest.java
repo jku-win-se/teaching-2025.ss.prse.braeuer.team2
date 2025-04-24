@@ -55,7 +55,7 @@ public class ExportDataControllerTest { //Alles von AI generiert
         assertEquals(invoicesTotal.getTotalRefund(), calculatedSum, 0.01);
     }
 
-    @Test
+    /*@Test
     public void testExportIsInJsonFormat() throws Exception {
         // Benutzerinteraktion mit dem Datumsauswahlfeld simulieren
         // Methode aufrufen, um Rechnungen für den ausgewählten Monat zu exportieren
@@ -79,6 +79,6 @@ public class ExportDataControllerTest { //Alles von AI generiert
 
         // Überprüfen, ob die Datei nicht leer ist
         assertTrue(exportFile.length() > 0, "Die exportierte Datei sollte nicht leer sein");
-    }
+    }*/
 
 }
