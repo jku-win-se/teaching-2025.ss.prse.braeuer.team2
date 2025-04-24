@@ -17,7 +17,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <TextField fx:id="txt_email" layoutX="200.0" layoutY="100.0" promptText="E-Mail">
+      <TextField fx:id="emailField" layoutX="200.0" layoutY="100.0" promptText="E-Mail">
          <font>
             <Font size="14.0" />
          </font>
@@ -28,15 +28,15 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <PasswordField fx:id="txt_password" layoutX="200.0" layoutY="150.0" promptText="Passwort">
+      <PasswordField fx:id="passwordField" layoutX="200.0" layoutY="150.0" promptText="Passwort">
          <font>
             <Font size="14.0" />
          </font>
       </PasswordField>
 
-      <Button fx:id="btn_login" layoutX="327.0" layoutY="200.0" onAction="#btn_loginActionPerformed" text="Login" />
+      <Button fx:id="loginButton" layoutX="327.0" layoutY="200.0" onAction="#handleLoginAction" text="Login" />
 
-      <Label fx:id="lbl_message" alignment="CENTER" layoutX="14.0" layoutY="250.0" prefHeight="20.0" prefWidth="371.0" text="" textFill="red">
+      <Label fx:id="messageLabel" alignment="CENTER" layoutX="14.0" layoutY="250.0" prefHeight="20.0" prefWidth="371.0" text="" textFill="red">
          <font>
             <Font size="14.0" />
          </font>

@@ -15,15 +15,22 @@ import jku.se.Status;
 
 public class LoginController extends Controller {
 
-    @FXML private Button btn_login;
-    @FXML private TextField txt_email;
-    @FXML private PasswordField txt_password;
-    @FXML private Label lbl_message;
+    @FXML
+    private Button loginButton;
 
     @FXML
-    private void btn_loginActionPerformed() throws IOException {
-        String email = txt_email.getText().trim();
-        String password = txt_password.getText();
+    private TextField emailField;
+
+    @FXML
+    private PasswordField passwordField;
+
+    @FXML
+    private Label messageLabel;
+
+    @FXML
+    private void handleLoginAction() throws IOException {
+        String email = emailField.getText().trim();
+        String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
             showErrorMessage("Bitte E-Mail und Passwort eingeben!");
@@ -34,7 +41,7 @@ public class LoginController extends Controller {
         StringBuilder accountStatus = new StringBuilder();
 
         if (Login.validateLogin(email, password, userRole, accountStatus)) {
-            lbl_message.setText("");
+            messageLabel.setText("");
 
             switch (Login.getCurrentUserRole()) {
                 case USER:
@@ -56,12 +63,12 @@ public class LoginController extends Controller {
     private void switchToDashboard(String fxmlPath) throws IOException {
         URL fxmlLocation = getClass().getResource(fxmlPath);
         FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation);
-        Stage stage = (Stage) btn_login.getScene().getWindow();
+        Stage stage = (Stage) loginButton.getScene().getWindow();
         stage.setScene(new Scene(fxmlLoader.load()));
     }
 
     private void showErrorMessage(String message) {
-        lbl_message.setText(message);
-        lbl_message.setStyle("-fx-text-fill: red;");
+        messageLabel.setText(message);
+        messageLabel.setStyle("-fx-text-fill: red;");
     }
 }
