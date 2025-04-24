@@ -44,7 +44,56 @@
 7. Rolle (änderbar: USER | ADMIN)
 
 ### 2. Anträge bearbeiten
+![image](https://github.com/user-attachments/assets/f634670a-fdb4-4910-bde2-b7c90cc4cc77)
 
+1. Anträge können bearbeitet werden
+
+![Screenshot 2025-04-21 185218](https://github.com/user-attachments/assets/5633560d-a176-47d0-8248-d8c898beaf37)
+
+1.) RechnungsID:
+Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
+
+2.) Betrag:
+Der Benutzer kann den Betrag der Rechnung bearbeiten.
+
+3.) Datum: 
+Der Benutzer sieht und kann das Rechnungsdatum bearbeiten.
+
+4.) Typ: 
+Der Benutzer kann den Typ der Rechnung auswählen ("SUPERMARKET" oder "RESTAURANT").
+
+5.) Username: 
+Der Benutzer sieht den Benutzernamen, dem die Rechnung zugeordnet ist, und kann ihn gegebenenfalls ändern.
+
+6.) Status: 
+Der Benutzer kann den Status der Rechnung auswählen (z.B. "PENDING").
+
+7.) Image: 
+Der Benutzer sieht den Link zu einem Bild der Rechnung und kann ihn bei Bedarf ändern.
+
+8.) Refund: 
+Der Benutzer sieht den Betrag für die Rückerstattung. Dieser wird je nach ausgewähltem Rechnungstyp automatisch angepasst.
+
+9.) Back: 
+Der Benutzer kann zur vorherigen Seite zurückkehren.
+
+10.) Delete: 
+Der Benutzer kann die Rechnung löschen.
+
+11.) Save
+Der Benutzer kann die änderungen speichern. 
+   
+2. Filter öffnen
+
+![image](https://github.com/user-attachments/assets/575d31b6-e7f1-4a25-b365-971d57f18bbd)
+
+   1. nach Rechnungs-ID filtern
+   2. nach Rechnungstyp filtern (SUPERMARKET | RESTAURANT)
+   3. nach Benutzer filtern
+   4. nach Rechnungsstatus filtern (ACCEPTED | PENDING | DENIED)
+   5. nur nach aktuellem Monat filtern
+   6. Filter anwenden
+3. Zurück zu Admin Aktionen
 
 ### 3. Statistik
 ![Statistik](https://github.com/user-attachments/assets/62355f8c-0e8e-45ab-b464-72aa12848293)
@@ -90,39 +139,6 @@ Es stehen zwei Buttons zur Verfügung – einer für den PDF-Export und einer f�
 
 
 
-
-### Edit Invoice Admin:
-![Screenshot 2025-04-21 185218](https://github.com/user-attachments/assets/5633560d-a176-47d0-8248-d8c898beaf37)
-
-#### 1.) RechnungsID:
-Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
-
-#### 2.) Betrag:
-Der Benutzer kann den Betrag der Rechnung bearbeiten.
-
-#### 3.) Datum: 
-Der Benutzer sieht und kann das Rechnungsdatum bearbeiten.
-
-#### 4.) Typ: 
-Der Benutzer kann den Typ der Rechnung auswählen ("SUPERMARKET" oder "RESTAURANT").
-
-#### 5.) Username: 
-Der Benutzer sieht den Benutzernamen, dem die Rechnung zugeordnet ist, und kann ihn gegebenenfalls ändern.
-
-#### 6.) Status: 
-Der Benutzer kann den Status der Rechnung auswählen (z.B. "PENDING").
-
-#### 7.) Image: 
-Der Benutzer sieht den Link zu einem Bild der Rechnung und kann ihn bei Bedarf ändern.
-
-#### 8.) Refund: 
-Der Benutzer sieht den Betrag für die Rückerstattung. Dieser wird je nach ausgewähltem Rechnungstyp automatisch angepasst.
-
-#### 9.) Back: 
-Der Benutzer kann zur vorherigen Seite zurückkehren.
-
-#### 10.) Delete: 
-Der Benutzer kann die Rechnung löschen.
 
 ## User
 
