@@ -6,6 +6,67 @@
 2. Passwort eingeben
 3. Klick auf Login Button, um zu verifizieren
 
+## User
+![image](https://github.com/user-attachments/assets/ad6a8118-4e2a-4295-bb98-c3df0a1208db)
+### 1. Rechnung einreichen:
+
+![Rechnung_hochladen](https://github.com/user-attachments/assets/cced8817-1f6f-4dfa-a01b-a021b3efc0b2)
+
+#### 1.)  Datei auswählen:
+Nach dem Klick auf den Button öffnet sich der Datei-Explorer. Dort kann eine Rechnung im PDF-, PNG- oder JPEG-Format hochgeladen werden.
+Bitte achte darauf, dass die Rechnung gut lesbar ist und das Bild möglichst nur die Rechnung selbst zeigt – zugeschnitten und ohne störende Hintergründe – damit sie automatisch erkannt werden kann.
+
+#### 2.) Dateiinformationen
+Nachdem eine Datei ausgewählt wurde, werden deren Pfad und Dateiname hier angezeigt.
+
+#### 3.) "Rechnung hochladen" Button
+Nachdem eine Datei ausgewählt wurde, kann hier der Upload gestartet und die automatische Erkennung der Rechnung durchgeführt werden.
+
+### Rechnungsdaten bestätigen:
+![Rechnung_bestätigen](https://github.com/user-attachments/assets/a78cdf7e-2816-4567-968c-91964fd1146d) 
+
+Sobald die automatische Texterkennung abgeschlossen ist oder fehlende Angaben manuell eingegeben wurden, erscheint eine Übersicht der Rechnungsdaten.
+
+#### 1.) Datum:
+Hier wird das Datum angezeigt, das die Software automatisch anhand des Rechnungsfotos erkannt hat. Dieses Datum kann bei Bedarf manuell angepasst werden.
+Es sind nur Werktage als gültige Daten erlaubt – sollte ein Wochenende oder Feiertag ausgewählt werden, erscheint ein Hinweis und das Datum kann nicht bestätigt werden. 
+
+#### 2.) Betrag:
+Hier wird der auf der Rechnung erkannte Betrag angezeigt. Dieser kann bei Bedarf manuell angepasst werden.
+
+#### 3.) Rechnungstyp:
+Hier wird der erkannte Rechnungstyp angezeigt. Dieser kann bei Bedarf umgeändert werden.
+
+#### 4.) Speichern-Button
+Mit einem Klick auf diesen Button wird die Rechnung bestätigt – vorausgesetzt, alle erforderlichen Angaben wurden korrekt ausgefüllt. Anschließend wird die Rechnung hochgeladen und erscheint in der Übersicht der eingereichten Rechnungen. 
+
+#### 5.) Abbrechen-Button
+Mit einem Klick auf diesen Button wird der Vorgang abgebrochen, und der Prozess muss von vorne begonnen werden. Das bedeutet, dass ein neues Bild hochgeladen werden muss. 
+
+Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen mehr erforderlich sind, wird die Rechnung automatisch bestätigt und erfordert keine manuelle Überprüfung durch einen Administrator.
+
+### 2. Eingereichte Rechnungen
+![image](https://github.com/user-attachments/assets/8e781675-76c5-4902-9ad2-431a2aae4dd6)
+#### 1.) Anträge können bearbeitet werden
+
+#### 2. Filter öffnen
+![image](https://github.com/user-attachments/assets/b4bd6f6a-7712-4e49-8fbf-927593d42b68)
+   1. nach Rechnungs-ID filtern
+   2. nach Rechnungstyp filtern (SUPERMARKET | RESTAURANT)
+   3. nach Rechnungsstatus filtern (ACCEPTED | PENDING | DENIED)
+   4. nur nach aktuellem Monat filtern
+   5. Filter anwenden
+
+#### 3. Zurück zu User Aktionen
+
+### 3. Genehmigte Rechnungen
+### 4. Offene Anträge
+### 5. Eingereichte Rechnungen
+### 6. Gesamterstttungsbetrag
+### 7. Mitteilungszentrale
+
+
+
 ## Admin
 ### Admin Rollenauswahl
 ![image](https://github.com/user-attachments/assets/e743e583-d2b7-49b6-a04b-c0496669f430)
@@ -140,43 +201,5 @@ Es stehen zwei Buttons zur Verfügung – einer für den PDF-Export und einer f�
 
 
 
-## User
-
-### Rechnung hochladen:
-
-![Rechnung_hochladen](https://github.com/user-attachments/assets/cced8817-1f6f-4dfa-a01b-a021b3efc0b2)
-
-#### 1.)  Datei auswählen:
-Nach dem Klick auf den Button öffnet sich der Datei-Explorer. Dort kann eine Rechnung im PDF-, PNG- oder JPEG-Format hochgeladen werden.
-Bitte achte darauf, dass die Rechnung gut lesbar ist und das Bild möglichst nur die Rechnung selbst zeigt – zugeschnitten und ohne störende Hintergründe – damit sie automatisch erkannt werden kann.
-
-#### 2.) Dateiinformationen
-Nachdem eine Datei ausgewählt wurde, werden deren Pfad und Dateiname hier angezeigt.
-
-#### 3.) "Rechnung hochladen" Button
-Nachdem eine Datei ausgewählt wurde, kann hier der Upload gestartet und die automatische Erkennung der Rechnung durchgeführt werden.
-
-### Rechnungsdaten bestätigen:
-![Rechnung_bestätigen](https://github.com/user-attachments/assets/a78cdf7e-2816-4567-968c-91964fd1146d) 
-
-Sobald die automatische Texterkennung abgeschlossen ist oder fehlende Angaben manuell eingegeben wurden, erscheint eine Übersicht der Rechnungsdaten.
-
-#### 1.) Datum:
-Hier wird das Datum angezeigt, das die Software automatisch anhand des Rechnungsfotos erkannt hat. Dieses Datum kann bei Bedarf manuell angepasst werden.
-Es sind nur Werktage als gültige Daten erlaubt – sollte ein Wochenende oder Feiertag ausgewählt werden, erscheint ein Hinweis und das Datum kann nicht bestätigt werden. 
-
-#### 2.) Betrag:
-Hier wird der auf der Rechnung erkannte Betrag angezeigt. Dieser kann bei Bedarf manuell angepasst werden.
-
-#### 3.) Rechnungstyp:
-Hier wird der erkannte Rechnungstyp angezeigt. Dieser kann bei Bedarf umgeändert werden.
-
-#### 4.) Speichern-Button
-Mit einem Klick auf diesen Button wird die Rechnung bestätigt – vorausgesetzt, alle erforderlichen Angaben wurden korrekt ausgefüllt. Anschließend wird die Rechnung hochgeladen und erscheint in der Übersicht der eingereichten Rechnungen. 
-
-#### 5.) Abbrechen-Button
-Mit einem Klick auf diesen Button wird der Vorgang abgebrochen, und der Prozess muss von vorne begonnen werden. Das bedeutet, dass ein neues Bild hochgeladen werden muss. 
-
-Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen mehr erforderlich sind, wird die Rechnung automatisch bestätigt und erfordert keine manuelle Überprüfung durch einen Administrator.
 
 
