@@ -54,7 +54,6 @@ public class AddUserController extends Controller {
                 successAlert.setContentText("Benutzer wurde angelegt");
                 successAlert.showAndWait();
 
-                // Das übergebene Event verwenden
                 switchScene(event, "userOverviewDashboard.fxml");
             }
         } catch (SQLException e) {
