@@ -8,7 +8,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import jku.se.*;
-
 import java.io.IOException;
 import java.sql.*;
 
