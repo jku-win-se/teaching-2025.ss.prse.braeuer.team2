@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static jku.se.Controller.RequestManagementController.showAlert;
-
 public class UserSearchController extends Controller {
 
     @FXML

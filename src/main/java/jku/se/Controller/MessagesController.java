@@ -1,21 +1,14 @@
 package jku.se.Controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import jku.se.Database;
-
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
-import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.getConnection;
 import static jku.se.Login.getCurrentUsername;
 
