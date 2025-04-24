@@ -10,8 +10,6 @@ import jku.se.Status;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import static jku.se.Controller.RequestManagementController.showAlert;
-
 public class UserSearchResultsController extends Controller {
 
     @FXML private TextField firstNameField;
