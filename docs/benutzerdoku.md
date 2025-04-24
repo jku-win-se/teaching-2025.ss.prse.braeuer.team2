@@ -7,7 +7,8 @@
 3. Klick auf Login Button, um zu verifizieren
 
 ## User
-![image](https://github.com/user-attachments/assets/ad6a8118-4e2a-4295-bb98-c3df0a1208db)
+![image](https://github.com/user-attachments/assets/e1bbba09-26ee-4ba5-baca-5fb2fdc8a41a)
+
 ### 1. Rechnung einreichen:
 
 ![Rechnung_hochladen](https://github.com/user-attachments/assets/cced8817-1f6f-4dfa-a01b-a021b3efc0b2)
@@ -49,7 +50,7 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 ![image](https://github.com/user-attachments/assets/8e781675-76c5-4902-9ad2-431a2aae4dd6)
 #### 1.) Anträge können bearbeitet werden
 
-#### 2. Filter öffnen
+#### 2.) Filter öffnen
 ![image](https://github.com/user-attachments/assets/b4bd6f6a-7712-4e49-8fbf-927593d42b68)
    1. nach Rechnungs-ID filtern
    2. nach Rechnungstyp filtern (SUPERMARKET | RESTAURANT)
@@ -57,13 +58,14 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
    4. nur nach aktuellem Monat filtern
    5. Filter anwenden
 
-#### 3. Zurück zu User Aktionen
+#### 3.) Zurück zu User Aktionen
 
 ### 3. Genehmigte Rechnungen
 ### 4. Offene Anträge
 ### 5. Eingereichte Rechnungen
 ### 6. Gesamterstttungsbetrag
 ### 7. Mitteilungszentrale
+### 8. Logout
 
 
 
@@ -81,28 +83,47 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 ![image](https://github.com/user-attachments/assets/d0c059ce-abb2-4eab-a731-303db6c9e645)
 #### 1. User suchen
 ![image](https://github.com/user-attachments/assets/6897e135-2cb2-4ca4-9388-a78d24201508)
- 1. Nutzernamen eingeben
- 2. Suchen --> neues Fenster öffnet sich
-    ![image](https://github.com/user-attachments/assets/aea05272-e43b-49d7-95a4-3b8a2be958dc)
+
+ 1.) Nutzernamen eingeben
+ 
+ 2.) Suchen --> neues Fenster öffnet sich
+ ![image](https://github.com/user-attachments/assets/aea05272-e43b-49d7-95a4-3b8a2be958dc)
+ 
   1. Vorname (änderbar)
+
   2. Nachname (änderbar)
+
   3. Username (nicht änderbar)
+     
   4. Email (änderbar)
+     
   5. Rolle (änderbar: USER | ADMIN)
+      
   6. Status (änderbar: ACTIVE | BLOCKED)
+      
   7. Fehlgeschlagene Anmeldeversuche (änderbar - ab 10 Benutzer --> BLOCKED)
+      
   8. Erstellungsdatum des Benutzers (nicht änderbar)
- 3. Zurück zu User suchen Startseite
+
+ 3.) Zurück zu User suchen Startseite
 
 #### 2. User hinzufügen
 ![image](https://github.com/user-attachments/assets/ae2d6be2-5ef7-4122-8117-c1dfe4d85c33)
-1. Vorname 
-2. Nachname
-3. Username
-4. Email
-5. Passwort
-6. Passwort bestätigen
-7. Rolle (änderbar: USER | ADMIN)
+
+1.) Vorname 
+
+2.) Nachname
+
+3.) Username
+
+4.) Email
+
+5.) Passwort
+
+6.) Passwort bestätigen
+
+7.) Rolle (änderbar: USER | ADMIN)
+
 
 ### 2. Anträge bearbeiten
 ![image](https://github.com/user-attachments/assets/f634670a-fdb4-4910-bde2-b7c90cc4cc77)
