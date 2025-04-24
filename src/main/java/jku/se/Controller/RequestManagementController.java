@@ -99,13 +99,4 @@ public class RequestManagementController extends Controller {
         stage.setScene(scene);
         stage.show();
     }
-
-
-    public static void showAlert(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 }
