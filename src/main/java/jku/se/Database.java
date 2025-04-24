@@ -10,24 +10,57 @@ import java.nio.file.Files;
 import java.sql.*;
 import java.time.LocalDate;
 
-
+/**
+ * Database:
+ * Methods for the communication with Supabase
+ */
 public class Database {
 
-    // Constants for the database connection
+    /**
+     * URL for JDBC
+     */
     private static final String JDBC_URL = "jdbc:postgresql://aws-0-eu-central-1.pooler.supabase.com:6543/postgres?prepareThreshold=0";
+
+    /**
+     * User for postgres
+     */
     private static final String USER = "postgres.pwltfjlqripcrhenhgnk";
+
+    /**
+     * Password
+     */
     private static final String PASSWORD = "ujCpo7WdTPUzWpss";
+
+    /**
+     * Supabase-Bucket
+     * for uploading images of the invoices
+     */
     public static final String SUPABASE_BUCKET = "invoices";
+
+    /**
+     * Supabase-API-Key
+     */
     private static final String SUPABASE_API_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3bHRmamxxcmlwY3JoZW5oZ25rIiwi" +
             "cm9sZSI6ImFub24iLCJpYXQiOjE3NDIzOTY0NTAsImV4cCI6MjA1Nzk3MjQ1MH0.VSMfiNzyXxzSjXyiwhkomUk_kd5WYbuuLXLBVIgfo_I";
+
+    /**
+     * Supabase-URL
+     */
     public static final String SUPABASE_URL = "https://pwltfjlqripcrhenhgnk.supabase.co";
 
-    // Method to connect to the database
+    /**
+     * Creates a connection to the database
+     *
+     * @throws SQLException Falls ein Fehler bei der Verbindung zur Datenbank auftritt.
+     */
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(JDBC_URL, USER, PASSWORD);
     }
 
-    // uploads the image/pdf of the invoice to the supabase-storage and generates a link to it(AI)
+    /**
+     * uploads the image/pdf of the invoice to the supabase-storage and generates a link to it(AI)
+     * @param imageFile
+     */
     public static String uploadImage(File imageFile) {
         try {
             // Generate unique file name
@@ -40,59 +73,66 @@ public class Database {
 
 
             // establish connection to Supabase and configures it for a PUT request with authorization
-            HttpURLConnection conn = (HttpURLConnection) new URL(uploadUrl).openConnection();
-            conn.setRequestMethod("PUT");
-            conn.setRequestProperty("Authorization", "Bearer " + SUPABASE_API_KEY);
-            conn.setRequestProperty("Content-Type", contentType);
-            conn.setDoOutput(true);
+            HttpURLConnection connection = (HttpURLConnection) new URL(uploadUrl).openConnection();
+            connection.setRequestMethod("PUT");
+            connection.setRequestProperty("Authorization", "Bearer " + SUPABASE_API_KEY);
+            connection.setRequestProperty("Content-Type", contentType);
+            connection.setDoOutput(true);
 
             // reads a file in blocks and sends it to the server via the HTTP connection
-            try (OutputStream os = conn.getOutputStream();
+            try (OutputStream os = connection.getOutputStream();
                  FileInputStream fis = new FileInputStream(imageFile)) {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
                 while ((bytesRead = fis.read(buffer)) != -1) {
                     os.write(buffer, 0, bytesRead);
-                }
-            }
+                } // End of while loop
+            } // End of try block
 
             //checks answer
-            int responseCode = conn.getResponseCode();
+            int responseCode = connection.getResponseCode();
             if (responseCode == 200 || responseCode == 201) { //is uploaded successfully
                 return getPublicUrl(fileName);
             } else {
-                System.out.println("Upload fehlgeschlagen: HTTP " + responseCode);
-
                 //to get more information why the upload went wrong
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()))) {
                     String inputLine;
                     StringBuilder response = new StringBuilder();
                     while ((inputLine = in.readLine()) != null) {
                         response.append(inputLine);
                     }
-                    System.out.println("Fehlerdetails: " + response);
                 }
 
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
         return null;
     }
 
-    // Method for generating the public URL for the image (AI)
+    /**
+     * Method for generating the public URL for the image (AI)
+     * @param filePath
+     * @return Url for picture
+     */
     private static String getPublicUrl(String filePath) {
         return SUPABASE_URL + "/storage/v1/object/public/" + SUPABASE_BUCKET + "/" + filePath;
     }
 
+
+    /**
+     * get username of the invoice
+     * @param id
+     * @return username
+     */
     public static String getInvoiceUsername(int id) {
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT username FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, id);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getString("username");
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getString("username");
                     }
                 }
             }
@@ -102,11 +142,17 @@ public class Database {
         return null;
     }
 
-    public static LocalDate getInvoiceDate(int id) {
+
+    /**
+     * get the date of the invoice
+     * @param identifier
+     * @return invoice date
+     */
+    public static LocalDate getInvoiceDate(int identifier) {
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT datum FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, id);
+                stmt.setInt(1, identifier);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
                         return rs.getDate("datum").toLocalDate();
@@ -119,14 +165,19 @@ public class Database {
         return null;
     }
 
-    public static String getInvoiceStatus(int id) {
+    /**
+     * get status of the Invoice
+     * @param identifier
+     * @return status
+     */
+    public static String getInvoiceStatus(int identifier) {
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT status FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, id);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getString("status");
+                stmt.setInt(1, identifier);
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getString("status");
                     }
                 }
             }
@@ -216,7 +267,6 @@ public class Database {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
             return false;
         }
     }
@@ -233,14 +283,12 @@ public class Database {
             if(!InvoiceScan.isWithinCurrentMonth(datum)) {
                 controller.displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");
                 connection.rollback();  // rollback on error
-                System.out.println("Datum muss innerhalb des aktuellen Monats liegen.");
                 return;
             }
 
             //Check if an invoice already exists for the date
             if (invoiceExists(connection, username, datum)) {
                 controller.displayMessage("Rechnung für dieses Datum existiert bereits!", "red");
-                System.out.println("Rechnung für dieses Datum existiert bereits!");
                 connection.rollback();  // rollback on error
                 return;
             }
@@ -248,7 +296,6 @@ public class Database {
             //Upload image
             String imageUrl = uploadImage(imageFile);
             if (imageUrl == null) { //checks if upload was successfully
-                System.out.println("Bild-Upload fehlgeschlagen. Abbruch.");
                 connection.rollback();  // rollback on error
                 return;
             }
@@ -267,24 +314,19 @@ public class Database {
                 int rowsAffected = pstmt.executeUpdate();
                 if (rowsAffected > 0) {
                     controller.displayMessage("Rechnung erfolgreich eingefügt!", "green");
-                    System.out.println("Rechnung erfolgreich eingefügt!");
                     connection.commit();  // complete transaction successfully
                 } else {
-                    System.out.println("Rechnung konnte nicht eingefügt werden.");
                     connection.rollback();  // rollback on error
                 }
             } catch (SQLException e) {
                 connection.rollback();  // rollback on error
-                System.out.println("Datenbankfehler: " + e.getMessage());
             }
 
         } catch (SQLException e) {
             try {
                 connection.rollback();  // rollback on error
             } catch (SQLException rollbackEx) {
-                System.out.println("Rollback fehlgeschlagen: " + rollbackEx.getMessage());
             }
-            System.out.println("Datenbankfehler: " + e.getMessage());
         } finally {
             try {
                 // reset Auto-Commit
@@ -306,7 +348,6 @@ public class Database {
                 return rs.next(); // Returns true if an entry exists
             }
         } catch (SQLException e) {
-            System.out.println("Fehler bei Existenzprüfung: " + e.getMessage());
         }
         return false;
     }
@@ -321,7 +362,6 @@ public class Database {
                 InvoiceScan invoiceScan = new InvoiceScan(controller);
                 invoice = invoiceScan.scanInvoice(path); //Specify the path to the image file
             } catch (Exception e) {
-                System.out.println("Fehler beim Scannen der Rechnung: " + e.getMessage());
                 Platform.runLater(() -> controller.displayMessage("Fehler beim Scannen der Rechnung: " + e.getMessage(), "red"));
                 return; //if an error occurs, abort the method
             }
@@ -340,7 +380,6 @@ public class Database {
                 Database.uploadInvoice(connection, Login.getCurrentUsername(), sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
 
             } catch (SQLException e) {
-                System.out.println("Fehler bei der Verbindung zur Datenbank: " + e.getMessage());
                 Platform.runLater(() -> controller.displayMessage("Fehler bei der Verbindung zur Datenbank: " + e.getMessage(), "red"));
             }
         }).start(); //starts the background thread
@@ -362,10 +401,8 @@ public class Database {
             // checks response
             int responseCode = conn.getResponseCode();
             if (responseCode == 200 || responseCode == 204) { // Erfolgreich gelöscht
-                System.out.println("Bild erfolgreich gelöscht: " + fileName);
                 return true;
             } else {
-                System.out.println("Löschen fehlgeschlagen: HTTP " + responseCode);
 
                 //Error-details
                 try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
@@ -374,7 +411,6 @@ public class Database {
                     while ((inputLine = in.readLine()) != null) {
                         response.append(inputLine);
                     }
-                    System.out.println("Fehlerdetails: " + response);
                 }
             }
         } catch (Exception e) {
@@ -410,15 +446,12 @@ public class Database {
 
                     int rowsAffected = deleteStmt.executeUpdate();
                     if (rowsAffected > 0) {
-                        System.out.println("Invoice and image deleted successfully.");
                         return true; // Successful deletion
                     } else {
-                        System.out.println("No invoice record found to delete.");
                         return false; // Invoice not found
                     }
                 }
             } else {
-                System.out.println("Image deletion failed.");
                 return false; // Image deletion failed
             }
         } catch (SQLException e) {
