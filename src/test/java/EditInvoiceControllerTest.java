@@ -1,5 +1,6 @@
 import jku.se.Controller.EditInvoiceController;
 import jku.se.Controller.RequestManagementController;
+import jku.se.Controller.SubmitBillController;
 import jku.se.Database;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
@@ -7,9 +8,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.Objects;
 
-import static jku.se.Database.updateInvoice;
+import static jku.se.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class EditInvoiceControllerTest {
@@ -143,15 +147,61 @@ public class EditInvoiceControllerTest {
     @Test
     public void testUpdateInvoiceRefund() {
         boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.ACCEPTED,
-                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 3.0, 166);
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", getInvoiceRefund(166), 166);
         assertTrue(success, String.valueOf(true));
     }
 
     @Test
     public void testUpdateInvoiceRefundInvalid() {
         boolean success = updateInvoice(30, Date.valueOf("2025-03-12"), InvoiceType.RESTAURANT, "user", InvoiceStatus.PENDING,
-                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 5, 166);
+                "https://pwltfjlqripcrhenhgnk.supabase.co/storage/v1/object/public/invoices/1743532655831_20250401_203232.jpg", 5.0, 166);
         assertFalse(success, String.valueOf(true));
     }
 
+    @Test
+    public void testDeleteInvoiceWithoutPicture() throws SQLException {//Soll fehlschlagen weil Rechnung 196 kein Foto hat
+        int idToDelete = TestMethoden.uploadInvoiceWithoutImage(Database.getConnection(),"user",2.0,LocalDate.of(1999,01,04));
+
+        // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
+        try (Connection conn = Database.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM rechnungen WHERE id = ?")) {
+            checkStmt.setInt(1, idToDelete);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    fail("Rechnung mit ID " + idToDelete + " existiert nicht und kann daher nicht gelöscht werden.");
+                }
+            }
+        } catch (SQLException e) {
+            fail("Fehler beim Vorabcheck: " + e.getMessage());
+        }
+
+        // Schritt 2: Rechnung löschen
+        boolean deleted = deleteInvoice(getConnection(), getInvoiceUsername(idToDelete), getInvoiceDate(idToDelete));
+        assertFalse(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
+
+    }
+
+    @Test
+    public void testDeleteInvoice() throws SQLException {
+
+        int idToDelete = TestMethoden.uploadInvoice(Database.getConnection(),"user",2.0,LocalDate.of(1999,01,03)); // Beispiel-ID, stelle sicher, dass sie existiert
+
+        // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
+        try (Connection conn = Database.getConnection();
+             PreparedStatement checkStmt = conn.prepareStatement("SELECT COUNT(*) FROM rechnungen WHERE id = ?")) {
+            checkStmt.setInt(1, idToDelete);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) == 0) {
+                    fail("Rechnung mit ID " + idToDelete + " existiert nicht und kann daher nicht gelöscht werden.");
+                }
+            }
+        } catch (SQLException e) {
+            fail("Fehler beim Vorabcheck: " + e.getMessage());
+        }
+
+        // Schritt 2: Rechnung löschen
+        boolean deleted = deleteInvoice(getConnection(), getInvoiceUsername(idToDelete), getInvoiceDate(idToDelete));
+        assertTrue(deleted, "Die Rechnung sollte erfolgreich gelöscht werden.");
+
+    }
 }

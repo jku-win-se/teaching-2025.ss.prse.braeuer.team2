@@ -24,25 +24,25 @@ public class Login {
                     return false;
                 }
 
-                userRole.append(account.role);
-                accountStatus.append(account.status.name());
+                userRole.append(account.getRole());
+                accountStatus.append(account.getStatus().name());
 
-                if (account.status == Status.BLOCKED) {
+                if (account.getStatus() == Status.BLOCKED) {
                     conn.commit();
                     return false;
                 }
 
-                if (password.equals(account.password)) {
-                    currentUsername = account.username;
+                if (password.equals(account.getPassword())) {
+                    currentUsername = account.getUsername();
                     currentUserEmail = email;
-                    currentUserRole = Role.valueOf(account.role);
-                    currentUserStatus = account.status;
+                    currentUserRole = Role.valueOf(account.getRole());
+                    currentUserStatus = account.getStatus();
 
                     resetFailedAttempts(conn, email);
                     conn.commit();
                     return true;
                 } else {
-                    incrementFailedAttempts(conn, email, account.failedAttempts);
+                    incrementFailedAttempts(conn, email, account.getFailedAttempts());
                     conn.commit();
                     return false;
                 }
@@ -91,6 +91,14 @@ public class Login {
         return currentUserStatus;
     }
 
+    public static String getUsername() {
+        return currentUsername;
+    }
+
+    public static int getMaxFailedAttempts() {
+        return MAX_FAILED_ATTEMPTS;
+    }
+
     public static void logout() {
         currentUsername = null;
         currentUserEmail = null;
@@ -102,7 +110,6 @@ public class Login {
         updateAccountStatus(conn, email, "SET failed_attempts = 0, status = 'ACTIVE'::account_status");
     }
 
-    //Chat GPT Anfang
     private static void incrementFailedAttempts(Connection conn, String email, int currentAttempts) throws SQLException {
         String action = currentAttempts + 1 >= MAX_FAILED_ATTEMPTS
                 ? "SET failed_attempts = failed_attempts + 1, status = 'BLOCKED'::account_status"
@@ -115,25 +122,6 @@ public class Login {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.executeUpdate();
-        }
-    }
-    //Chat GPT Ende
-
-    private static class AccountData {
-        final String username;
-        final String email;
-        final String password;
-        final String role;
-        final Status status;
-        final int failedAttempts;
-
-        AccountData(String username, String email, String password, String role, Status status, int failedAttempts) {
-            this.username = username;
-            this.email = email;
-            this.password = password;
-            this.role = role;
-            this.status = status;
-            this.failedAttempts = failedAttempts;
         }
     }
 }

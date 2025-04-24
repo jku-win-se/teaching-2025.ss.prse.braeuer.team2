@@ -1,70 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.DatePicker?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.EditInvoiceController">
    <children>
       <VBox alignment="TOP_LEFT" layoutX="24.0" layoutY="21.0" prefHeight="304.0" prefWidth="555.0" spacing="10.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Rechnung bearbeiten:" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Rechnung bearbeiten">
+               <font>
+                  <Font name="Arial Black" size="18.0" />
+               </font></Label>
             <HBox spacing="10.0">
                <children>
-                  <CheckBox fx:id="checkboxRechnungsID" prefHeight="17.0" prefWidth="103.0" text="RechnungsID" />
-                  <TextField fx:id="textfieldRechnungsID" prefHeight="25.0" prefWidth="443.0" promptText="RechnungsID eingeben" />
+                  <Label prefHeight="17.0" prefWidth="93.0" text="RechnungID">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label fx:id="labelRechnungsID" prefHeight="17.0" prefWidth="441.0" />
                </children>
             </HBox>
             <HBox spacing="10.0">
                <children>
-                  <CheckBox fx:id="checkboxTyp" prefHeight="17.0" prefWidth="103.0" text="Betrag" />
+                  <Label prefHeight="25.0" prefWidth="93.0" text="Betrag">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <TextField fx:id="textFieldBetrag" prefHeight="25.0" prefWidth="441.0" promptText="Betrag eingeben" />
                </children>
             </HBox>
             <HBox prefHeight="25.0" prefWidth="353.0" spacing="10.0">
                <children>
-                  <CheckBox fx:id="checkboxBenutzer" prefHeight="17.0" prefWidth="103.0" text="Datum" />
-                  <TextField fx:id="textfieldDatum" prefHeight="25.0" prefWidth="441.0" promptText="Datum eingeben" />
+                  <Label prefHeight="25.0" prefWidth="93.0" text="Datum">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <DatePicker fx:id="datePickerDatum" prefHeight="25.0" prefWidth="441.0" promptText="Datum eingeben" />
                </children>
             </HBox>
             <HBox spacing="10.0">
                <children>
-                  <CheckBox fx:id="checkboxStatus" prefHeight="17.0" prefWidth="103.0" text="Typ" />
-                  <TextField fx:id="textfieldTyp" prefHeight="25.0" prefWidth="441.0" promptText="Typ eingeben" />
+                  <Label prefHeight="25.0" prefWidth="94.0" text="Typ">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <ComboBox fx:id="comboBoxTyp" prefHeight="25.0" prefWidth="440.0" promptText="Typ auswählen" visibleRowCount="3" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
                <children>
-                  <CheckBox fx:id="checkboxStatus1" prefHeight="17.0" prefWidth="113.0" text="Username" />
+                  <Label prefHeight="25.0" prefWidth="104.0" text="Username">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <TextField fx:id="textfieldUsername" prefHeight="25.0" prefWidth="441.0" promptText="Username eingeben" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
                <children>
-                  <CheckBox fx:id="checkboxStatus11" prefHeight="17.0" prefWidth="113.0" text="Status" />
-                  <TextField fx:id="textfieldStatus" prefHeight="25.0" prefWidth="441.0" promptText="Status eingeben" />
+                  <Label prefHeight="25.0" prefWidth="104.0" text="Status">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <ComboBox fx:id="comboBoxStatus" prefHeight="25.0" prefWidth="440.0" promptText="Status auswählen" visibleRowCount="2" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
                <children>
-                  <CheckBox fx:id="checkboxStatus12" prefHeight="17.0" prefWidth="113.0" text="Image" />
+                  <Label prefHeight="25.0" prefWidth="104.0" text="Image">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <TextField fx:id="textfieldImage" prefHeight="25.0" prefWidth="441.0" promptText="Image eingeben" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
                <children>
-                  <CheckBox fx:id="checkboxStatus13" prefHeight="17.0" prefWidth="113.0" text="Refund" />
-                  <TextField fx:id="textfieldRefund" prefHeight="25.0" prefWidth="441.0" promptText="Refund eingeben" />
+                  <Label prefHeight="25.0" prefWidth="104.0" text="Refund">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+                  <Label fx:id="labelRefund" prefHeight="28.0" prefWidth="441.0" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="139.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToAllInvoices" prefHeight="25.0" prefWidth="121.0" text="Back" />
-      <Button layoutX="457.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="25.0" prefWidth="121.0" text="Save" />
-      <Button layoutX="300.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleDeleteInvoice" prefHeight="25.0" prefWidth="121.0" text="Delete" />
+      <Button layoutX="128.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToAllInvoices" prefHeight="25.0" prefWidth="121.0" text="Back">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button layoutX="449.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+      <Button layoutX="291.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleDeleteInvoice" prefHeight="25.0" prefWidth="121.0" text="Delete" textFill="#d21414">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
    </children>
 </AnchorPane>
