@@ -3,7 +3,7 @@
 ![image](https://github.com/user-attachments/assets/2a8867b7-38f8-4bb9-afb5-7450392d97be)
 
 1. E-Mail-Adresse eingeben
-2. Passwort eingeben
+2. Passwort eingeben 
 3. Klick auf Login Button, um zu verifizieren
 
 ## User
