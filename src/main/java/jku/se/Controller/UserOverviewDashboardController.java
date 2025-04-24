@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 
 import java.io.IOException;
 
-public class userOverviewDashboardController extends Controller {
+public class UserOverviewDashboardController extends Controller {
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
         switchScene(event, "adminPanel.fxml");
