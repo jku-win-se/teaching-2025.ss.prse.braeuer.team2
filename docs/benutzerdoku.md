@@ -218,9 +218,3 @@ Es stehen zwei Buttons zur Verfügung – einer für den PDF-Export und einer f�
 ### 6. Zurück zu Admin Rollenauswahl
 
 ### 7. Logout
-
-
-
-
-
-
