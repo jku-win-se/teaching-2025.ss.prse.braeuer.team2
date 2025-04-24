@@ -46,32 +46,6 @@ public class RequestManagementController extends Controller {
                 GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
     }
 
-    /*
-    private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
-        int id = rs.getInt("id");
-        String image = rs.getString("image");
-
-        Hyperlink invoiceLink = new Hyperlink("Rechnung " + id);
-        invoiceLink.setOnAction(event -> invoiceService.openInvoiceLink(image));
-
-        gridInvoices.add(invoiceLink, 0, row);
-        gridInvoices.add(new Label(String.format("%.2f €", rs.getDouble("betrag"))), 1, row);
-        gridInvoices.add(new Label(rs.getString("typ")), 2, row);
-        gridInvoices.add(new Label(rs.getString("datum")), 3, row);
-        gridInvoices.add(new Label(rs.getString("username")), 4, row);
-        gridInvoices.add(new Label(rs.getString("status")), 5, row);
-
-        Button editButton = new Button("Edit");
-        editButton.setOnAction(event -> {
-            try {
-                handleEditInvoice(id);
-            } catch (IOException e) {
-                showAlert("Error", "Failed to edit invoice: " + e.getMessage());
-            }
-        });
-        gridInvoices.add(editButton, 6, row);
-    }*/
-
     private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
         int id = rs.getInt("id");
         String image = rs.getString("image");
