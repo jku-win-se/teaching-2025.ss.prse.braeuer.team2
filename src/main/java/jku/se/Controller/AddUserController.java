@@ -3,14 +3,12 @@ package jku.se.Controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
-import javafx.scene.Node;
 import jku.se.UserManagement;
 import jku.se.Role;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static jku.se.Controller.RequestManagementController.showAlert;
 
 public class AddUserController extends Controller {
 
