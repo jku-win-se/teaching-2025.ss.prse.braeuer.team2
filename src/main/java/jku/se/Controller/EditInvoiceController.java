@@ -39,14 +39,8 @@ public class EditInvoiceController extends Controller{
     public TextField textFieldBetrag;
     @FXML
     public DatePicker datePickerDatum;
-
-    private int invoiceId;
-    private double amount;
-    private String date;
     private InvoiceType typ;
-
     private InvoiceStatus status;
-    private String user;
 
     @FXML
     public void initialize() {

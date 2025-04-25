@@ -37,10 +37,7 @@ public class EditInvoiceUserController extends Controller{
     @FXML
     public DatePicker datePickerDatum;
 
-    private int invoiceId;
-    private double amount;
     private String date;
-    private String typ;
     private String user;
 
     @FXML
@@ -128,9 +125,6 @@ public class EditInvoiceUserController extends Controller{
     }
 
     public void setInvoice(int id, double amount, String typ, String date, String user) { //Wird für Ausfüllung von fxml Spalten benötigt
-        this.invoiceId = id;
-        this.amount = amount;
-        this.typ = typ;
         this.date = date;
         this.user = user; //wird nur benötigt falls die datei gelöscht wird
         labelRechnungsID.setText(String.valueOf(id));

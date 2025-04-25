@@ -29,7 +29,6 @@ public class ExportDataController extends Controller{
 
     @FXML
     public DatePicker datumExport;
-    private LocalDate datum;
     private double totalRefund;
     private double refundToPay;
     private List<InvoiceExport> invoices;
