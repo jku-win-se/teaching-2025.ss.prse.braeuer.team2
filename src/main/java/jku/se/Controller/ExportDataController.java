@@ -172,7 +172,7 @@ public class ExportDataController extends Controller{
     }
 
     @FXML
-    public void ExportButtonClicked(ActionEvent actionEvent) {
+    public void exportButtonClicked(ActionEvent actionEvent) {
         datumExport.setShowWeekNumbers(false);
         LocalDate selected = datumExport.getValue();
         int year = selected.getYear();

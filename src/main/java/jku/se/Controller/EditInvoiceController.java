@@ -186,7 +186,6 @@ public class EditInvoiceController extends Controller{
         } else {
             showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
-        System.out.println(success);
     }
 
     @FXML

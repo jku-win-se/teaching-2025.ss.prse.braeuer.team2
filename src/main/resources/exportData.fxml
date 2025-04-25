@@ -8,7 +8,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.ExportDataController">
    <children>
-      <Button layoutX="259.0" layoutY="233.0" mnemonicParsing="false" onAction="#ExportButtonClicked" text="JSON Export">
+      <Button layoutX="259.0" layoutY="233.0" mnemonicParsing="false" onAction="#exportButtonClicked" text="JSON Export">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
