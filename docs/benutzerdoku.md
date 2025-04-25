@@ -158,7 +158,11 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 
 6.) Passwort bestätigen
 
-7.) Rolle (änderbar: USER | ADMIN)
+7.) Rolle (USER | ADMIN)
+
+8.) Speichern
+
+9.) Abbrechen
 
 
 ### 2. Eingereichte Rechnungen bearbeiten
