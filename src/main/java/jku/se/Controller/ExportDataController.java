@@ -205,8 +205,6 @@ public class ExportDataController extends Controller{
                         month
                 );
                 showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + file.getAbsolutePath());
-            } else {
-                // User hat abgebrochen -> keine Fehlermeldung, einfach ignorieren
             }
         } catch (Exception e) {
             showAlert("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());

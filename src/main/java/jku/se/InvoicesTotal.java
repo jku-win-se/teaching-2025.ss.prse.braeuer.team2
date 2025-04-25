@@ -3,9 +3,9 @@ package jku.se;
 import java.util.List;
 
 public class InvoicesTotal {
-    private List<InvoiceExport> invoices;
-    private double totalRefund;
-    private double refundToPay;
+    private final List<InvoiceExport> invoices;
+    private final double totalRefund;
+    private final double refundToPay;
 
     public InvoicesTotal(List<InvoiceExport> invoices, double totalRefund, double refundToPay) {
         this.invoices = invoices;

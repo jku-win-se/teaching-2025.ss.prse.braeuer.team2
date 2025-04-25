@@ -20,6 +20,7 @@ public class MessagesController extends Controller{
     private final Connection connection = getConnection();
 
     public MessagesController() throws SQLException {
+        super();//Good practice PMD Empfehlung
     }
 
     @FXML

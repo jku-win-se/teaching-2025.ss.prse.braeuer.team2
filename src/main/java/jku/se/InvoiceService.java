@@ -7,6 +7,10 @@ import java.util.List;
 
 public class InvoiceService {
 
+    public InvoiceService() {
+
+    }
+
     public ResultSet getFilteredInvoices(String[] filters) throws SQLException {
         String query = buildQuery(filters);
         Connection conn = Database.getConnection();
