@@ -20,14 +20,22 @@ import java.time.LocalDate;
 import java.util.Set;
 
 
+/**
+ * implements Tesseract-OCR
+ */
 public class InvoiceScan {
 
-    //variables
+    /**tesseract-instance*/
     private final Tesseract tesseract;
-    private SubmitBillController controller;
+    /**controller for SubmitBillcontroller*/
+    private final SubmitBillController controller;
+    /**Sum*/
     public double sum;
 
-    //constructor (AI)
+    /**
+     * constructor (AI)
+     * @param controller
+     */
     public InvoiceScan(SubmitBillController controller) {
         this.controller = controller; //Stores the passed controller in an instance variable
         tesseract = new Tesseract(); //create new tesseract-instance
@@ -36,7 +44,14 @@ public class InvoiceScan {
         tesseract.setLanguage("deu+eng"); //set language to german and englisch
     }
 
-    //scans the uploaded invoice and returns a invoice (date, sum, type, status) (AI)
+    /**
+     * scans the uploaded invoice and returns a invoice (date, sum, type, status) (AI)
+     * @param imagePath
+     * @return Invoice(lDate, sum, type,status,refund)
+     * @throws TesseractException
+     * @throws IOException
+     * @throws SQLException
+     */
     public Invoice scanInvoice(String imagePath) throws TesseractException, IOException, SQLException {
 
         String text;
@@ -63,12 +78,6 @@ public class InvoiceScan {
             //Tesseract is processing the invoice to a text
             text = tesseract.doOCR(imageFile);
         }
-
-
-
-        //output of the text
-        System.out.println(text);
-
         // extract data out of the extracted text (with methods)
         String date = extractDate(text);
         LocalDate lDate = stringToDate (date);
@@ -91,7 +100,6 @@ public class InvoiceScan {
         if (!isValidSum(sum)) {
             controller.displayMessage("Betrag konnte nicht gelesen werden.", "red");
             sum = controller.requestManualSum();
-            System.out.println("Manuell eingegebener Betrag: " + sum);
         }
 
         //if date is null, display error message and prompt users to enter it manually
@@ -99,7 +107,6 @@ public class InvoiceScan {
             controller.displayMessage("Datum konnte nicht gelesen werden.", "red");
             date = controller.requestManualDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             lDate = stringToDate (date);
-            System.out.println("Manuell eingegebenes Datum: " + lDate);
         }
 
         //if date is not within the current month, display error message
@@ -124,14 +131,6 @@ public class InvoiceScan {
 
         //calculate refund
         double refund = Refund.refundCalculation(sum,type, lDate);
-
-
-        // Return an invoice with the extracted information
-        System.out.println(text);
-        System.out.println(lDate);
-        System.out.println(sum);
-        System.out.println(type);
-        System.out.println(refund);
         return new Invoice(lDate, sum, type,status,refund);
     }
 
@@ -141,7 +140,12 @@ public class InvoiceScan {
         Type
     */
 
-    //checks if the type could be clearly identified
+    /**
+     * checks if the type could be clearly identified
+     * @param supermarkt
+     * @param restaurant
+     * @return
+     */
     public static InvoiceType determineInvoiceType(boolean supermarkt, boolean restaurant) {
         if (!supermarkt && !restaurant) {
             return InvoiceType.UNDEFINED; // if neither a supermarket nor a restaurant was found
@@ -154,14 +158,22 @@ public class InvoiceScan {
         }
     }
 
-    //checks if it is a restaurant from the extracted OCR-text (AI)
+    /**
+     * checks if it is a restaurant from the extracted OCR-text (AI)
+     * @param text
+     * @return true if a match was found, else false
+     */
     public static boolean extractRestaurant(String text) {
         Pattern pattern = Pattern.compile("\\b(Restaurant|RESTAURANT|Tisch|KELLNER|bediente|Mensa)\\b");
         Matcher matcher = pattern.matcher(text);
         return matcher.find();
     }
 
-    //checks if it is a supermarket from the extracted OCR-text (AI)
+    /**
+     * checks if it is a supermarkt from the extracted OCR-text (AI)
+     * @param text
+     * @return true if a match was found, else false
+     */
     public static boolean extractSupermarkt(String text) {
         Pattern pattern = Pattern.compile("\\b(Spar|Ihr Einkauf|Hofer|HOFER|Lidl|Billa|jö)\\b");
         Matcher matcher = pattern.matcher(text);
@@ -174,7 +186,11 @@ public class InvoiceScan {
         Date
     */
 
-    //finds the date from the extracted OCR-text (AI)
+    /**
+     * finds the date from the extracted OCR-text (AI)
+     * @param text
+     * @return date
+     */
     public static String extractDate(String text) {
 
         // Regular expression for different date formats
@@ -191,7 +207,11 @@ public class InvoiceScan {
         }
     }
 
-    //converts the different types of dates to a LocalDate (AI)
+    /**
+     * converts the different types of dates to a LocalDate (AI)
+     * @param dateStr
+     * @return date in the correct format
+     */
     public static LocalDate stringToDate(String dateStr) {
 
         // if String is null, date is null
@@ -269,28 +289,26 @@ public class InvoiceScan {
 
     //finds the sum from the extracted OCR-text (AI)
     public static Double extractSum(String text) {
-        Pattern pattern = Pattern.compile("(?:SUMME|PREIS|Preis|Summe|Total|zahlen|summe|Sunne|Mastercard|Betrag:|EC)" +
-                "\\s*(?:EUR|€|:)?\\s*(\\d{1,3}(?:[.,]\\d{2}))");
-        // first bracket musst be a match; second bracket optional; than there is the sum
+        Pattern pattern = Pattern.compile("(SUMME|PREIS|Preis|Summe|Total|zahlen|summe|Sunne|Mastercard|Betrag:|EC)" +
+                "\\s*(EUR|€|:)?\\s*(\\d{1,3}[.,]\\d{2})");
 
-        Matcher matcher = pattern.matcher(text); //searches the sum based on the pattern
-
-        //if there are found more than one sum, the highest double is the correct one
+        Matcher matcher = pattern.matcher(text);
         List<Double> betraege = new ArrayList<>();
+
         while (matcher.find()) {
-            // Save number as double (replace comma with period for parsing)
-            double betrag = Double.parseDouble(matcher.group(1).replace(",", "."));
+            double betrag = Double.parseDouble(matcher.group(3).replace(",", "."));
             betraege.add(betrag);
         }
-        if (!betraege.isEmpty()) {
-            double summe = Collections.max(betraege); //find highest number
-            return summe;
-        } else {
-            return -1.0; //if the sum couldn't be found return -1 (is invalid Sum)
-        }
+
+        return betraege.isEmpty() ? -1.0 : Collections.max(betraege);
     }
 
-    //checks if the amount is correct
+
+    /**
+     * checks if the amount is correct
+     * @param amount
+     * @return true, if it is a correct sum, else false
+     */
     private boolean isValidSum(Double amount) {
         return amount != null && amount >= 0;
     }

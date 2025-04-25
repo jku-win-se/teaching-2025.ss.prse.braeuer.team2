@@ -5,6 +5,7 @@ import jku.se.InvoiceScan;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
 
+import javax.xml.transform.Result;
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
@@ -72,19 +73,28 @@ public class TestMethoden {
                 ex.printStackTrace();
             }
         }
-        PreparedStatement stmt = Database.getConnection().prepareStatement(
-                "SELECT id FROM rechnungen WHERE username = ? AND betrag = ? AND datum = ? ");
-        stmt.setString(1, username);
-        stmt.setDouble(2, betrag);
-        stmt.setDate(3, Date.valueOf(datum));
+        try {
+            PreparedStatement stmt = Database.getConnection().prepareStatement(
+                    "SELECT id FROM rechnungen WHERE username = ? AND betrag = ? AND datum = ? "
+            );
+            stmt.setString(1, username);
+            stmt.setDouble(2, betrag);
+            stmt.setDate(3, Date.valueOf(datum));
 
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                invoiceId = rs.getInt("id");
+                // System.out.println("Neue Rechnung-ID: " + invoiceId);
+            }
 
-
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-             invoiceId = rs.getInt("id");
-            System.out.println("Neue Rechnung-ID: " + invoiceId);
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.err.println("Datenbankfehler: " + e.getMessage());
         }
+
+
+
 
         return invoiceId;
     }
@@ -140,18 +150,24 @@ public class TestMethoden {
                 ex.printStackTrace();
             }
         }
-        PreparedStatement stmt = Database.getConnection().prepareStatement(
-                "SELECT id FROM rechnungen WHERE username = ? AND betrag = ? AND datum = ? ");
-        stmt.setString(1, username);
-        stmt.setDouble(2, betrag);
-        stmt.setDate(3, Date.valueOf(datum));
 
 
+        try {
+            PreparedStatement stmt = Database.getConnection().prepareStatement(
+                    "SELECT id FROM rechnungen WHERE username = ? AND betrag = ? AND datum = ?"
+            );
+            stmt.setString(1, username);
+            stmt.setDouble(2, betrag);
+            stmt.setDate(3, Date.valueOf(datum));
 
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            invoiceId = rs.getInt("id");
-            System.out.println("Neue Rechnung-ID: " + invoiceId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                invoiceId = rs.getInt("id");
+                System.out.println("Neue Rechnung-ID: " + invoiceId);
+            }
+
+        } catch (SQLException e) {
+            System.err.println("Fehler beim Abrufen der Rechnung: " + e.getMessage());
         }
 
         return invoiceId;

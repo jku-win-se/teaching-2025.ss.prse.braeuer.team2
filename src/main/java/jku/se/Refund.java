@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.List;
 
 public class Refund {
 
@@ -41,6 +42,13 @@ public class Refund {
         return getRefundForDate(LocalDate.now(), "restaurant");
     }
     public static double getRefundForDate(LocalDate date, String column) throws SQLException {
+        // Only allow specific, known-safe column names
+        List<String> allowedColumns = List.of("restaurant", "supermarket");
+
+        if (!allowedColumns.contains(column)) {
+            throw new IllegalArgumentException("Invalid column name: " + column);
+        }
+
         String query = "SELECT " + column + " FROM refunds WHERE change_date <= ? " +
                 "ORDER BY change_date DESC LIMIT 1";
 

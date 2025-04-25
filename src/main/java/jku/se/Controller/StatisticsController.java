@@ -104,7 +104,7 @@ public class StatisticsController extends Controller {
     // Loads data into the BarChart based on the selected metric (AI)
     private void loadChartData(String selectedMetric) {
         barChart.getData().clear(); // Clear previous data
-        Double maxYValue = 0.0;
+        double maxYValue = 0.0;
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         String barColor = "#3D64E1FF"; // Default bar color
         series.setName(selectedMetric); // Label the chart series
@@ -126,7 +126,7 @@ public class StatisticsController extends Controller {
         if (filterRestaurant) conditions.add("r.typ = 'RESTAURANT'");
         if (filterSupermarkt) conditions.add("r.typ = 'SUPERMARKET'");
 
-        String sql = ""; // SQL query placeholder
+        String sql;
 
         // Choose SQL query based on the selected metric
         if (selectedMetric.equals("Rückvergütung pro Monat")) { // Choose the SQL query based on selected metric
@@ -302,7 +302,7 @@ public class StatisticsController extends Controller {
         if (filterRestaurant) conditions.add("r.typ = 'RESTAURANT'");
         if (filterSupermarkt) conditions.add("r.typ = 'SUPERMARKET'");
 
-        String sql = "";
+        String sql;
 
         // SQL for total refund by type
         if (selectedMetric.equals("Rückvergütung pro Monat")) {

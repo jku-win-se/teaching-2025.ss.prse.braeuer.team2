@@ -163,18 +163,18 @@ public class OCRTest {
     //tests a normal day
     @Test
     void testIsWorkday_True (){
-        LocalDate workday = LocalDate.of(2025,03,26); //normal workday
+        LocalDate workday = LocalDate.of(2025,3,26); //normal workday
         assertTrue(InvoiceScan.isWorkday(workday));
     }
 
     //tests different days that are no workdays in austria
     @Test
     void testIsWorkday_False (){
-        LocalDate noWorkday = LocalDate.of(2025,03,29); //saturday
+        LocalDate noWorkday = LocalDate.of(2025,3,29); //saturday
         assertFalse(InvoiceScan.isWorkday(noWorkday));
         LocalDate noWorkday2 = LocalDate.of(2024,10,26); //national holiday in Austria
         assertFalse(InvoiceScan.isWorkday(noWorkday2));
-        LocalDate noWorkday3 = LocalDate.of(2025,04,21); //easter-monday
+        LocalDate noWorkday3 = LocalDate.of(2025,4,21); //easter-monday
         assertFalse(InvoiceScan.isWorkday(noWorkday3));
     }
 
@@ -197,9 +197,9 @@ public class OCRTest {
     @Test
     void testStringtoDate (){
         String date = "24,05,25";
-        assertEquals(LocalDate.of(2025,05,24),InvoiceScan.stringToDate(date));
+        assertEquals(LocalDate.of(2025,5,24),InvoiceScan.stringToDate(date));
         String date2 = "24.Mai,2025";
-        assertEquals(LocalDate.of(2025,05,24),InvoiceScan.stringToDate(date));
+        assertEquals(LocalDate.of(2025,5,24),InvoiceScan.stringToDate(date));
 
     }
 
