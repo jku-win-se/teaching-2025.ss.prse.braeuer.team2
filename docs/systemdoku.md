@@ -2,7 +2,7 @@
 
 ## 📌 1. Projektkontext
 
-Lunchify ist eine interne Softwarelösung zur automatisierten Rückvergütung von Essensausgaben für Mitarbeiter:innen eines Linzer Unternehmens. Ziel ist es, eine intuitive Plattform bereitzustellen, über die Essensrechnungen digital eingereicht, automatisch verarbeitet und zur Gehaltsabrechnung übergeben werden können.
+Lunchify ist eine interne Softwarelösung zur automatisierten Rückvergütung von Essensausgaben für Mitarbeiter:innen. Ziel ist es, eine intuitive Plattform bereitzustellen, über die Essensrechnungen digital eingereicht, automatisch verarbeitet und zur Gehaltsabrechnung übergeben werden können.
 
 Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbesserungen zu ermöglichen. Die Anwendung basiert auf **Java** und verwendet **Tesseract OCR** zur automatischen Auslesung von Belegdaten.
 
@@ -20,9 +20,9 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 ## 🧱 3. Systemübersicht
 
 **Technologien:**
-- Java 17
-- JavaFX oder Spring Boot (je nach Zielplattform)
-- SQLite/PostgreSQL
+- Java 21
+- JavaFX 
+- PostgreSQL (Supabase)
 - Maven
 - Tesseract (OCR)
 
@@ -36,76 +36,89 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 ## ✅ 4. Funktionale Anforderungen
 
 ### 4.1 Authentifizierung
-- Login mit E-Mail + Passwort (BCrypt)
+- Login mit E-Mail + Passwort
 - Sitzungsverwaltung
 
 ### 4.2 Rechnungseinreichung
 - Upload von JPEG, PNG oder PDF
-- Optional: manuelle Klassifizierung & Betragseingabe
 - Automatisierte Klassifizierung via OCR
+- falls OCR nicht funktioniert: manuelle Klassifizierung & Betragseingabe
 - Speicherung in Datenbank
 
 ### 4.3 Rückerstattungslogik
-- **Restaurant:** max. 3 € ab 3 € Rechnungsbetrag
-- **Supermarkt:** max. 2,50 € ab 2,50 € Rechnungsbetrag
-- Darunter: voller Betrag wird erstattet
+- voller Erstattungsbetrag: Rechnungsbetrag >= Erstattung
+- nur Rechnungsbetrag als Erstattung: Rechnungsbetrag < Erstattung
 
 ### 4.4 Historie
 - Übersicht über alle eingereichten Rechnungen
-- Korrektur & Löschung bis Monatsende
-- Diagramm: Restaurant vs. Supermarkt (z. B. Balkendiagramm)
+- Korrektur & Löschung bis Monatsende (für aktuelle Monat)
 
 ### 4.5 Administratorfunktionen
-- Dashboard mit KPIs
-- Exportfunktionen: CSV, PDF, JSON/XML
+- Dashboard mit KPIs (Diagramme)
+- Exportfunktionen: CSV, PDF, JSON
 - Benutzerverwaltung
 - Rechnungssuche + Bearbeitung
 - Anomalie-Erkennung
 
 ## ⚙️ 5. Nicht-funktionale Anforderungen
-
 - Schnelle Ladezeiten (< 3 Sekunden)
 - Sicherer Login & Upload
 - Fehlerresilienz
 - Intuitive UI
-- Grundlegende Barrierefreiheit
 
 ## 🏗️ 6. Systemarchitektur
 
 **Schichten:**
-- UI (JavaFX / Web)
+- UI (JavaFX)
 - Business-Logik
-- Persistenz (JDBC / JPA)
+- Persistenz (JDBC)
 - Services (OCR, Export)
 
 **Externe Komponenten:**
 - Tesseract OCR (lokal)
-- Dateiablage für Uploads
-- Exportformate: CSV, PDF, JSON/XML
+- Exportformate: CSV, PDF, JSON
 
 ## 🗃️ 7. Datenmodell (vereinfacht)
 
-### `users`
-- `id`
-- `email`
-- `password_hash`
+### `accounts`
+- `username`
+- `createdAt`
+- `first_name`
+- `last_name`
 - `role` (USER / ADMIN)
+- `email`
+- `password`
+- `failed_attempts`
+- `status` (ACTIVE / BLOCKED)
 
-### `receipts`
+### `rechnungen`
 - `id`
-- `user_id`
-- `date`
-- `image_path`
-- `amount_entered`
-- `amount_detected`
-- `category`
-- `reimbursement_amount`
-- `status`
+- `betrag`
+- `datum`
+- `typ` (SUPERMARKET / RESTAURANT)
+- `username`
+- `status` (PENDING / ACCEPTED, DENIED)
+- `image`
+- `refund`
+
+### `message`
+- `id`
+- `rechnung_id`
+- `username`
+- `created_at`
+- `new_message`
+
+### `refunds`
+- `change_date`
+- `restaurant`
+- `supermarket`
+- `admin`
+
 
 ## 🔍 8. Anomalie-Erkennung
 
 **Beispiele:**
-- OCR-Betrag weicht stark vom Eingabebetrag ab
+- OCR-Betrag weicht vom Eingabebetrag ab
 - Viele Korrekturen (> 10 pro Monat)
 - Ungewöhnlich viele Einreichungen (> 20)
 - Häufige identische Beträge
@@ -114,21 +127,19 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 
 | Sprint | Dauer      | Inhalt                              |
 |--------|------------|-------------------------------------|
-| 1      | Woche 1–2  | Authentifizierung, Userverwaltung   |
-| 2      | Woche 3–4  | Upload, OCR, Rückerstattung         |
-| 3      | Woche 5–6  | Historie, Korrekturen               |
-| 4      | Woche 7–8  | Admin-Tools, Export, Anomalien      |
-| 5      | Woche 9–10 | Testing, Doku, Finalisierung        |
+| 1      |  21.03-11.04 | Authentifizierung,  Upload, OCR, UI  |
+| 2      |  12.04-02.05 | Userverwaltung, Rückerstattung, Statistics, Export |
+| 3      |  03.05-23.05 | Anomalie-Erkennung               |
+
 
 ## 💡 10. Erweiterungsideen
 
-- Mobile App (Android)
-- Benachrichtigung bei Genehmigung
+- Mobile App (Android / IOS)
 - Deep-Learning-basierte Belegerkennung
 - Integration in Slack oder MS Teams
 
 ---
 
-> 📁 Dieses Dokument ist Teil des Projekts *Lunchify*. Weitere technische Dokumentation und Code findest du im `/src`-Ordner und im Wiki dieses Repositories.
+> 📁 Dieses Dokument ist Teil des Projekts *Lunchify*. Weitere technische Dokumentation und Code findest du im `/src`-Ordner.
 
 
