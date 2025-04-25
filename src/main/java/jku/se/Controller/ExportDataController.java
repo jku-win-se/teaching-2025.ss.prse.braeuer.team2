@@ -57,7 +57,7 @@ public class ExportDataController extends Controller{
             }
         });
 
-        // Optional: nur aktuelles Jahr + letzten 5 Jahre erlauben
+
         datumExport.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -71,7 +71,7 @@ public class ExportDataController extends Controller{
     }
 
     public static String getMonthName(int month) {
-        // Konvertiere die Monatszahl in den Monatsnamen
+        // Konvertiert die Monatszahl in den Monatsnamen
         Month m = Month.of(month);
         return m.getDisplayName(TextStyle.FULL, Locale.ENGLISH);  // "March", "April", etc.
     }
@@ -110,7 +110,7 @@ public class ExportDataController extends Controller{
                 invoices.add(new InvoiceExport(date, sum, type, status, refund, id, user));
                 totalRefund += refund;
 
-                if (status == InvoiceStatus.ACCEPTED) {//Alle rausfiltern, die denied sind
+                if (status == InvoiceStatus.ACCEPTED) {//Alle rausfiltern, die nicht accepted sind
                     refundToPay += refund;
                 }
             }
@@ -119,7 +119,7 @@ public class ExportDataController extends Controller{
         return new InvoicesTotal(invoices, totalRefund, refundToPay);
     }
 
-    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, double refundToPay, Path filePath, int year, int month) throws IOException {
+    public void exportInvoicesToJson(List<InvoiceExport> invoices, double totalRefund, double refundToPay, Path filePath, int year, int month) throws IOException {//AI
         ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JavaTimeModule());
 
@@ -171,7 +171,7 @@ public class ExportDataController extends Controller{
     }
 
     @FXML
-    public void exportButtonClicked(ActionEvent actionEvent) {
+    public void exportButtonClicked(ActionEvent actionEvent) {//AI
         datumExport.setShowWeekNumbers(false);
         LocalDate selected = datumExport.getValue();
         int year = selected.getYear();
@@ -214,7 +214,7 @@ public class ExportDataController extends Controller{
         switchScene(event,"adminPanel.fxml");
     }
 
-    // Benutzerdaten für das JSON
+
     public static class UserInvoices {
         public String username;
         public int totalInvoices;

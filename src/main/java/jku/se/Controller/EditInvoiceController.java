@@ -95,7 +95,7 @@ public class EditInvoiceController extends Controller{
 
     @FXML
     public void saveChanges() throws SQLException {
-        // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
+        // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
         int id = Integer.parseInt(labelRechnungsID.getText());
         double betrag = 0;
         String input = textFieldBetrag.getText().replace(",", ".");
@@ -126,14 +126,14 @@ public class EditInvoiceController extends Controller{
             refund = Refund.getRefundRestaurant();
         }
 
-        try {//Wahrscheinlich nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
+        try {// nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
             InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue());
         } catch (IllegalArgumentException e) {
             showAlert("Error", "Choose a valid InvoiceType!");
             return;
         }
 
-        try {//Wahrscheinlich nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
+        try {// nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
             InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
         } catch (IllegalArgumentException ex) {
             showAlert("Error", "Choose a valid InvoiceStatus!");

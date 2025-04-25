@@ -12,7 +12,6 @@ public class InvoiceExport {
     private int id;
     private String user;
 
-    // Konstruktor zum Erstellen einer neuen Invoice
     public InvoiceExport(LocalDate date, double sum, InvoiceType typ, InvoiceStatus status, double refund, int id, String user) {
         this.date = date;
         this.sum = sum;
@@ -23,7 +22,6 @@ public class InvoiceExport {
         this.user = user;
     }
 
-    // Getter and Setter
     public LocalDate getDate() {
         return date;
     }
@@ -69,7 +67,6 @@ public class InvoiceExport {
     public String getUser() {return user;}
     public void setUser(String user){this.user = user;}
 
-    //A method to output the invoice information as a string
     @Override
     public String toString() {
         return "Rechnung [Datum=" + date + ", Summe=" + sum + " EUR, Typ=" + typ + "]";

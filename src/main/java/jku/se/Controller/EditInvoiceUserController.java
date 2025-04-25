@@ -51,7 +51,7 @@ public class EditInvoiceUserController extends Controller{
 
     @FXML
     public void saveChangesUser() throws IOException, SQLException {
-        // Hole die bearbeiteten Werte aus den Textfeldern und speichere sie in der Datenbank
+        // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
         int id = Integer.parseInt(labelRechnungsID.getText());
         double betrag = 0;
 
