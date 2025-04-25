@@ -1,6 +1,6 @@
-# 🥗 Lunchify – Systemdokumentation
+# Lunchify – Systemdokumentation
 
-## 📌 1. Projektkontext
+## 1. Projektkontext
 
 Lunchify ist eine interne Softwarelösung zur automatisierten Rückvergütung von Essensausgaben für Mitarbeiter:innen. Ziel ist es, eine intuitive Plattform bereitzustellen, über die Essensrechnungen digital eingereicht, automatisch verarbeitet und zur Gehaltsabrechnung übergeben werden können.
 
@@ -10,14 +10,14 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 - **Benutzer:innen:** Mitarbeiter:innen, die Rechnungen einreichen
 - **Administrator:innen:** Personalverrechner:innen, die Rückerstattungen prüfen und exportieren
 
-## 🎯 2. Zielsetzung
+## 2. Zielsetzung
 
 - Automatisierte Rückvergütung von Essensausgaben
 - Entlastung der Personalverrechnung
 - Minimierung manueller Fehler
 - Transparenz für Mitarbeiter:innen
 
-## 🧱 3. Systemübersicht
+## 🧱. Systemübersicht
 
 **Technologien:**
 - Java 21
@@ -33,7 +33,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 | Benutzer:in     | Rechnung hochladen, Verlauf einsehen, Korrekturen vornehmen |
 | Administrator:in| Rückerstattungen prüfen, exportieren, Benutzer verwalten, Anomalien erkennen |
 
-## ✅ 4. Funktionale Anforderungen
+## 4. Funktionale Anforderungen
 
 ### 4.1 Authentifizierung
 - Login mit E-Mail + Passwort
@@ -66,7 +66,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 - Fehlerresilienz
 - Intuitive UI
 
-## 🏗️ 6. Systemarchitektur
+##  6. Systemarchitektur
 
 **Schichten:**
 - UI (JavaFX)
@@ -78,7 +78,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 - Tesseract OCR (lokal)
 - Exportformate: CSV, PDF, JSON
 
-## 🗃️ 7. Datenmodell (vereinfacht)
+##  7. Datenmodell (vereinfacht)
 
 ### `accounts`
 - `username`
@@ -132,7 +132,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 | 3      |  03.05-23.05 | Anomalie-Erkennung               |
 
 
-## 💡 10. Erweiterungsideen
+## 10. Erweiterungsideen
 
 - Mobile App (Android / IOS)
 - Deep-Learning-basierte Belegerkennung
