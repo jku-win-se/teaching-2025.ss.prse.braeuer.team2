@@ -17,7 +17,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 - Minimierung manueller Fehler
 - Transparenz für Mitarbeiter:innen
 
-## 🧱. Systemübersicht
+## 3. Systemübersicht
 
 **Technologien:**
 - Java 21
@@ -115,7 +115,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 - `admin`
 
 
-## 🔍 8. Anomalie-Erkennung
+##  8. Anomalie-Erkennung
 
 **Beispiele:**
 - OCR-Betrag weicht vom Eingabebetrag ab
@@ -123,7 +123,7 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 - Ungewöhnlich viele Einreichungen (> 20)
 - Häufige identische Beträge
 
-## 🕓 9. Projektverlauf (agil)
+##  9. Projektverlauf (agil)
 
 | Sprint | Dauer      | Inhalt                              |
 |--------|------------|-------------------------------------|
