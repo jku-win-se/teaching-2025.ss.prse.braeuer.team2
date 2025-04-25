@@ -66,25 +66,25 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 ### 4. Offene Anträge
 ### 5. Eingereichte Rechnungen bearbeiten
 ![Screenshot 2025-04-21 191949](https://github.com/user-attachments/assets/ff0e5445-5e29-4293-a1ac-ed14765f36f5)
- #### 1.) RechnungsID:
+ #### 1.) RechnungsID
  Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
  
- #### 2.) Betrag:
+ #### 2.) Betrag
  Der Benutzer kann den Betrag der Rechnung bearbeiten.
  
- #### 3.) Datum: 
+ #### 3.) Datum
  Der Benutzer sieht und kann das Rechnungsdatum bearbeiten.
  
- #### 4.) Typ: 
+ #### 4.) Typ
  Der Benutzer kann den Typ der Rechnung auswählen ("SUPERMARKET" oder "RESTAURANT").
  
- #### 5.) Back: 
+ #### 5.) Back
  Der Benutzer kann zur vorherigen Seite zurückkehren.
  
- #### 6.) Delete: 
+ #### 6.) Delete 
  Der Benutzer kann die Rechnung löschen.
  
- #### 7.) Save: 
+ #### 7.) Save
  Der Benutzer kann die bearbeitete Rechnung speichern.
  
 ### 6. Gesamterstttungsbetrag
