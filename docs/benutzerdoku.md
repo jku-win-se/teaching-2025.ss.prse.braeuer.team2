@@ -11,7 +11,8 @@
 
 ### 1. Rechnung einreichen:
 
-![Rechnung_hochladen](https://github.com/user-attachments/assets/cced8817-1f6f-4dfa-a01b-a021b3efc0b2)
+![Rechnung-hochladen](https://github.com/user-attachments/assets/6eb93743-ce0c-4429-9383-571e73d2070a)
+
 
 #### 1.)  Datei auswählen:
 Nach dem Klick auf den Button öffnet sich der Datei-Explorer. Dort kann eine Rechnung im PDF-, PNG- oder JPEG-Format hochgeladen werden.
@@ -24,7 +25,8 @@ Nachdem eine Datei ausgewählt wurde, werden deren Pfad und Dateiname hier angez
 Nachdem eine Datei ausgewählt wurde, kann hier der Upload gestartet und die automatische Erkennung der Rechnung durchgeführt werden.
 
 ### Rechnungsdaten bestätigen:
-![Rechnung_bestätigen](https://github.com/user-attachments/assets/a78cdf7e-2816-4567-968c-91964fd1146d) 
+![rechnung-bestaetigen](https://github.com/user-attachments/assets/587c6561-41e2-4f7b-864d-fac2b0349167)
+
 
 Sobald die automatische Texterkennung abgeschlossen ist oder fehlende Angaben manuell eingegeben wurden, erscheint eine Übersicht der Rechnungsdaten.
 
@@ -178,7 +180,8 @@ Der Benutzer kann die änderungen speichern.
 3. Zurück zu Admin Aktionen
 
 ### 3. Statistik
-![Statistik](https://github.com/user-attachments/assets/62355f8c-0e8e-45ab-b464-72aa12848293)
+![Statistik](https://github.com/user-attachments/assets/73ea8418-7476-4156-93b8-64b9c9efc4b3)
+
 
 #### 1.) Statistik-Filter:
 Hier kann man filtern zwischen:
@@ -212,6 +215,18 @@ Es stehen zwei Buttons zur Verfügung – einer für den PDF-Export und einer f�
 
 
 ### 4. Erstattung bearbeiten
+
+![Refund](https://github.com/user-attachments/assets/7e2157d1-5738-4a6b-82bc-8d75b64b2024)
+
+#### 1.) Erstattung-Restaurant:
+Hier siehst du den aktuellen Erstattungsbetrag für Restaurant-Rechnungen. Du kannst ihn ändern, indem du einen neuen Wert eingibst und auf den Button „Aktualisieren“ klickst.
+#### 2.) Erstattung-Supermarkt:
+Hier siehst du den aktuellen Erstattungsbetrag für Supermarkt-Rechnungen. Du kannst ihn ändern, indem du einen neuen Wert eingibst und auf den Button „Aktualisieren“ klickst.
+
+#### 3.) Aktualisierungsbutton:
+Mit diesem Button werden die Erstattungsbeträge aktualisiert. Die Änderung tritt sofort mit dem heutigen Datum in Kraft und gilt bis zur nächsten Anpassung.
+#### 4.) Erstattungshistorie-Tabelle:
+In dieser Tabelle ist die Historie der Änderungen an den Erstattungsbeträgen einsehbar. Sie zeigt die jeweiligen Beträge für Supermärkte und Restaurants, das Datum der Änderung sowie den Benutzer, der die Anpassung vorgenommen hat.
 
 ### 5. Export Daten
 
