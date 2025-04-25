@@ -273,6 +273,7 @@ public class SubmitBillController extends Controller {
         return selectedType[0];
     }
 
+    //user can check invoice (AI)
     public Invoice requestManualAll(LocalDate defaultDate, double defaultAmount, InvoiceType defaultType, InvoiceStatus defaultStatus) {
         CountDownLatch latch = new CountDownLatch(1);
         Invoice[] resultInvoice = new Invoice[1];
@@ -306,8 +307,9 @@ public class SubmitBillController extends Controller {
 
             Button cancelButton = new Button("Abbrechen");
             cancelButton.setOnAction(e -> {
-                displayMessage("Abgebrochen Rechnung wurde nicht hochgeladen","red");
-            });
+                displayMessage("Abgebrochen – Rechnung wurde nicht hochgeladen", "red");
+                stage.close();
+            });;
 
             // Default-Werte setzen
             if (defaultDate != null) {

@@ -10,7 +10,14 @@ public class Invoice {
     private InvoiceStatus status;
     private double refund;
 
-    // Konstruktor zum Erstellen einer neuen Invoice
+    /**
+     * Invoice-Constructor
+     * @param date
+     * @param sum
+     * @param typ
+     * @param status
+     * @param refund
+     */
     public Invoice(LocalDate date, double sum, InvoiceType typ, InvoiceStatus status, double refund) {
         this.date = date;
         this.sum = sum;
