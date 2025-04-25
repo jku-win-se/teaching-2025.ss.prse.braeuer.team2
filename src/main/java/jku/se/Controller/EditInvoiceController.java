@@ -18,6 +18,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
+import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
 import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.*;
 import static jku.se.InvoiceScan.isWorkday;
@@ -97,7 +98,7 @@ public class EditInvoiceController extends Controller{
     public void saveChanges() throws SQLException {
         // Holt die bearbeiteten Werte aus den Textfeldern und speichert sie in der Datenbank
         int id = Integer.parseInt(labelRechnungsID.getText());
-        double betrag = 0;
+        double betrag;
         String input = textFieldBetrag.getText().replace(",", ".");
 
         // Prüfen, ob NUR gültige Zahlen drin ist (z.B. 12, 12.0, 12.34)
@@ -113,13 +114,13 @@ public class EditInvoiceController extends Controller{
             return;
         }
 
-        Date datum = null;
+        Date datum;
         String typString = (String) comboBoxTyp.getValue();
         String username = textfieldUsername.getText();
         String statusString = (String) comboBoxStatus.getValue();
         String image = textfieldImage.getText();
 
-        double refund = 0;
+        double refund;
         if(typString.equals(String.valueOf(InvoiceType.SUPERMARKET))){
             refund = Refund.getRefundSupermarket();
         } else {
@@ -171,7 +172,7 @@ public class EditInvoiceController extends Controller{
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showInfoAlert("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
                     "\nID: " + id +
                     "\nBetrag: " + betrag +
                     "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht

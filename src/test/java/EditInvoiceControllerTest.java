@@ -160,7 +160,7 @@ public class EditInvoiceControllerTest {
 
     @Test
     public void testDeleteInvoiceWithoutPicture() throws SQLException {//Soll fehlschlagen weil Rechnung 196 kein Foto hat
-        int idToDelete = TestMethoden.uploadInvoiceWithoutImage(Database.getConnection(),"user",2.0,LocalDate.of(1999,01,04));
+        int idToDelete = TestMethoden.uploadInvoiceWithoutImage(Database.getConnection(),"user",2.0,LocalDate.of(1999,1,4));
 
         // Schritt 1: Sicherstellen, dass die Rechnung existiert (optional)
         try (Connection conn = Database.getConnection();
