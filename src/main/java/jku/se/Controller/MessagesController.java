@@ -64,7 +64,7 @@ public class MessagesController extends Controller{
             try {
                 deleteMessage(id);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                showAlert("Fehler", "Datenbankfehler beim Löschen der Nachricht: " + e.getMessage());
             }
         });
         gridMessages.add(deleteButton, 2, row);
