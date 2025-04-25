@@ -9,12 +9,17 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.sql.*;
 import java.time.LocalDate;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Database:
  * Methods for the communication with Supabase
  */
 public class Database {
+
+    private static final Logger LOGGER = Logger.getLogger(Database.class.getName());
 
     /**
      * URL for JDBC
@@ -62,6 +67,7 @@ public class Database {
      * @param imageFile
      */
     public static String uploadImage(File imageFile) {
+        String image =  null;
         try {
             // Generate unique file name
             String fileName = System.currentTimeMillis() + "_" + imageFile.getName();
@@ -69,7 +75,9 @@ public class Database {
 
             // Determine the content type correctly
             String contentType = Files.probeContentType(imageFile.toPath());
-            if (contentType == null) contentType = "application/octet-stream";  //if detection fails, set a default value
+            if (contentType == null) {
+                contentType = "application/octet-stream";  //if detection fails, set a default value
+            }
 
 
             // establish connection to Supabase and configures it for a PUT request with authorization
@@ -80,34 +88,24 @@ public class Database {
             connection.setDoOutput(true);
 
             // reads a file in blocks and sends it to the server via the HTTP connection
-            try (OutputStream os = connection.getOutputStream();
+            try (OutputStream outputStream = connection.getOutputStream();
                  FileInputStream fis = new FileInputStream(imageFile)) {
                 byte[] buffer = new byte[1024];
                 int bytesRead;
                 while ((bytesRead = fis.read(buffer)) != -1) {
-                    os.write(buffer, 0, bytesRead);
+                    outputStream.write(buffer, 0, bytesRead);
                 } // End of while loop
             } // End of try block
 
             //checks answer
             int responseCode = connection.getResponseCode();
             if (responseCode == 200 || responseCode == 201) { //is uploaded successfully
-                return getPublicUrl(fileName);
-            } else {
-                //to get more information why the upload went wrong
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()))) {
-                    String inputLine;
-                    StringBuilder response = new StringBuilder();
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                }
-
+                image = getPublicUrl(fileName);
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Exeption:", exception);
         }
-        return null;
+        return image;
     }
 
     /**
@@ -122,24 +120,26 @@ public class Database {
 
     /**
      * get username of the invoice
-     * @param id
+     * @param identifier
      * @return username
      */
-    public static String getInvoiceUsername(int id) {
+    public static String getInvoiceUsername(int identifier) {
+        String username = null;
+
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT username FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, id);
+                stmt.setInt(1, identifier);
                 try (ResultSet resultSet = stmt.executeQuery()) {
                     if (resultSet.next()) {
-                        return resultSet.getString("username");
+                        username = resultSet.getString("username");
                     }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Rechnungsstatus mit ID: " + identifier, e);
         }
-        return null;
+        return username;
     }
 
 
@@ -153,14 +153,14 @@ public class Database {
             String query = "SELECT datum FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, identifier);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getDate("datum").toLocalDate();
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getDate("datum").toLocalDate();
                     }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Rechnungsstatus mit ID: " + identifier, e);
         }
         return null;
     }
@@ -171,70 +171,99 @@ public class Database {
      * @return status
      */
     public static String getInvoiceStatus(int identifier) {
+        String status = null;
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT status FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
                 stmt.setInt(1, identifier);
                 try (ResultSet resultSet = stmt.executeQuery()) {
                     if (resultSet.next()) {
-                        return resultSet.getString("status");
+                         status = resultSet.getString("status");
                     }
                 }
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Exeption:", exception);
         }
-        return null;
+        return status;
     }
 
-    public static String getInvoiceImage(int id) {
+
+    /**
+     * get image of the invoice
+     * @param identifier
+     * @return image of the invoice
+     */
+    public static String getInvoiceImage(int identifier) {
+        String image = null;
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT image FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, id);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getString("image");
+                stmt.setInt(1, identifier);
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        image =  resultSet.getString("image");
                     }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Fotos mit ID: " + identifier, e);
         }
-        return null;
+        return image;
     }
 
-    public static double getInvoiceRefund(int id) {
+
+    /**
+     * get refund
+     * @param identifier
+     * @return refund of the invoice
+     */
+    public static double getInvoiceRefund(int identifier) {
+        double refund = 0.0;
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT refund FROM rechnungen WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(query)) {
-                stmt.setInt(1, id);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        return rs.getDouble("refund");
+                stmt.setInt(1, identifier);
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        refund = resultSet.getDouble("refund");
                     }
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Erstattungsbetrags mit ID: " + identifier, e);
         }
-        return 0;
+        return refund;
     }
-    public static boolean updateInvoice(double betrag, Date datum, InvoiceType typ, String username, InvoiceStatus status, String image, double refund, int id){
+
+
+    /**
+     * Updates invoice
+     * @param betrag
+     * @param datum
+     * @param typ
+     * @param username
+     * @param status
+     * @param image
+     * @param refund
+     * @param identifier
+     * @return if the update was successful
+     */
+    public static boolean updateInvoice(double betrag, Date datum, InvoiceType typ, String username, InvoiceStatus status, String image, double refund, int identifier){
         boolean userFound = false;
         try (Connection conn = Database.getConnection()) {
             String query = "SELECT username FROM accounts";
             try (PreparedStatement stmt = conn.prepareStatement(query);
-                 ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    String users = rs.getString("username");
+                 ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    String users = resultSet.getString("username");
                         if(username.equals(users)) {
                         userFound = true; //wenn user gefunden wird
                     }
                 }
 
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
             }
 
             if (!userFound) return false; //wenn user nicht in abfrage gefunden wird
@@ -244,7 +273,7 @@ public class Database {
             }
 
             if (betrag < 0) {
-                return false;
+                 return false;
             }
 
             if(refund != 3 && refund != 2.5) {//falls beim test eine andere zahl eingegeben wird, soll false zurückgegeben werden
@@ -261,17 +290,28 @@ public class Database {
                 stmt.setObject(5, status, Types.OTHER);
                 stmt.setString(6, image);
                 stmt.setDouble(7, refund);
-                stmt.setInt(8, id);
+                stmt.setInt(8, identifier);
                 int rows = stmt.executeUpdate();
                 return rows == 1;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
             return false;
         }
     }
 
-    //uploads the invoice data to the table rechnungen (AI)
+    /**
+     * uploads the invoice data to the table rechnungen (AI)
+     * @param connection
+     * @param username
+     * @param betrag
+     * @param datum
+     * @param typ
+     * @param status
+     * @param imageFile
+     * @param refund
+     * @param controller
+     */
     public static void uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile, Double refund, SubmitBillController controller) {
         String sqlInsert = "INSERT INTO rechnungen (username, betrag, datum, typ, status, image,refund) VALUES (?, ?, ?, ?, ?, ?,?)";
 
@@ -326,6 +366,7 @@ public class Database {
             try {
                 connection.rollback();  // rollback on error
             } catch (SQLException rollbackEx) {
+                LOGGER.log(Level.SEVERE, "Exeption:", rollbackEx);
             }
         } finally {
             try {
@@ -338,26 +379,38 @@ public class Database {
 
     }
 
-    //checks if the user has already uploaded an invoice for that day
+    /**
+     * checks if the user has already uploaded an invoice for that day
+     * @param connection
+     * @param username
+     * @param datum
+     * @return
+     */
     public static boolean invoiceExists(Connection connection, String username, LocalDate datum) {
+        boolean exists = false;
         String sql = "SELECT 1 FROM rechnungen WHERE username = ? AND datum = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
             pstmt.setDate(2, java.sql.Date.valueOf(datum));
-            try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next(); // Returns true if an entry exists
+            try (ResultSet resultSet = pstmt.executeQuery()) {
+                exists = resultSet.next(); // Returns true if an entry exists
             }
-        } catch (SQLException e) {
+        } catch (SQLException exception) {
+            LOGGER.log(Level.SEVERE, "Exeption:", exception);
         }
-        return false;
+        return exists;
     }
 
-    //OCR+data upload (AI)
+    /**
+     * OCR+data upload (AI)
+     * @param path
+     * @param controller
+     */
     public static void invoiceScanUpload(String path, SubmitBillController controller) {
 
         //Perform OCR processing and database operations in a background thread
         new Thread(() -> {
-            Invoice invoice = null; //generate invoice instance
+            Invoice invoice; //generate invoice instance
             try {
                 InvoiceScan invoiceScan = new InvoiceScan(controller);
                 invoice = invoiceScan.scanInvoice(path); //Specify the path to the image file
@@ -385,8 +438,13 @@ public class Database {
         }).start(); //starts the background thread
     }
 
-    //deletes an image from the supabase-storage (AI)
+    /**
+     * deletes an image from the supabase-storage (AI)
+     * @param imageUrl
+     * @return if the image deletion was successful
+     */
     public static boolean deleteImage(String imageUrl) {
+        boolean result = false;
         try {
             // Extracts file-name from url
             URI uri = new URI(imageUrl);
@@ -401,26 +459,24 @@ public class Database {
             // checks response
             int responseCode = conn.getResponseCode();
             if (responseCode == 200 || responseCode == 204) { // Erfolgreich gelöscht
-                return true;
-            } else {
-
-                //Error-details
-                try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getErrorStream()))) {
-                    String inputLine;
-                    StringBuilder response = new StringBuilder();
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-                }
+                result = true;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
-        return false;
+        return result;
     }
 
-    //method to delete a specific invoice from the database and deletes the image from the storage (AI)
+    /**
+     * method to delete a specific invoice from the database and deletes the image from the storage (AI)
+     * @param connection
+     * @param username
+     * @param date
+     * @return if the invoice deletion was successful
+     */
     public static boolean deleteInvoice(Connection connection, String username, LocalDate date) {
+        boolean result = false;
+
         // First, fetch the image URL associated with the invoice record
         String imageUrl = null;
         try {
@@ -430,9 +486,10 @@ public class Database {
                 stmt.setString(1, username);
                 stmt.setDate(2, java.sql.Date.valueOf(date));
 
-                ResultSet resultSet = stmt.executeQuery();
-                if (resultSet.next()) {
-                    imageUrl = resultSet.getString("image");
+                try (ResultSet resultSet = stmt.executeQuery()) {
+                    if (resultSet.next()) {
+                        imageUrl = resultSet.getString("image");
+                    }
                 }
             }
 
@@ -446,18 +503,15 @@ public class Database {
 
                     int rowsAffected = deleteStmt.executeUpdate();
                     if (rowsAffected > 0) {
-                        return true; // Successful deletion
-                    } else {
-                        return false; // Invoice not found
+                        result = true; // Successful deletion
                     }
                 }
-            } else {
-                return false; // Image deletion failed
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false; // Error occurred during deletion process
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            result = false; // Error occurred during deletion process
         }
+        return result;
     }
 
 

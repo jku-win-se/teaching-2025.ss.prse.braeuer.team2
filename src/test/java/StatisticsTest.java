@@ -1,24 +1,24 @@
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import static org.junit.Assert.assertEquals;
 
 public class StatisticsTest {
 
     @Test
     public void AbbreviateSupTest() {
         String abv = TestMethoden.abbreviate("SUPERMARKET");
-        assertEquals(abv,"SUP");
+        Assertions.assertEquals("SUP", abv);
     }
 
     @Test
     public void AbbreviateResTest() {
         String abv = TestMethoden.abbreviate("RESTAURANT");
-        assertEquals(abv,"RES");
+        Assertions.assertEquals("RES", abv);
     }
 
     @Test
     public void calculateStepSizeTest(){
-        assertEquals(5,TestMethoden.calculateStepSize(4));
-        assertEquals(10,TestMethoden.calculateStepSize(90));
+        Assertions.assertEquals(5, TestMethoden.calculateStepSize(4));
+        Assertions.assertEquals(10, TestMethoden.calculateStepSize(90));
     }
 
 }
