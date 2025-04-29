@@ -2,6 +2,8 @@ package jku.se;
 
 import javafx.application.Platform;
 import jku.se.Controller.SubmitBillController;
+import org.apache.commons.logging.Log;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URI;
@@ -103,7 +105,9 @@ public class Database {
                 image = getPublicUrl(fileName);
             }
         } catch (Exception exception) {
-            LOGGER.log(Level.SEVERE, "Exeption:", exception);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Exeption:", exception);
+            }
         }
         return image;
     }
@@ -137,7 +141,9 @@ public class Database {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Rechnungsstatus mit ID: " + identifier, e);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Rechnungsstatus mit ID: " + identifier, e);
+            }
         }
         return username;
     }
@@ -160,7 +166,9 @@ public class Database {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Rechnungsstatus mit ID: " + identifier, e);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Rechnungsstatus mit ID: " + identifier, e);
+            }
         }
         return null;
     }
@@ -183,7 +191,9 @@ public class Database {
                 }
             }
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Exeption:", exception);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Exeption:", exception);
+            }
         }
         return status;
     }
@@ -207,7 +217,9 @@ public class Database {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Fotos mit ID: " + identifier, e);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Fotos mit ID: " + identifier, e);
+            }
         }
         return image;
     }
@@ -231,7 +243,9 @@ public class Database {
                 }
             }
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Fehler beim Abrufen des Erstattungsbetrags mit ID: " + identifier, e);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Fehler: " + identifier, e);
+            }
         }
         return refund;
     }
@@ -366,7 +380,9 @@ public class Database {
             try {
                 connection.rollback();  // rollback on error
             } catch (SQLException rollbackEx) {
-                LOGGER.log(Level.SEVERE, "Exeption:", rollbackEx);
+                if (LOGGER.isLoggable(Level.SEVERE)) {
+                    LOGGER.log(Level.SEVERE, "Exeption:", rollbackEx);
+                }
             }
         } finally {
             try {
@@ -391,12 +407,14 @@ public class Database {
         String sql = "SELECT 1 FROM rechnungen WHERE username = ? AND datum = ?";
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
             pstmt.setString(1, username);
-            pstmt.setDate(2, java.sql.Date.valueOf(datum));
+            pstmt.setDate(2, Date.valueOf(datum));
             try (ResultSet resultSet = pstmt.executeQuery()) {
                 exists = resultSet.next(); // Returns true if an entry exists
             }
         } catch (SQLException exception) {
-            LOGGER.log(Level.SEVERE, "Exeption:", exception);
+            if (LOGGER.isLoggable(Level.SEVERE)) {
+                LOGGER.log(Level.SEVERE, "Exeption:", exception);
+            }
         }
         return exists;
     }
@@ -484,7 +502,7 @@ public class Database {
             String query = "SELECT image FROM rechnungen WHERE username = ? AND datum = ?";
             try (PreparedStatement stmt = connection.prepareStatement(query)) {
                 stmt.setString(1, username);
-                stmt.setDate(2, java.sql.Date.valueOf(date));
+                stmt.setDate(2, Date.valueOf(date));
 
                 try (ResultSet resultSet = stmt.executeQuery()) {
                     if (resultSet.next()) {
@@ -499,7 +517,7 @@ public class Database {
                 String deleteQuery = "DELETE FROM rechnungen WHERE username = ? AND datum = ?";
                 try (PreparedStatement deleteStmt = connection.prepareStatement(deleteQuery)) {
                     deleteStmt.setString(1, username);
-                    deleteStmt.setDate(2, java.sql.Date.valueOf(date));
+                    deleteStmt.setDate(2, Date.valueOf(date));
 
                     int rowsAffected = deleteStmt.executeUpdate();
                     if (rowsAffected > 0) {
