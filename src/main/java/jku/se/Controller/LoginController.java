@@ -33,7 +33,7 @@ public class LoginController extends Controller {
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            showErrorMessage("Bitte E-Mail und Passwort eingeben!");
+            showAlert("Error", "Bitte E-Mail und Passwort eingeben!");
             return;
         }
 
@@ -53,9 +53,9 @@ public class LoginController extends Controller {
             }
         } else {
             if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
-                showErrorMessage("Konto nach 10 fehlgeschlagenen Versuchen gesperrt!");
+                showAlert("Error", "Konto nach 3 fehlgeschlagenen Versuchen gesperrt!");
             } else {
-                showErrorMessage("E-Mail oder Passwort falsch!");
+                showAlert("Error","E-Mail oder Passwort falsch!");
             }
         }
     }
@@ -67,8 +67,5 @@ public class LoginController extends Controller {
         stage.setScene(new Scene(fxmlLoader.load()));
     }
 
-    private void showErrorMessage(String message) {
-        messageLabel.setText(message);
-        messageLabel.setStyle("-fx-text-fill: red;");
-    }
+
 }

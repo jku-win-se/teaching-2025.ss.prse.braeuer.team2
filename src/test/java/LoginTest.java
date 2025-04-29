@@ -55,7 +55,7 @@ public class LoginTest { //Tests mit AI generiert
 
             // Create blocked user account
             createAccount(conn, BLOCKED_USER_EMAIL, BLOCKED_USERNAME, BLOCKED_PASSWORD,
-                    Role.USER, Status.BLOCKED, 10, BLOCKED_FIRST_NAME, BLOCKED_LAST_NAME);
+                    Role.USER, Status.BLOCKED, 3, BLOCKED_FIRST_NAME, BLOCKED_LAST_NAME);
 
             conn.commit();
         }

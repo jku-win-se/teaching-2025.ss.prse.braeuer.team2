@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Login {
-    private static final int MAX_FAILED_ATTEMPTS = 10;
+    private static final int MAX_FAILED_ATTEMPTS = 3;
 
     private static String currentUsername;
     private static String currentUserEmail;
