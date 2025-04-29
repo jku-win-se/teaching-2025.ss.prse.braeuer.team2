@@ -277,7 +277,6 @@ public class StatisticsController extends Controller {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("SQL Fehler:\n" + sql); // Log full SQL for debugging
         }
     }
 
@@ -404,7 +403,6 @@ public class StatisticsController extends Controller {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            System.err.println("Fehlerhaftes SQL:\n" + sql); // Debug: print SQL if it fails
         }
     }
 
@@ -620,9 +618,9 @@ public class StatisticsController extends Controller {
 
                 // Save the PDF to the selected file
                 document.save(file);
-                showAlert("Export Successful", "Data exported to PDF successfully!");
+                showAlertSuccess("Export Successful", "Data exported to PDF successfully!");
             } catch (IOException e) {
-                showAlert("Export Error", "Failed to export PDF: " + e.getMessage());
+                showAlertSuccess("Export Error", "Failed to export PDF: " + e.getMessage());
             }
         }
     }

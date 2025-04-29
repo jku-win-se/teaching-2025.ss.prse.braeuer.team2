@@ -12,6 +12,17 @@
     </properties>
 
     <build>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.fxml</include>
+                    <include>Tesseract-OCR/tessdata/**</include>
+                </includes>
+            </resource>
+        </resources>
+
         <plugins>
             <!-- Fat Jar (Uber Jar) Plugin -->
             <plugin>
@@ -49,6 +60,8 @@
             </plugin>
         </plugins>
     </build>
+
+
 
     <dependencies>
         <dependency>

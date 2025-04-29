@@ -5,7 +5,11 @@ import net.sourceforge.tess4j.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -19,17 +23,16 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Set;
 
-
 /**
  * implements Tesseract-OCR
  */
 public class InvoiceScan {
 
-    /**tesseract-instance*/
+    /** tesseract-instance */
     private final Tesseract tesseract;
-    /**controller for SubmitBillcontroller*/
+    /** controller for SubmitBillcontroller */
     private final SubmitBillController controller;
-    /**Sum*/
+    /** Sum */
     public double sum;
 
     /**
@@ -37,11 +40,47 @@ public class InvoiceScan {
      * @param controller
      */
     public InvoiceScan(SubmitBillController controller) {
-        this.controller = controller; //Stores the passed controller in an instance variable
-        tesseract = new Tesseract(); //create new tesseract-instance
-        tesseract.setTessVariable("user_defined_dpi", "70"); //set dpi
-        tesseract.setDatapath("src/main/resources/Tesseract-OCR/tessdata"); //datapath to tesseract
-        tesseract.setLanguage("deu+eng"); //set language to german and englisch
+        this.controller = controller; // Stores the passed controller in an instance variable
+        tesseract = new Tesseract(); // Create new tesseract-instance
+        tesseract.setTessVariable("user_defined_dpi", "70"); // Set dpi
+
+        // Set the path for tessdata after extracting it from the JAR
+        try {
+            initializeOCR(); // Initialize OCR by extracting traineddata from the JAR
+        } catch (IOException e) {
+            e.printStackTrace();
+            controller.displayMessage("Fehler beim Laden der Tesseract-Sprachdateien.", "red");
+        }
+
+        tesseract.setLanguage("deu+eng"); // Set language to German and English
+    }
+
+    private void initializeOCR() throws IOException {
+        // Temp directory for tessdata
+        Path tempDir = Files.createTempDirectory("tesseract-tessdata");
+        Path tessdataDir = tempDir.resolve("tessdata");
+        Files.createDirectories(tessdataDir);
+
+        // Extract the German and English traineddata files from the JAR into temp directory
+        extractTrainedData("/Tesseract-OCR/tessdata/deu.traineddata", tessdataDir.resolve("deu.traineddata"));
+        extractTrainedData("/Tesseract-OCR/tessdata/eng.traineddata", tessdataDir.resolve("eng.traineddata"));
+
+        // Set the datapath for Tesseract
+        tesseract.setDatapath(tessdataDir.toString()); // Use the temp directory path for Tesseract
+
+        // Set the TESSDATA_PREFIX to the directory that contains the tessdata
+        System.setProperty("TESSDATA_PREFIX", tessdataDir.getParent().toString());
+    }
+
+    private void extractTrainedData(String resourcePath, Path destination) throws IOException {
+        // Try to get the resource stream from the JAR
+        try (InputStream in = getClass().getResourceAsStream(resourcePath)) {
+            if (in == null) {
+                throw new FileNotFoundException("Sprachdatei nicht gefunden: " + resourcePath);
+            }
+            // Copy the resource to the destination file
+            Files.copy(in, destination, StandardCopyOption.REPLACE_EXISTING);
+        }
     }
 
     /**
@@ -55,12 +94,11 @@ public class InvoiceScan {
     public Invoice scanInvoice(String imagePath) throws TesseractException, IOException, SQLException {
 
         String text;
-        //generates a file object
+        // Generates a file object
         File imageFile = new File(imagePath);
 
-        //checks if it is a jpg and change the image so that it can be read by the OCR
-        if (imagePath.toLowerCase().endsWith(".jpg")){
-
+        // Checks if it is a jpg and change the image so that it can be read by the OCR
+        if (imagePath.toLowerCase().endsWith(".jpg")) {
             // Read the image file into a BufferedImage
             BufferedImage bufferedImage = ImageIO.read(imageFile);
 
@@ -73,72 +111,70 @@ public class InvoiceScan {
 
             // Pass the in-memory BufferedImage to the OCR engine
             text = tesseract.doOCR(newBufferedImage);
-        }
-        else{
-            //Tesseract is processing the invoice to a text
+        } else {
+            // Tesseract is processing the invoice to a text
             text = tesseract.doOCR(imageFile);
         }
-        // extract data out of the extracted text (with methods)
+
+        // Extract data out of the extracted text (with methods)
         String date = extractDate(text);
-        LocalDate lDate = stringToDate (date);
+        LocalDate lDate = stringToDate(date);
         sum = extractSum(text);
         boolean supermarkt = extractSupermarkt(text);
         boolean restaurant = extractRestaurant(text);
         InvoiceType type = determineInvoiceType(supermarkt, restaurant);
 
-        //if OCR could find all needed parameters the invoice is accepted automatically
-        //otherwise it is on status pending -> must be checked by an admin
+        // If OCR could find all needed parameters the invoice is accepted automatically
+        // Otherwise, it is on status pending -> must be checked by an admin
         InvoiceStatus status;
         if (type != InvoiceType.UNDEFINED && isValidSum(sum) && isWithinCurrentMonth(lDate)) {
             status = InvoiceStatus.ACCEPTED;
-        }
-        else{
+        } else {
             status = InvoiceStatus.PENDING;
         }
 
-        //if sum is not correct, display error message and prompt users to enter it manually
+        // If sum is not correct, display error message and prompt users to enter it manually
         if (!isValidSum(sum)) {
             controller.displayMessage("Betrag konnte nicht gelesen werden.", "red");
             sum = controller.requestManualSum();
         }
 
-        //if date is null, display error message and prompt users to enter it manually
+        // If date is null, display error message and prompt users to enter it manually
         if (lDate == null) {
             controller.displayMessage("Datum konnte nicht gelesen werden.", "red");
             date = controller.requestManualDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-            lDate = stringToDate (date);
+            lDate = stringToDate(date);
         }
 
-        //if date is not within the current month, display error message
+        // If date is not within the current month, display error message
         if (!isWithinCurrentMonth(lDate)) {
             controller.displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");
         }
 
-        //if type is UNDEFINED, invoice could not be categorized
-        if (type == InvoiceType.UNDEFINED){
+        // If type is UNDEFINED, invoice could not be categorized
+        if (type == InvoiceType.UNDEFINED) {
             controller.displayMessage("Typ konnte nicht erkannt werden.", "red");
             type = controller.requestManualType();
         }
 
-        Invoice invoice = controller.requestManualAll(lDate,sum,type, status);
-        if (invoice == null){
+        Invoice invoice = controller.requestManualAll(lDate, sum, type, status);
+        if (invoice == null) {
             return null;
         }
+
         lDate = invoice.getDate();
         sum = invoice.getSum();
         type = invoice.getTyp();
         status = invoice.getStatus();
 
-        //calculate refund
-        double refund = Refund.refundCalculation(sum,type, lDate);
-        return new Invoice(lDate, sum, type,status,refund);
+        // Calculate refund
+        double refund = Refund.refundCalculation(sum, type, lDate);
+        return new Invoice(lDate, sum, type, status, refund);
     }
-
-
 
     /*
         Type
-    */
+     */
 
     /**
      * checks if the type could be clearly identified
@@ -181,10 +217,9 @@ public class InvoiceScan {
         return matcher.find();
     }
 
-
     /*
         Date
-    */
+     */
 
     /**
      * finds the date from the extracted OCR-text (AI)
@@ -209,20 +244,20 @@ public class InvoiceScan {
 
     /**
      * converts the different types of dates to a LocalDate (AI)
-     * @param dateStr
+     * @param dateString
      * @return date in the correct format
      */
-    public static LocalDate stringToDate(String dateStr) {
+    public static LocalDate stringToDate(String dateString) {
 
         // if String is null, date is null
-        if (dateStr == null) {
+        if (dateString == null) {
             return null;
         }
 
         // Replace commas with points
-        dateStr = dateStr.replace(',', '.');
+        String dateStr = dateString.replace(',', '.');
 
-        //list with possible date types
+        // List with possible date types
         List<DateTimeFormatter> formatters = Arrays.asList(
                 DateTimeFormatter.ofPattern("d.M.yyyy"),
                 DateTimeFormatter.ofPattern("d.M.yy"),
@@ -230,15 +265,14 @@ public class InvoiceScan {
                 DateTimeFormatter.ofPattern("d.MMMM.yy", Locale.GERMAN)
         );
 
-        //goes through the list and trys to format the date
+        // Goes through the list and tries to format the date
         for (DateTimeFormatter formatter : formatters) {
             try {
                 return LocalDate.parse(dateStr, formatter);
             } catch (DateTimeParseException ignored) {}
         }
 
-        //if the passed date does not match one of the formats;
-        System.out.println("Ungültiges Datum: " + dateStr);
+        // If the passed date does not match one of the formats;
         return null;
     }
 
@@ -252,20 +286,17 @@ public class InvoiceScan {
         // Checks if the date is a Saturday or Sunday
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         if (dayOfWeek == DayOfWeek.SATURDAY || dayOfWeek == DayOfWeek.SUNDAY) {
-            System.out.println("Kein Arbeitstag");
             return false;
         }
 
         //Checks if the date is a holiday
         for (Holiday holiday : holidays) {
             if (holiday.getDate().equals(date)) {
-                System.out.println("Kein Arbeitstag");
                 return false;
             }
         }
 
         // if it is no holiday or sunday or saturday, it must be a work day
-        System.out.println("Arbeitstag");
         return true;
     }
 
@@ -315,5 +346,3 @@ public class InvoiceScan {
 
 
 }
-
-
