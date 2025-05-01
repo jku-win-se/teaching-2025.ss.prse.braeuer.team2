@@ -88,6 +88,9 @@ public class SubmittedBillsController extends Controller {
             Button editBtn = new Button("Edit");
             editBtn.setOnAction(event -> {
                 try {
+
+                    closeFilterWindow();
+
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/editInvoiceUser.fxml"));
                     Parent root = loader.load();
 
@@ -104,6 +107,13 @@ public class SubmittedBillsController extends Controller {
             actionBox.getChildren().add(editBtn);
         }
         gridInvoices.add(actionBox, 5, row);
+    }
+
+    public void closeFilterWindow() {
+        if (filterStage != null && filterStage.isShowing()) {
+            filterStage.close();
+            filterStage = null;
+        }
     }
 
     // Deepseek Anfang

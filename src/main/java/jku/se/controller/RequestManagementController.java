@@ -1,11 +1,15 @@
 package jku.se.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jku.se.*;
 import java.io.IOException;
@@ -15,6 +19,7 @@ public class RequestManagementController extends Controller {
 
     @FXML private GridPane gridInvoices;
     private final InvoiceService invoiceService = new InvoiceService();
+    private Stage filterStage;
 
     @FXML
     public void initialize() {
@@ -25,7 +30,7 @@ public class RequestManagementController extends Controller {
         }
     }
 
-    private void loadAndDisplayInvoices() throws SQLException {
+    public void loadAndDisplayInvoices() throws SQLException {
         String[] filters = FilterPanelAdminController.getFilter();
         ResultSet resultSet = invoiceService.getFilteredInvoices(filters);
         displayResults(resultSet);
@@ -40,6 +45,13 @@ public class RequestManagementController extends Controller {
         }
     }
 
+    public void closeFilterWindow() {
+        if (filterStage != null && filterStage.isShowing()) {
+            filterStage.close();
+            filterStage = null;
+        }
+    }
+
     private void clearGridContent() {
         gridInvoices.getChildren().removeIf(node ->
                 GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
@@ -48,8 +60,8 @@ public class RequestManagementController extends Controller {
     private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
         int id = rs.getInt("id");
         String image = rs.getString("image");
-        String invoiceSubmitter = rs.getString("username"); // The user who submitted the invoice
-        String currentUser = Login.getUsername(); // CurrentUser;
+        String invoiceSubmitter = rs.getString("username");
+        String currentUser = Login.getUsername();
 
         Hyperlink invoiceLink = new Hyperlink("Rechnung " + id);
         invoiceLink.setOnAction(event -> invoiceService.openInvoiceLink(image));
@@ -59,13 +71,16 @@ public class RequestManagementController extends Controller {
         gridInvoices.add(new Label(rs.getString("typ")), 2, row);
         gridInvoices.add(new Label(rs.getString("datum")), 3, row);
         gridInvoices.add(new Label(invoiceSubmitter), 4, row);
-        gridInvoices.add(new Label(rs.getString("status")), 5, row);
 
-        // Only add the edit button if the current user is NOT the submitter
+        Label statusLabel = new Label(rs.getString("status"));
+        statusLabel.setStyle(getStatusStyle(rs.getString("status")));
+        gridInvoices.add(statusLabel, 5, row);
+
         if (!currentUser.equals(invoiceSubmitter)) {
             Button editButton = new Button("Edit");
             editButton.setOnAction(event -> {
                 try {
+                    closeFilterWindow();
                     handleEditInvoice(id);
                 } catch (IOException e) {
                     showAlert("Error", "Failed to edit invoice: " + e.getMessage());
@@ -75,15 +90,52 @@ public class RequestManagementController extends Controller {
         }
     }
 
+    private String getStatusStyle(String status) {
+        if (status == null) return "";
+        return switch (status) {
+            case "ACCEPTED" -> "-fx-text-fill: green;";
+            case "PENDING" -> "-fx-text-fill: orange;";
+            case "DENIED" -> "-fx-text-fill: red;";
+            default -> "";
+        };
+    }
+
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
+        if (filterStage != null && filterStage.isShowing()) {
+            filterStage.close();
+        }
         FilterPanelAdminController.clearFilters();
         switchScene(event, "adminPanel.fxml");
     }
 
     @FXML
-    private void openFilter(javafx.event.ActionEvent event) throws IOException {
-        switchScene(event, "filterPanelAdmin.fxml");
+    private void openFilter(ActionEvent event) throws SQLException {
+        loadAndDisplayInvoices();
+
+        try {
+            if (filterStage != null && filterStage.isShowing()) {
+                filterStage.toFront();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filterPanelAdmin.fxml"));
+            Parent root = loader.load();
+
+            FilterPanelAdminController controller = loader.getController();
+            controller.setMainController(this);
+
+            filterStage = new Stage();
+            filterStage.setTitle("Rechnungen filtern (Admin)");
+            filterStage.setScene(new Scene(root));
+            filterStage.initModality(Modality.NONE);
+            filterStage.initOwner(((Node)event.getSource()).getScene().getWindow());
+
+            filterStage.show();
+
+        } catch (IOException e) {
+            showAlert("Fehler", "Filter konnte nicht geöffnet werden");
+        }
     }
 
     private void handleEditInvoice(int invoiceId) throws IOException {
