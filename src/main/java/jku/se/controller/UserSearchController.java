@@ -21,7 +21,8 @@ public class UserSearchController extends Controller {
     private TextField searchField;
 
     @FXML
-    private void searchUser(ActionEvent event) {
+    //private void searchUser(ActionEvent event) {
+    private void searchUser() {
         String username = searchField.getText().trim();
 
         if (username.isEmpty()) {
