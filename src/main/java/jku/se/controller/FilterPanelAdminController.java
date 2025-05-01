@@ -2,12 +2,9 @@ package jku.se.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class FilterPanelAdminController extends Controller {
@@ -52,7 +49,8 @@ public class FilterPanelAdminController extends Controller {
     }
 
     @FXML
-    private void applyFilters(ActionEvent event) {
+    //private void applyFilters(ActionEvent event) {
+    private void applyFilters() {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
         activeFilters[2] = getFilterValue(checkboxBenutzer, textfieldBenutzer);
@@ -67,12 +65,6 @@ public class FilterPanelAdminController extends Controller {
                 showAlert("Fehler", "Daten konnten nicht geladen werden");
             }
         }
-    }
-
-    @FXML
-    private void handleCancel(ActionEvent event) {
-        clearFilters();
-        ((Stage)((Node)event.getSource()).getScene().getWindow()).close();
     }
 
     private String getStatusFilterValue() {

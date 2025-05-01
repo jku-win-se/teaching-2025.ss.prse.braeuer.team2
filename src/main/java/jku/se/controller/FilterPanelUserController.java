@@ -2,16 +2,13 @@ package jku.se.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
 import jku.se.Login;
 
-import java.io.IOException;
 import java.sql.SQLException;
 
 public class FilterPanelUserController extends Controller {
@@ -59,7 +56,8 @@ public class FilterPanelUserController extends Controller {
     }
 
     @FXML
-    private void applyFilters(ActionEvent event) {
+    //private void applyFilters(ActionEvent event) {
+    private void applyFilters() {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
         activeFilters[2] = Login.getCurrentUsername();
