@@ -28,7 +28,4 @@ public class LunchifyApplication extends Application {
         stage.setTitle("Lunchify - Login");
         stage.show();
     }
-
-
-
 }
