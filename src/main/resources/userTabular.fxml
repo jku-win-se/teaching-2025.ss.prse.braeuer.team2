@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.UserTabularController">
+
+    <Label layoutX="306.0" layoutY="15.0" prefHeight="30.0" prefWidth="86.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Benutzer" />
+    <Button fx:id="btn_back" layoutX="14.0" layoutY="17.0" onAction="#handleBack" text="⬅ Zurück" />
+
+    <!-- ScrollPane with bottom spacing -->
+    <ScrollPane layoutX="16.0" layoutY="66.0" prefHeight="314.0" prefWidth="666.0" style="-fx-padding: 0 0 20 0;">
+        <GridPane fx:id="gridUsers" hgap="10.0" prefWidth="665.0" style="-fx-background-color: transparent;" vgap="10.0">
+            <!-- Column headers -->
+            <Label style="-fx-font-weight: bold;" text="Benutzer" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label style="-fx-font-weight: bold;" text="Nachname" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <Label style="-fx-font-weight: bold;" text="Vorname" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="180.0" style="-fx-font-weight: bold;" text="Rolle" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+
+            <!-- Column constraints -->
+            <columnConstraints>
+                <ColumnConstraints percentWidth="32.0" />  <!-- Benutzer -->
+                <ColumnConstraints percentWidth="32.0" />  <!-- Vorname -->
+                <ColumnConstraints percentWidth="28.0" />  <!-- Nachname -->
+                <ColumnConstraints percentWidth="8.0" />  <!-- Rolle -->
+            </columnConstraints>
+
+            <!-- Row constraints -->
+            <rowConstraints>
+                <RowConstraints minHeight="30.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+        </GridPane>
+    </ScrollPane>
+
+    <!-- User count label at the bottom -->
+    <Label fx:id="lbl_userCount" layoutX="16.0" layoutY="390.0" />
+</AnchorPane>

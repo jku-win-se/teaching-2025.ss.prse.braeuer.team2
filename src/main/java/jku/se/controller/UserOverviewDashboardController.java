@@ -19,4 +19,8 @@ public class UserOverviewDashboardController extends Controller {
     private void openAddUser (javafx.event.ActionEvent event) throws IOException {
         switchScene(event, "addUser.fxml");
     }
+    @FXML
+    private void showUsers(javafx.event.ActionEvent event) throws IOException {
+        switchScene(event, "userTabular.fxml");
+    }
 }

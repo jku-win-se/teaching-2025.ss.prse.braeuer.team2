@@ -16,6 +16,7 @@ public class UserSearchResultsController extends Controller {
     @FXML private TextField lastNameField;
     @FXML private Label usernameLabel;
     @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
     @FXML private ComboBox<String> roleComboBox;
     @FXML private ComboBox<String> statusComboBox;
     @FXML private TextField failedAttemptsField;
@@ -42,6 +43,7 @@ public class UserSearchResultsController extends Controller {
                 lastNameField.setText(user.lastName);
                 usernameLabel.setText(user.username);
                 emailField.setText(user.email);
+                passwordField.setText(user.password);
                 roleComboBox.setValue(user.role);
                 statusComboBox.setValue(user.status);
                 failedAttemptsField.setText(String.valueOf(user.failedAttempts));
@@ -62,6 +64,7 @@ public class UserSearchResultsController extends Controller {
             user.lastName = lastNameField.getText();
             user.username = usernameLabel.getText();
             user.email = emailField.getText();
+            user.password = passwordField.getText(); // Add this line
             user.role = roleComboBox.getValue();
             user.status = statusComboBox.getValue();
             user.failedAttempts = Integer.parseInt(failedAttemptsField.getText());
