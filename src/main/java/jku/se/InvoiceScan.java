@@ -1,6 +1,6 @@
 package jku.se;
 
-import jku.se.Controller.SubmitBillController;
+import jku.se.controller.SubmitBillController;
 import net.sourceforge.tess4j.*;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -9,12 +9,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.regex.*;
 import de.jollyday.Holiday;
 import de.jollyday.HolidayCalendar;

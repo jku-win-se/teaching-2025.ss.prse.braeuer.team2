@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.control.ListView?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.DashboardUserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.DashboardUserController">
 
     <!-- KPIs (Kennzahlen) -->
     <HBox layoutX="170.0" layoutY="60.0" spacing="15" />

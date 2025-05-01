@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.Controller.AddUserController">
+<AnchorPane fx:id="root" prefHeight="400.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.AddUserController">
     <VBox alignment="TOP_CENTER" spacing="15" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20" AnchorPane.topAnchor="20">
         <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Add New User" />
 

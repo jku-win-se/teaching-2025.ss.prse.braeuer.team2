@@ -1,19 +1,21 @@
-package jku.se.Controller;
+package jku.se.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
+import jku.se.Login;
+
 import java.io.IOException;
 
-public class FilterPanelAdminController extends Controller {
+public class FilterPanelUserController extends Controller {
 
     @FXML private CheckBox checkboxRechnungsID;
     @FXML private TextField textfieldRechnungsID;
     @FXML private CheckBox checkboxTyp;
     @FXML private ComboBox<String> comboBoxTyp;
-    @FXML private CheckBox checkboxBenutzer;
-    @FXML private TextField textfieldBenutzer;
     @FXML private CheckBox checkboxStatus;
     @FXML private ComboBox<String> comboBoxStatus;
     @FXML private CheckBox checkboxCurrentMonth;
@@ -22,16 +24,20 @@ public class FilterPanelAdminController extends Controller {
 
     @FXML
     public void initialize() {
-        comboBoxTyp.getItems().addAll(
-                InvoiceType.SUPERMARKET.name(),
-                InvoiceType.RESTAURANT.name()
-        );
+        if (comboBoxTyp != null) {
+            comboBoxTyp.getItems().addAll(
+                    InvoiceType.SUPERMARKET.name(),
+                    InvoiceType.RESTAURANT.name()
+            );
+        }
 
-        comboBoxStatus.getItems().addAll(
-                InvoiceStatus.ACCEPTED.name(),
-                InvoiceStatus.PENDING.name(),
-                InvoiceStatus.DENIED.name()
-        );
+        if (comboBoxStatus != null) {
+            comboBoxStatus.getItems().addAll(
+                    InvoiceStatus.ACCEPTED.name(),
+                    InvoiceStatus.PENDING.name(),
+                    InvoiceStatus.DENIED.name()
+            );
+        }
     }
 
     public static String[] getFilter() {
@@ -46,31 +52,31 @@ public class FilterPanelAdminController extends Controller {
     private void applyFilters(javafx.event.ActionEvent event) throws IOException {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
-        activeFilters[2] = getFilterValue(checkboxBenutzer, textfieldBenutzer);
+        activeFilters[2] = Login.getCurrentUsername(); // Always filter by current user
         activeFilters[3] = getStatusFilterValue();
         activeFilters[4] = checkboxCurrentMonth.isSelected() ? "current_month" : null;
 
-        switchScene(event, "requestManagement.fxml");
+        switchScene(event, "submittedBills.fxml");
     }
 
     private String getStatusFilterValue() {
-        if (checkboxStatus.isSelected() && comboBoxStatus.getValue() != null) {
-            return comboBoxStatus.getValue();
+        if (!checkboxStatus.isSelected() || comboBoxStatus.getValue() == null) {
+            return null;
         }
-        return null;
+        return comboBoxStatus.getValue();
     }
 
     private String getTypFilterValue() {
-        if (checkboxTyp.isSelected() && comboBoxTyp.getValue() != null) {
-            return comboBoxTyp.getValue();
+        if (!checkboxTyp.isSelected() || comboBoxTyp.getValue() == null) {
+            return null;
         }
-        return null;
+        return comboBoxTyp.getValue();
     }
 
     private String getFilterValue(CheckBox checkbox, TextField textField) {
-        if (checkbox.isSelected() && !textField.getText().isEmpty()) {
-            return textField.getText();
+        if (!checkbox.isSelected() || textField.getText().isEmpty()) {
+            return null;
         }
-        return null;
+        return textField.getText();
     }
 }

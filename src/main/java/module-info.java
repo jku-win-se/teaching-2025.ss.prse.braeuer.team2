@@ -13,10 +13,12 @@ module com.example.lunchify {
     requires commons.logging;
 
     exports jku.se; // Alle Klassen im jku.se Package exportieren
-    opens jku.se.Controller to javafx.fxml; // Controller für javafx.fxml öffnen
+    opens jku.se.controller to javafx.fxml; // controller für javafx.fxml öffnen
 
-    exports jku.se.Controller;
-    opens jku.se to javafx.fxml, org.controlsfx.controls;  // Erlaubt den Zugriff auf dieses Paket von anderen Modulen
+    exports jku.se.controller;
+    opens jku.se to javafx.fxml, org.controlsfx.controls;
+    exports jku.se.exceptions;
+    opens jku.se.exceptions to javafx.fxml, org.controlsfx.controls;  // Erlaubt den Zugriff auf dieses Paket von anderen Modulen
 
 }
 

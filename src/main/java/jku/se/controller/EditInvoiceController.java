@@ -1,13 +1,7 @@
-package jku.se.Controller;
+package jku.se.controller;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import jku.se.*;
 
 import java.io.IOException;
@@ -18,8 +12,6 @@ import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
 
-import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
-import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.*;
 import static jku.se.InvoiceScan.isWorkday;
 

@@ -1,11 +1,7 @@
-package jku.se.Controller;
+package jku.se.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
 import jku.se.Refund;
