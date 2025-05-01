@@ -1,6 +1,5 @@
 package jku.se.controller;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jku.se.InvoiceStatus;
