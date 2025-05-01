@@ -25,7 +25,7 @@ public class UserSearchController extends Controller {
         String username = searchField.getText().trim();
 
         if (username.isEmpty()) {
-            showAlert("Eingabefehler", "Bitte geben Sie einen Benutzernamen ein");
+            showError("Eingabefehler", "Bitte geben Sie einen Benutzernamen ein");
             return;
         }
 
@@ -70,9 +70,9 @@ public class UserSearchController extends Controller {
                 }
             }
         } catch (SQLException e) {
-            showAlert("Datenbankfehler", "Fehler bei der Benutzersuche: " + e.getMessage());
+            showError("Datenbankfehler", "Fehler bei der Benutzersuche: " + e.getMessage());
         } catch (IOException e) {
-            showAlert("Fehler", "Fenster konnte nicht geöffnet werden: " + e.getMessage());
+            showError("Fehler", "Fenster konnte nicht geöffnet werden: " + e.getMessage());
         }
     }
 

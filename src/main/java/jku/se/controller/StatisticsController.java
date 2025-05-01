@@ -530,10 +530,10 @@ public class StatisticsController extends Controller {
                 }
 
                 // Show success alert
-                showAlert("Export Successful", "Data exported to CSV successfully!");
+                showError("Export Successful", "Data exported to CSV successfully!");
             } catch (FileNotFoundException e) {
                 // Show error alert if saving fails
-                showAlert("Export Error", "Failed to export CSV: " + e.getMessage());
+                showError("Export Error", "Failed to export CSV: " + e.getMessage());
             }
         }
     }
@@ -618,9 +618,9 @@ public class StatisticsController extends Controller {
 
                 // Save the PDF to the selected file
                 document.save(file);
-                showAlertSuccess("Export Successful", "Data exported to PDF successfully!");
+                showSuccess("Export Successful", "Data exported to PDF successfully!");
             } catch (IOException e) {
-                showAlertSuccess("Export Error", "Failed to export PDF: " + e.getMessage());
+                showError("Export Error", "Failed to export PDF: " + e.getMessage());
             }
         }
     }

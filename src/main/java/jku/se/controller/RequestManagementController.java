@@ -26,7 +26,7 @@ public class RequestManagementController extends Controller {
         try {
             loadAndDisplayInvoices();
         } catch (SQLException e) {
-            showAlert("Database Error", "Failed to load invoices: " + e.getMessage());
+            showError("Database Error", "Failed to load invoices: " + e.getMessage());
         }
     }
 
@@ -83,7 +83,7 @@ public class RequestManagementController extends Controller {
                     closeFilterWindow();
                     handleEditInvoice(id);
                 } catch (IOException e) {
-                    showAlert("Error", "Failed to edit invoice: " + e.getMessage());
+                    showError("Error", "Failed to edit invoice: " + e.getMessage());
                 }
             });
             gridInvoices.add(editButton, 6, row);
@@ -134,7 +134,7 @@ public class RequestManagementController extends Controller {
             filterStage.show();
 
         } catch (IOException e) {
-            showAlert("Fehler", "Filter konnte nicht geöffnet werden");
+            showError("Fehler", "Filter konnte nicht geöffnet werden");
         }
     }
 

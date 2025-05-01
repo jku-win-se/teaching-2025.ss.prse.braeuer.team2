@@ -55,9 +55,9 @@ public class AddUserController extends Controller {
                 switchScene(event, "userOverviewDashboard.fxml");
             }
         } catch (SQLException e) {
-            showAlert("Datenbankfehler", "Fehler beim Anlegen: " + e.getMessage());
+            showError("Datenbankfehler", "Fehler beim Anlegen: " + e.getMessage());
         } catch (IOException e) {
-            showAlert("Navigation Error", "Could not return to user overview");
+            showError("Navigation Error", "Could not return to user overview");
         }
     }
 
@@ -66,7 +66,7 @@ public class AddUserController extends Controller {
         try {
             switchScene(event, "userOverviewDashboard.fxml");
         } catch (IOException e) {
-            showAlert("Navigation Error", "Could not return to user overview");
+            showError("Navigation Error", "Could not return to user overview");
         }
     }
 
@@ -76,19 +76,19 @@ public class AddUserController extends Controller {
                 usernameField.getText().isEmpty() || emailField.getText().isEmpty() ||
                 passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()) {
 
-            showAlert("Validation Error", "All fields are required");
+            showError("Validation Error", "All fields are required");
             return false;
         }
 
         // Check password match
         if (!passwordField.getText().equals(confirmPasswordField.getText())) {
-            showAlert("Validation Error", "Passwords do not match");
+            showError("Validation Error", "Passwords do not match");
             return false;
         }
 
         // Check password length
         if (passwordField.getText().length() < 8) {
-            showAlert("Validation Error", "Password must be at least 8 characters");
+            showError("Validation Error", "Password must be at least 8 characters");
             return false;
         }
 

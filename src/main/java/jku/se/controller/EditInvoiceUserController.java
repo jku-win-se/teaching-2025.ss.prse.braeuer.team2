@@ -55,14 +55,14 @@ public class EditInvoiceUserController extends Controller{
 
         // Prüfen, ob NUR gültige Zahlen drin ist (z.B. 12, 12.0, 12.34)
         if (!input.matches("\\d+(\\.\\d{1,2})?")) {
-            showAlert("Fehler", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
+            showError("Fehler", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
             return;
         }
 
         try {
             betrag = Double.parseDouble(textFieldBetrag.getText());
         } catch (NumberFormatException exc) {
-            showAlert("Error", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
+            showError("Error", "Bitte gib einen gültigen Betrag ein! Z.B. 12.00");
             return;
         }
 
@@ -71,12 +71,12 @@ public class EditInvoiceUserController extends Controller{
         try {
             datum = Date.valueOf(datePickerDatum.getValue());
         } catch (IllegalArgumentException exc) {
-            showAlert("Error", "Please enter a valid date in the format yyyy-mm-dd.");
+            showError("Error", "Please enter a valid date in the format yyyy-mm-dd.");
             return; // Update wird abgebrochen, falls das Datum ungültig ist
         }
 
         if(!isWorkday(datum.toLocalDate())){
-            showAlert("Error", "The chosen date is not a working day!"); //ist kein Arbeitstag
+            showError("Error", "The chosen date is not a working day!"); //ist kein Arbeitstag
             return;
         }
 
@@ -95,14 +95,14 @@ public class EditInvoiceUserController extends Controller{
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+            showSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
                     "\nID: " + id +
                     "\nBetrag: " + betrag +
                     "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
                     "\nStatus: " + status +
                     "\nRefund: " + refund);
         } else {
-            showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
+            showError("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
     }
     public void setInvoice(int id, double amount, String typ, String date, String user) { //Wird für Ausfüllung von fxml Spalten benötigt

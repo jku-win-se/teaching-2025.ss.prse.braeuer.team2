@@ -47,10 +47,10 @@ public class UserSearchResultsController extends Controller {
                 failedAttemptsField.setText(String.valueOf(user.failedAttempts));
                 createdAtLabel.setText(user.createdAt);
             } else {
-                showAlert("Error", "User not found");
+                showError("Error", "User not found");
             }
         } catch (SQLException e) {
-            showAlert("Database Error", "Error loading user data: " + e.getMessage());
+            showError("Database Error", "Error loading user data: " + e.getMessage());
         }
     }
 
@@ -77,9 +77,9 @@ public class UserSearchResultsController extends Controller {
                 closeWindow();
             }
         } catch (SQLException e) {
-            showAlert("Database Error", "Failed to update user: " + e.getMessage());
+            showError("Database Error", "Failed to update user: " + e.getMessage());
         } catch (NumberFormatException e) {
-            showAlert("Input Error", "Failed attempts must be a number");
+            showError("Input Error", "Failed attempts must be a number");
         }
     }
 
@@ -102,7 +102,7 @@ public class UserSearchResultsController extends Controller {
                     closeWindow();
                 }
             } catch (SQLException e) {
-                showAlert("Database Error", "Failed to delete user: " + e.getMessage());
+                showError("Database Error", "Failed to delete user: " + e.getMessage());
             }
         }
     }

@@ -32,7 +32,7 @@ public class SubmittedBillsController extends Controller {
         try {
             loadUserInvoices();
         } catch (SQLException e) {
-            showAlert("Error", "Failed to load invoices: " + e.getMessage());
+            showError("Error", "Failed to load invoices: " + e.getMessage());
         }
     }
 
@@ -168,7 +168,7 @@ public class SubmittedBillsController extends Controller {
             filterStage.show();
 
         } catch (IOException e) {
-            showAlert("Fehler", "Filter konnte nicht geöffnet werden");
+            showError("Fehler", "Filter konnte nicht geöffnet werden");
         }
     }
 }
