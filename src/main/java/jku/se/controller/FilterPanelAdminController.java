@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
-import java.io.IOException;
+import java.sql.SQLException;
 
 public class FilterPanelAdminController extends Controller {
 
@@ -19,6 +19,7 @@ public class FilterPanelAdminController extends Controller {
     @FXML private CheckBox checkboxCurrentMonth;
 
     private static String[] activeFilters = new String[5]; // 0=id, 1=typ, 2=username, 3=status, 4=date
+    private RequestManagementController mainController;
 
     @FXML
     public void initialize() {
@@ -42,35 +43,47 @@ public class FilterPanelAdminController extends Controller {
         activeFilters = new String[5];
     }
 
+    public void setMainController(RequestManagementController mainController) {
+        this.mainController = mainController;
+    }
+
     @FXML
-    private void applyFilters(javafx.event.ActionEvent event) throws IOException {
+    //private void applyFilters(ActionEvent event) {
+    private void applyFilters() {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
         activeFilters[2] = getFilterValue(checkboxBenutzer, textfieldBenutzer);
         activeFilters[3] = getStatusFilterValue();
         activeFilters[4] = checkboxCurrentMonth.isSelected() ? "current_month" : null;
 
-        switchScene(event, "requestManagement.fxml");
+        // Refresh main view if possible
+        if (mainController != null) {
+            try {
+                mainController.loadAndDisplayInvoices();
+            } catch (SQLException e) {
+                showError("Fehler", "Daten konnten nicht geladen werden");
+            }
+        }
     }
 
     private String getStatusFilterValue() {
-        if (checkboxStatus.isSelected() && comboBoxStatus.getValue() != null) {
-            return comboBoxStatus.getValue();
+        if (!checkboxStatus.isSelected() || comboBoxStatus.getValue() == null) {
+            return null;
         }
-        return null;
+        return comboBoxStatus.getValue();
     }
 
     private String getTypFilterValue() {
-        if (checkboxTyp.isSelected() && comboBoxTyp.getValue() != null) {
-            return comboBoxTyp.getValue();
+        if (!checkboxTyp.isSelected() || comboBoxTyp.getValue() == null) {
+            return null;
         }
-        return null;
+        return comboBoxTyp.getValue();
     }
 
     private String getFilterValue(CheckBox checkbox, TextField textField) {
-        if (checkbox.isSelected() && !textField.getText().isEmpty()) {
-            return textField.getText();
+        if (!checkbox.isSelected() || textField.getText().isEmpty()) {
+            return null;
         }
-        return null;
+        return textField.getText();
     }
 }

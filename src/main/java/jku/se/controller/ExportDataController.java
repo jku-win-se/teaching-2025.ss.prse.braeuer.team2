@@ -202,10 +202,10 @@ public class ExportDataController extends Controller{
                         year,
                         month
                 );
-                showAlertSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + file.getAbsolutePath());
+                showSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + file.getAbsolutePath());
             }
         } catch (Exception e) {
-            showAlert("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());
+            showError("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());
         }
     }
 

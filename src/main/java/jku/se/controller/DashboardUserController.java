@@ -66,7 +66,7 @@ public class DashboardUserController extends Controller {
             // Setze den Button zurück auf die normale Farbe
             messages.setStyle("-fx-background-color: lightgray;");
         } catch (SQLException e) {
-            showAlert("Error", "Failed to mark messages as read: " + e.getMessage());
+            showError("Error", "Failed to mark messages as read: " + e.getMessage());
         }
     }
 
@@ -102,7 +102,7 @@ public class DashboardUserController extends Controller {
           try {
             checkForNewMessages();
         } catch (SQLException e) {
-            showAlert("Database Error", "Failed to check for new messages: " + e.getMessage());
+            showError("Database Error", "Failed to check for new messages: " + e.getMessage());
         }
     }
 }

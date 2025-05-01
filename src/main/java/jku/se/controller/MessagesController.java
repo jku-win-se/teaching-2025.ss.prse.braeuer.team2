@@ -28,7 +28,7 @@ public class MessagesController extends Controller{
         try {
             loadAndDisplayMessages();
         } catch (SQLException e) {
-            showAlert("Database Error", "Failed to load Messages: " + e.getMessage());
+            showError("Database Error", "Failed to load Messages: " + e.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class MessagesController extends Controller{
             try {
                 deleteMessage(id);
             } catch (SQLException e) {
-                showAlert("Fehler", "Datenbankfehler beim Löschen der Nachricht: " + e.getMessage());
+                showError("Fehler", "Datenbankfehler beim Löschen der Nachricht: " + e.getMessage());
             }
         });
         gridMessages.add(deleteButton, 2, row);
@@ -80,10 +80,10 @@ public class MessagesController extends Controller{
                 //showAlertSuccess("Erfolg", "Nachricht erfolgreich gelöscht.");
                 loadAndDisplayMessages(); // Nach dem Löschen die Liste neu laden
             } else {
-                showAlert("Fehler", "Die Nachricht konnte nicht gelöscht werden, da sie bereits gelöscht wurde.");
+                showError("Fehler", "Die Nachricht konnte nicht gelöscht werden, da sie bereits gelöscht wurde.");
             }
         } catch (SQLException e) {
-            showAlert("Fehler", "Nachricht konnte nicht gelöscht werden: " + e.getMessage());
+            showError("Fehler", "Nachricht konnte nicht gelöscht werden: " + e.getMessage());
         }
     }
 

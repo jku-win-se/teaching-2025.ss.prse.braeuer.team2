@@ -8,7 +8,7 @@ import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
 import jku.se.Login;
 
-import java.io.IOException;
+import java.sql.SQLException;
 
 public class FilterPanelUserController extends Controller {
 
@@ -21,6 +21,8 @@ public class FilterPanelUserController extends Controller {
     @FXML private CheckBox checkboxCurrentMonth;
 
     private static String[] activeFilters = new String[5]; // 0=id, 1=typ, 2=username, 3=status, 4=date
+
+    private SubmittedBillsController mainController;
 
     @FXML
     public void initialize() {
@@ -48,15 +50,27 @@ public class FilterPanelUserController extends Controller {
         activeFilters = new String[5];
     }
 
+    public void setMainController(SubmittedBillsController mainController) {
+        this.mainController = mainController;
+    }
+
     @FXML
-    private void applyFilters(javafx.event.ActionEvent event) throws IOException {
+    //private void applyFilters(ActionEvent event) {
+    private void applyFilters() {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
-        activeFilters[2] = Login.getCurrentUsername(); // Always filter by current user
+        activeFilters[2] = Login.getCurrentUsername();
         activeFilters[3] = getStatusFilterValue();
         activeFilters[4] = checkboxCurrentMonth.isSelected() ? "current_month" : null;
 
-        switchScene(event, "submittedBills.fxml");
+        // Refresh main view if possible
+        if (mainController != null) {
+            try {
+                mainController.loadUserInvoices();
+            } catch (SQLException e) {
+                showError("Fehler", "Daten konnten nicht geladen werden");
+            }
+        }
     }
 
     private String getStatusFilterValue() {

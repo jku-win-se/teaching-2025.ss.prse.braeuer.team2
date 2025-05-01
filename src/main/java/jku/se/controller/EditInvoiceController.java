@@ -80,7 +80,7 @@ public class EditInvoiceController extends Controller{
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            showAlert("Database Error", "Failed to load invoice details: " + e.getMessage());
+            showError("Database Error", "Failed to load invoice details: " + e.getMessage());
         }
     }
 
@@ -95,14 +95,14 @@ public class EditInvoiceController extends Controller{
 
         // Prüfen, ob NUR gültige Zahlen drin ist (z.B. 12, 12.0, 12.34)
         if (!input.matches("\\d+(\\.\\d{1,2})?")) {
-            showAlert("Fehler", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
+            showError("Fehler", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
             return;
         }
 
         try {
             betrag = Double.parseDouble(textFieldBetrag.getText());
         } catch (NumberFormatException exc) {
-            showAlert("Error", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
+            showError("Error", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
             return;
         }
 
@@ -122,14 +122,14 @@ public class EditInvoiceController extends Controller{
         try {// nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
             InvoiceType typ = InvoiceType.valueOf((String) comboBoxTyp.getValue());
         } catch (IllegalArgumentException e) {
-            showAlert("Error", "Choose a valid InvoiceType!");
+            showError("Error", "Choose a valid InvoiceType!");
             return;
         }
 
         try {// nur relevant für tests, im Programm kann man sonst keine anderen auswählen durch Dropdownbox
             InvoiceStatus status = InvoiceStatus.valueOf((String) comboBoxStatus.getValue());
         } catch (IllegalArgumentException ex) {
-            showAlert("Error", "Choose a valid InvoiceStatus!");
+            showError("Error", "Choose a valid InvoiceStatus!");
             return;
         }
 
@@ -140,22 +140,22 @@ public class EditInvoiceController extends Controller{
         }
 
         if(!isWorkday(datum.toLocalDate())){
-            showAlert("Error", "The chosen date is not a working day!"); //ist kein Arbeitstag
+            showError("Error", "The chosen date is not a working day!"); //ist kein Arbeitstag
             return;
         }
 
         if (!Objects.equals(typString, "RESTAURANT") && !Objects.equals(typString, "SUPERMARKET")) {
-            showAlert("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
+            showError("Error", "Please enter 'RESTAURANT' or 'SUPERMARKET'");
             return;
         }
 
         if (!Objects.equals(statusString, "ACCEPTED") && !Objects.equals(statusString, "DENIED") && !Objects.equals(statusString, "PENDING")) {
-            showAlert("Error", "Please enter 'ACCEPTED', 'DENIED' or 'PENDING'");
+            showError("Error", "Please enter 'ACCEPTED', 'DENIED' or 'PENDING'");
             return;
         }
 
         if (betrag < 0) {//negativer Rechnungsbetrag
-            showAlert("Error", "Negative Beträge sind nicht erlaubt!");
+            showError("Error", "Negative Beträge sind nicht erlaubt!");
             return; // Update wird abgebrochen
         }
 
@@ -164,14 +164,14 @@ public class EditInvoiceController extends Controller{
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showAlertSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+            showSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
                     "\nID: " + id +
                     "\nBetrag: " + betrag +
                     "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
                     "\nStatus: " + status +
                     "\nRefund: " + refund);
         } else {
-            showAlert("Fehler", "Rechnung konnte nicht aktualisiert werden.");
+            showError("Fehler", "Rechnung konnte nicht aktualisiert werden.");
         }
     }
 

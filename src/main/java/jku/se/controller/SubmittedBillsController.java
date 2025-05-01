@@ -1,5 +1,6 @@
 package jku.se.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jku.se.InvoiceService;
 import jku.se.Login;
@@ -19,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 
 public class SubmittedBillsController extends Controller {
 
+    private Stage filterStage;
+
     @FXML private GridPane gridInvoices;
     private final InvoiceService invoiceService = new InvoiceService();
     private final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -28,11 +32,11 @@ public class SubmittedBillsController extends Controller {
         try {
             loadUserInvoices();
         } catch (SQLException e) {
-            showAlert("Error", "Failed to load invoices: " + e.getMessage());
+            showError("Error", "Failed to load invoices: " + e.getMessage());
         }
     }
 
-    private void loadUserInvoices() throws SQLException {
+    public void loadUserInvoices() throws SQLException {
         String[] filters = FilterPanelUserController.getFilter();
 
         filters[2] = Login.getCurrentUsername(); // always filter by current user
@@ -84,6 +88,9 @@ public class SubmittedBillsController extends Controller {
             Button editBtn = new Button("Edit");
             editBtn.setOnAction(event -> {
                 try {
+
+                    closeFilterWindow();
+
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/editInvoiceUser.fxml"));
                     Parent root = loader.load();
 
@@ -100,6 +107,13 @@ public class SubmittedBillsController extends Controller {
             actionBox.getChildren().add(editBtn);
         }
         gridInvoices.add(actionBox, 5, row);
+    }
+
+    public void closeFilterWindow() {
+        if (filterStage != null && filterStage.isShowing()) {
+            filterStage.close();
+            filterStage = null;
+        }
     }
 
     // Deepseek Anfang
@@ -121,12 +135,40 @@ public class SubmittedBillsController extends Controller {
 
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
+        if (filterStage != null && filterStage.isShowing()) {
+            filterStage.close();
+        }
         FilterPanelUserController.clearFilters();
         switchScene(event, "dashboardUser.fxml");
     }
 
     @FXML
-    private void openFilter(javafx.event.ActionEvent event) throws IOException {
-        switchScene(event, "filterPanelUser.fxml");
+    private void openFilter(ActionEvent event) throws SQLException {
+        loadUserInvoices();
+
+        try {
+            if (filterStage != null && filterStage.isShowing()) {
+                filterStage.toFront();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filterPanelUser.fxml"));
+            Parent root = loader.load();
+
+            FilterPanelUserController controller = loader.getController();
+            controller.setMainController(this);
+
+            filterStage = new Stage();
+            filterStage.setTitle("Rechnungen filtern");
+            filterStage.setScene(new Scene(root));
+            //filterStage.initModality(Modality.APPLICATION_MODAL);
+            filterStage.initModality(Modality.NONE); // <- Changed to NON-MODAL
+            filterStage.initOwner(((Node)event.getSource()).getScene().getWindow());
+
+            filterStage.show();
+
+        } catch (IOException e) {
+            showError("Fehler", "Filter konnte nicht geöffnet werden");
+        }
     }
 }

@@ -4,6 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
+<?import javafx.scene.Cursor?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="273.0" prefWidth="408.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.LoginController">
    <children>
       <Label layoutX="50.0" layoutY="50.0" text="Lunchify - Login">
@@ -11,7 +12,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-
       <Label layoutX="50.0" layoutY="100.0" text="E-Mail:">
          <font>
             <Font size="14.0" />
@@ -22,7 +22,6 @@
             <Font size="14.0" />
          </font>
       </TextField>
-
       <Label layoutX="50.0" layoutY="150.0" text="Passwort:">
          <font>
             <Font size="14.0" />
@@ -33,7 +32,11 @@
             <Font size="14.0" />
          </font>
       </PasswordField>
-
+      <Button fx:id="closeButton" layoutX="380.0" layoutY="10.0" onAction="#handleClose" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #ff5555; -fx-text-fill: white; -fx-font-weight: bold;" text="X">
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
       <Button fx:id="loginButton" layoutX="327.0" layoutY="200.0" onAction="#handleLoginAction" text="Login" />
 
       <Label fx:id="messageLabel" alignment="CENTER" layoutX="14.0" layoutY="250.0" prefHeight="20.0" prefWidth="371.0" text="" textFill="red">

@@ -2,7 +2,6 @@ package jku.se;
 
 import jku.se.exceptions.DatabaseConnectionException;
 import jku.se.exceptions.DatabaseOperationException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
