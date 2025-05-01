@@ -1,5 +1,6 @@
 package jku.se.controller;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -8,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import jku.se.InvoiceService;
 import jku.se.Login;
@@ -18,6 +20,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class SubmittedBillsController extends Controller {
+
+    private Stage filterStage;
 
     @FXML private GridPane gridInvoices;
     private final InvoiceService invoiceService = new InvoiceService();
@@ -32,7 +36,7 @@ public class SubmittedBillsController extends Controller {
         }
     }
 
-    private void loadUserInvoices() throws SQLException {
+    public void loadUserInvoices() throws SQLException {
         String[] filters = FilterPanelUserController.getFilter();
 
         filters[2] = Login.getCurrentUsername(); // always filter by current user
@@ -121,12 +125,40 @@ public class SubmittedBillsController extends Controller {
 
     @FXML
     private void handleBack(javafx.event.ActionEvent event) throws IOException {
+        if (filterStage != null && filterStage.isShowing()) {
+            filterStage.close();
+        }
         FilterPanelUserController.clearFilters();
         switchScene(event, "dashboardUser.fxml");
     }
 
     @FXML
-    private void openFilter(javafx.event.ActionEvent event) throws IOException {
-        switchScene(event, "filterPanelUser.fxml");
+    private void openFilter(ActionEvent event) throws SQLException {
+        loadUserInvoices();
+
+        try {
+            if (filterStage != null && filterStage.isShowing()) {
+                filterStage.toFront();
+                return;
+            }
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/filterPanelUser.fxml"));
+            Parent root = loader.load();
+
+            FilterPanelUserController controller = loader.getController();
+            controller.setMainController(this);
+
+            filterStage = new Stage();
+            filterStage.setTitle("Rechnungen filtern");
+            filterStage.setScene(new Scene(root));
+            //filterStage.initModality(Modality.APPLICATION_MODAL);
+            filterStage.initModality(Modality.NONE); // <- Changed to NON-MODAL
+            filterStage.initOwner(((Node)event.getSource()).getScene().getWindow());
+
+            filterStage.show();
+
+        } catch (IOException e) {
+            showAlert("Fehler", "Filter konnte nicht geöffnet werden");
+        }
     }
 }

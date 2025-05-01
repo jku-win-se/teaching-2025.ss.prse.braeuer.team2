@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 import javafx.scene.layout.Pane;
 import javafx.scene.Node;
 import javafx.event.ActionEvent;
+import javafx.stage.StageStyle;
 
 import static jku.se.Login.logout;
 
