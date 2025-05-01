@@ -1,17 +1,7 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jku.se.Controller.ExportDataController;
-import jku.se.InvoiceStatus;
+import jku.se.controller.ExportDataController;
 import jku.se.InvoicesTotal;
-import jku.se.InvoiceExport;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;

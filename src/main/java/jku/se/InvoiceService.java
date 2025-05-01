@@ -1,5 +1,7 @@
 package jku.se;
 
+import jku.se.exceptions.InvoiceOperationException;
+
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
@@ -20,8 +22,8 @@ public class InvoiceService {
 
     // Deepseek Anfang
     private String buildQuery(String[] filters) {
-        final String BASE_QUERY = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
-        StringBuilder queryBuilder = new StringBuilder(BASE_QUERY);
+        final String baseQuery = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
+        StringBuilder queryBuilder = new StringBuilder(baseQuery);
         List<String> whereConditions = new ArrayList<>();
 
         // Filterbedingungen sammeln
@@ -60,7 +62,11 @@ public class InvoiceService {
         try {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(link));
         } catch (IOException e) {
-            throw new RuntimeException("Failed to open invoice link", e);
+            throw new InvoiceOperationException("Failed to open invoice link: " + link, e);
+        } catch (UnsupportedOperationException e) {
+            throw new InvoiceOperationException("Opening links is not supported on this platform", e);
+        } catch (SecurityException e) {
+            throw new InvoiceOperationException("Security restrictions prevent opening the invoice link", e);
         }
     }
 

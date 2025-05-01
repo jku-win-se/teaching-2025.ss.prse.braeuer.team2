@@ -1,8 +1,7 @@
 package jku.se;
 
 import javafx.application.Platform;
-import jku.se.Controller.SubmitBillController;
-import org.apache.commons.logging.Log;
+import jku.se.controller.SubmitBillController;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -11,7 +10,6 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

@@ -1,5 +1,4 @@
 import javafx.collections.ObservableList;
-import jku.se.Controller.RefundController;
 import jku.se.Database;
 import jku.se.InvoiceType;
 import jku.se.Refund;

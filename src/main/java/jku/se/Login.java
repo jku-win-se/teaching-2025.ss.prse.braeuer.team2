@@ -1,5 +1,8 @@
 package jku.se;
 
+import jku.se.exceptions.DatabaseConnectionException;
+import jku.se.exceptions.DatabaseOperationException;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,7 +16,8 @@ public class Login {
     private static Role currentUserRole;
     private static Status currentUserStatus;
 
-    public static boolean validateLogin(String email, String password, StringBuilder userRole, StringBuilder accountStatus) {
+    public static boolean validateLogin(String email, String password,
+                                        StringBuilder userRole, StringBuilder accountStatus) {
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
             try {
@@ -48,10 +52,10 @@ public class Login {
                 }
             } catch (SQLException e) {
                 conn.rollback();
-                throw new RuntimeException("Database error", e);
+                throw new DatabaseOperationException("Failed to validate login due to database error", e);
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Connection error", e);
+            throw new DatabaseConnectionException("Failed to establish database connection", e);
         }
     }
 

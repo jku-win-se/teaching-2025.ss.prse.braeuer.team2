@@ -1,4 +1,4 @@
-package jku.se.Controller;
+package jku.se.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,11 +1,7 @@
-import javafx.scene.chart.NumberAxis;
-import jku.se.Controller.SubmitBillController;
 import jku.se.Database;
-import jku.se.InvoiceScan;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
 
-import javax.xml.transform.Result;
 import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
