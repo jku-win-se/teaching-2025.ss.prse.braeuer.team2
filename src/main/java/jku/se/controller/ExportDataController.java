@@ -1,4 +1,4 @@
-package jku.se.Controller;
+package jku.se.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,8 +20,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
 
-import static jku.se.Controller.EditInvoiceUserController.showAlertSuccess;
-import static jku.se.Controller.RequestManagementController.showAlert;
 import static jku.se.Database.getConnection;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

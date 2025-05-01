@@ -1,4 +1,4 @@
-package jku.se.Controller;
+package jku.se.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import static jku.se.Controller.RequestManagementController.showAlert;
+
 import static jku.se.Login.getCurrentUsername;
 import javafx.scene.control.Label;
 import jku.se.DashboardUser;

@@ -1,6 +1,4 @@
-import jku.se.Controller.EditInvoiceController;
-import jku.se.Controller.RequestManagementController;
-import jku.se.Controller.SubmitBillController;
+import jku.se.controller.EditInvoiceController;
 import jku.se.Database;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
@@ -8,10 +6,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import static jku.se.Database.*;
 import static org.junit.jupiter.api.Assertions.*;
