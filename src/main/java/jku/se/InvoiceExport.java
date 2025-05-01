@@ -62,6 +62,13 @@ public class InvoiceExport {
         return refund;
     }
 
+    public double getRefundToPay() {
+        if (this.status == InvoiceStatus.ACCEPTED) {
+            return refund;
+        }
+        return 0;
+    }
+
     public int getId(){return id;}
     public void setId(int id){this.id = id;}
     public String getUser() {return user;}

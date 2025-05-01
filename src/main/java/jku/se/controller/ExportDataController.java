@@ -159,6 +159,7 @@ public class ExportDataController extends Controller{
             ui.invoices.add(invoiceMap);
             ui.totalInvoices++;
             ui.totalAmount += inv.getSum();
+            ui.refundToPay += inv.getRefundToPay();
             ui.totalRefund += inv.getRefund();
         }
 
@@ -218,6 +219,8 @@ public class ExportDataController extends Controller{
         public int totalInvoices;
         public double totalAmount;
         public double totalRefund;
+
+        public double refundToPay;
         public List<Map<String, Object>> invoices;
 
         public UserInvoices(String username) {
@@ -225,6 +228,7 @@ public class ExportDataController extends Controller{
             this.invoices = new ArrayList<>();
             this.totalAmount = 0.0;
             this.totalRefund = 0.0;
+            this.refundToPay = 0.0;
             this.totalInvoices = 0;
         }
     }
