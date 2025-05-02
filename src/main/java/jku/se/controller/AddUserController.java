@@ -24,7 +24,7 @@ public class AddUserController extends Controller {
     public void initialize() {
         // Initialize role dropdown with only ADMIN and USER
         roleComboBox.getItems().clear();
-        roleComboBox.getItems().addAll(Role.ADMIN.name(), Role.USER.name());
+        roleComboBox.getItems().addAll(Role.USER.name(), Role.ADMIN.name());
         roleComboBox.getSelectionModel().selectFirst();
     }
 

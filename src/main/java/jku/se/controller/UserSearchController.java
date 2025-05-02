@@ -21,7 +21,6 @@ public class UserSearchController extends Controller {
     private TextField searchField;
 
     @FXML
-    //private void searchUser(ActionEvent event) {
     private void searchUser() {
         String username = searchField.getText().trim();
 
@@ -46,29 +45,7 @@ public class UserSearchController extends Controller {
                 stage.setScene(new Scene(root));
                 stage.show();
             } else {
-                // Benutzer nicht gefunden - Bestätigungsdialog anzeigen
-                Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmation.setTitle("Benutzer nicht gefunden");
-                confirmation.setHeaderText("Der Benutzer '" + username + "' existiert nicht.");
-                confirmation.setContentText("Möchten Sie einen neuen Benutzer anlegen?");
-
-                Optional<ButtonType> result = confirmation.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    // Neuen Benutzer anlegen
-                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/addUser.fxml"));
-                    Parent root = loader.load();
-
-                    // Direkten Zugriff auf das TextField im neuen Fenster
-                    TextField usernameField = (TextField) root.lookup("#usernameField");
-                    if (usernameField != null) {
-                        usernameField.setText(username);
-                    }
-
-                    Stage stage = new Stage();
-                    stage.setTitle("Neuen Benutzer anlegen");
-                    stage.setScene(new Scene(root));
-                    stage.show();
-                }
+                showInfo("Info", "Benutzer nicht gefunden");
             }
         } catch (SQLException e) {
             showError("Datenbankfehler", "Fehler bei der Benutzersuche: " + e.getMessage());
