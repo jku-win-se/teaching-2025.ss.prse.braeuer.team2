@@ -26,7 +26,11 @@
 
             <!-- Row 4 -->
             <Label style="-fx-font-weight: bold;" text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
-            <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="4" spacing="5">
+                <TextField fx:id="passwordTextField" visible="false" managed="false" />
+                <PasswordField fx:id="passwordField" />
+                <CheckBox fx:id="showPasswordCheckBox" mnemonicParsing="false" text="Show" />
+            </HBox>
 
             <!-- Row 5 -->
             <Label style="-fx-font-weight: bold;" text="Role:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
