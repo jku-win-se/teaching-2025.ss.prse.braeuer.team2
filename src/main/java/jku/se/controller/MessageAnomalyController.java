@@ -70,7 +70,7 @@ public class MessageAnomalyController extends Controller{
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
 
         int id = rs.getInt("id");
-        String user = rs.getString("user");
+        String user = rs.getString("invoice_username");
         String message = rs.getString("message");
         String date = rs.getString("date");
         String delete = "delete";
