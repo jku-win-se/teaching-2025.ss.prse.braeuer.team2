@@ -27,6 +27,6 @@
       <font>
          <Font size="14.0" />
       </font>
-   </Button>
+   </Button><Button fx:id="messages" layoutX="39.0" layoutY="79.0" mnemonicParsing="false" onAction="#openMessagesAnomalies" text="🔔" />
 
 </AnchorPane>
