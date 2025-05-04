@@ -5,13 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
+
 
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.*;
 
 public class LunchifyApplication extends Application {
 
@@ -20,7 +16,7 @@ public class LunchifyApplication extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws IOException, URISyntaxException {
+    public void start(Stage stage) throws IOException {
         // JavaFX-UI laden
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/login.fxml"));
         Scene scene = new Scene(fxmlLoader.load());

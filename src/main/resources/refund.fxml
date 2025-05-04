@@ -7,35 +7,34 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;"
-            xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jku.se.controller.RefundController">
-
- <Button fx:id="btn_back" layoutX="14.0" layoutY="14.0" onAction="#handleBack" text="⬅ Zurück" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.RefundController">
+<TextField fx:id="refundRestaurant" layoutX="299.0" layoutY="95.0" prefHeight="26.0" prefWidth="262.0" />
 
  <VBox layoutX="150.0" layoutY="50.0" spacing="20.0">
   <!-- Eingabebereich -->
-  <VBox spacing="10.0">
-   <Label text="Refund Restaurant (€):" />
-   <TextField fx:id="refundRestaurant" prefWidth="200.0" />
-
-   <Label text="Refund Supermarkt (€):" />
-   <TextField fx:id="refundSupermarket" prefWidth="200.0" />
-
-   <Button onAction="#updateRefunds" text="Aktualisieren" prefWidth="200.0" />
-  </VBox>
-
-  <!-- Tabelle -->
-  <TableView fx:id="refundTable" prefHeight="250.0" prefWidth="500.0">
-   <columns>
-    <TableColumn fx:id="dateColumn" text="Datum" prefWidth="150"/>
-    <TableColumn fx:id="restaurantColumn" text="Restaurant (€)" prefWidth="175"/>
-    <TableColumn fx:id="supermarketColumn" text="Supermarkt (€)" prefWidth="175"/>
-    <TableColumn fx:id="adminColumn" text="Admin" prefWidth="175"/>
-   </columns>
-  </TableView>
+  <VBox spacing="10.0" />
  </VBox>
+<TextField fx:id="refundSupermarket" layoutX="299.0" layoutY="137.0" prefHeight="26.0" prefWidth="262.0" />
+<Label layoutX="149.0" layoutY="100.0" text="Erstattung Restaurant (€):" />
+
+<Label layoutX="149.0" layoutY="142.0" prefWidth="165.0" text="Erstattung Supermarkt (€):" />
+
+<!-- Tabelle -->
+<TableView fx:id="refundTable" layoutX="110.0" layoutY="222.0" prefHeight="250.0" prefWidth="500.0">
+<columns>
+ <TableColumn fx:id="dateColumn" prefWidth="150" text="Datum" />
+ <TableColumn fx:id="restaurantColumn" prefWidth="175" text="Restaurant (€)" />
+ <TableColumn fx:id="supermarketColumn" prefWidth="175" text="Supermarkt (€)" />
+ <TableColumn fx:id="adminColumn" prefWidth="175" text="Admin" />
+</columns>
+</TableView>
+    <Label layoutX="250.0" layoutY="30.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Erstattung bearbeiten" />
+    <Button fx:id="btn_back" layoutX="14.0" layoutY="35.0" onAction="#handleBack" prefHeight="30.0" prefWidth="78.0" text="⬅ Zurück" />
+   <Button layoutX="299.0" layoutY="178.0" mnemonicParsing="false" onAction="#updateRefunds" prefHeight="25.0" prefWidth="121.0" text="Aktualisieren" textFill="#45a32f">
+      <font>
+         <Font name="System Bold" size="12.0" />
+      </font>
+   </Button>
 </AnchorPane>
