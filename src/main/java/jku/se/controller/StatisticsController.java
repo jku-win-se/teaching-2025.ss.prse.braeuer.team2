@@ -25,6 +25,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.io.*;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -101,12 +103,11 @@ public class StatisticsController extends Controller {
         }
     }
 
-    // Loads data into the BarChart based on the selected metric (AI)
     private void loadChartData(String selectedMetric) {
         barChart.getData().clear(); // Clear previous data
         double maxYValue = 0.0;
         XYChart.Series<String, Number> series = new XYChart.Series<>();
-        String barColor = "#3D64E1FF"; // Default bar color
+        String barColor = "#5F1AA3E8"; // Default bar color
         series.setName(selectedMetric); // Label the chart series
 
         // Determine filtering conditions based on dropdown selections
@@ -128,9 +129,7 @@ public class StatisticsController extends Controller {
 
         String sql;
 
-        // Choose SQL query based on the selected metric
-        if (selectedMetric.equals("Rückvergütung pro Monat")) { // Choose the SQL query based on selected metric
-            // SQL: Total refund per month over the past 12 months
+        if (selectedMetric.equals("Rückvergütung pro Monat")) {
             sql = """
             WITH monate AS (
                 SELECT generate_series(
@@ -140,7 +139,7 @@ public class StatisticsController extends Controller {
                 ) AS monat
             )
             SELECT
-                to_char(monate.monat, 'Mon YYYY') AS monat,
+                monate.monat AS monat,
                 COALESCE(SUM(r.refund), 0) AS wert
             FROM
                 monate
@@ -160,7 +159,6 @@ public class StatisticsController extends Controller {
         """;
 
         } else if (selectedMetric.equals("Anzahl Rechnungen pro Monat")) {
-            // SQL: Number of invoices per month over the past 12 months
             sql = """
             WITH monate AS (
                 SELECT generate_series(
@@ -170,7 +168,7 @@ public class StatisticsController extends Controller {
                 ) AS monat
             )
             SELECT
-                to_char(monate.monat, 'Mon YYYY') AS monat,
+                monate.monat AS monat,
                 COALESCE(COUNT(r.id), 0) AS wert
             FROM
                 monate
@@ -190,7 +188,6 @@ public class StatisticsController extends Controller {
         """;
 
         } else {
-            // SQL: Average invoices per user per month
             sql = """
             WITH monate AS (
                 SELECT generate_series(
@@ -207,7 +204,6 @@ public class StatisticsController extends Controller {
                 FROM
                     rechnungen r
         """;
-            // Add WHERE conditions if necessary
             if (!conditions.isEmpty()) {
                 sql += "WHERE " + String.join(" AND ", conditions) + "\nAND ";
             } else {
@@ -233,7 +229,7 @@ public class StatisticsController extends Controller {
                     m.monat
             )
             SELECT
-                to_char(monat, 'Mon YYYY') AS monat,
+                monat,
                 wert
             FROM
                 durchschnitt_pro_monat;
@@ -245,25 +241,26 @@ public class StatisticsController extends Controller {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM yyyy", Locale.GERMAN);
+
             while (rs.next()) {
-                String monat = rs.getString("monat");
+                LocalDate monatDate = rs.getDate("monat").toLocalDate();
+                String monatLabel = monatDate.format(formatter);
                 double wert = rs.getDouble("wert");
-                XYChart.Data<String, Number> data = new XYChart.Data<>(monat, wert);
+                XYChart.Data<String, Number> data = new XYChart.Data<>(monatLabel, wert);
                 series.getData().add(data);
-                if (wert > maxYValue) maxYValue = wert; // Track max Y value for scaling
+                if (wert > maxYValue) maxYValue = wert;
             }
 
-            // Add the filled series to the chart
             barChart.getData().add(series);
 
-            // Customize each bar (tooltip, hover effect, color)
+            // Tooltip + Hover Styling
             for (XYChart.Data<String, Number> data : series.getData()) {
                 String tooltipText = data.getXValue() + ": " + data.getYValue();
                 Tooltip tooltip = new Tooltip(tooltipText);
                 Tooltip.install(data.getNode(), tooltip);
                 data.getNode().setStyle("-fx-bar-fill: " + barColor);
 
-                // Highlight on hover
                 data.getNode().setOnMouseEntered(event ->
                         data.getNode().setStyle("-fx-bar-fill: #78a6d5;")
                 );
@@ -272,13 +269,14 @@ public class StatisticsController extends Controller {
                 );
             }
 
-            barChart.setLegendVisible(false); // Hide legend
-            resetYAxis(maxYValue); // Adjust Y-axis to fit data
+            barChart.setLegendVisible(false);
+            resetYAxis(maxYValue);
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     // Loads data into the PieChart based on the selected metric
     private void loadPieChartData(String selectedMetric) {
@@ -366,8 +364,8 @@ public class StatisticsController extends Controller {
 
             // Define colors for each type
             Map<String, String> typeColors = new HashMap<>();
-            typeColors.put("RESTAURANT", "-fx-pie-color: #272498FF;");
-            typeColors.put("SUPERMARKET", "-fx-pie-color: #1976d2;");
+            typeColors.put("RESTAURANT", "-fx-pie-color: #692F70E8;");
+            typeColors.put("SUPERMARKET", "-fx-pie-color: #5F1AA3E8;");
 
             // Disable default PieChart visuals (for cleaner custom visuals)
             pieChart.setLabelLineLength(0);
@@ -494,79 +492,69 @@ public class StatisticsController extends Controller {
         else return 100; // Default step size for larger values
     }
 
-    // Exports chart data to a CSV file (AI)
     private void exportToCSV() {
-        // Get selected metric and filters
         String selectedMetric = statSelector.getValue();
         String selectedType = typeSelector.getValue();
         String selectedStatus = statusSelector.getValue();
 
-        // Create and configure a FileChooser for saving the CSV
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save CSV File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        fileChooser.setTitle("CSV-Datei speichern");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV-Dateien", "*.csv"));
         fileChooser.setInitialFileName(
                 selectedMetric.replace(" ", "_") + "_" +
                         selectedType + "_" +
                         selectedStatus.replace(" ", "_") + ".csv"
         );
 
-        // Show save dialog and proceed if user selects a file
         File file = fileChooser.showSaveDialog(exportCSVButton.getScene().getWindow());
         if (file != null) {
             try (PrintWriter writer = new PrintWriter(file)) {
-                writer.println("\"Month\";\"Value\"");
+                // Deutsche Spaltenüberschriften
+                writer.println("\"Monat\";\"Wert\"");
 
-                // Create a number format using German locale (e.g., 1.234,56)
+                // Formatierung im deutschen Stil (z.B. 1.234,56)
                 NumberFormat germanFormat = NumberFormat.getInstance(Locale.GERMAN);
                 germanFormat.setMinimumFractionDigits(2);
 
-                // Loop through the chart data and write each data point to the fil
                 for (XYChart.Series<String, Number> series : barChart.getData()) {
                     for (XYChart.Data<String, Number> data : series.getData()) {
-                        String formattedValue = germanFormat.format(data.getYValue()); // Format value
-                        writer.println("\"" + data.getXValue() + "\";" + formattedValue); // Write month and value
+                        String formattedValue = germanFormat.format(data.getYValue());
+                        writer.println("\"" + data.getXValue() + "\";" + formattedValue);
                     }
                 }
 
-                // Show success alert
-                showError("Export Successful", "Data exported to CSV successfully!");
+                showSuccess("Export erfolgreich", "Daten wurden erfolgreich als CSV exportiert!");
             } catch (FileNotFoundException e) {
-                // Show error alert if saving fails
-                showError("Export Error", "Failed to export CSV: " + e.getMessage());
+                showError("Fehler beim Export", "CSV-Export fehlgeschlagen: " + e.getMessage());
             }
         }
     }
 
+
     // Exports chart data to a PDF file (AI)
     private void exportToPDF() {
-
-        // Get selected filters and metric
         String selectedMetric = statSelector.getValue();
         String selectedType = typeSelector.getValue();
         String selectedStatus = statusSelector.getValue();
 
-        // Create and configure a FileChooser for saving the PDF
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Save PDF File");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF Files", "*.pdf"));
+        fileChooser.setTitle("PDF-Datei speichern");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF-Dateien", "*.pdf"));
         fileChooser.setInitialFileName(
                 selectedMetric.replace(" ", "_") + "_" +
                         selectedType + "_" +
                         selectedStatus.replace(" ", "_") + ".pdf"
         );
 
-        // Show save dialog and proceed if user selects a file
         File file = fileChooser.showSaveDialog(exportPDFButton.getScene().getWindow());
         if (file != null) {
             try (PDDocument document = new PDDocument()) {
-                // Create a new PDF page
                 PDPage page = new PDPage(PDRectangle.LETTER);
                 document.addPage(page);
-                // Take a snapshot of the current bar chart
+
                 WritableImage chartImage = barChart.snapshot(new SnapshotParameters(), null);
                 PixelReader reader = chartImage.getPixelReader();
-                // Convert the JavaFX image to a BufferedImage
+
                 BufferedImage bufferedImage = new BufferedImage(
                         (int) chartImage.getWidth(),
                         (int) chartImage.getHeight(),
@@ -577,51 +565,49 @@ public class StatisticsController extends Controller {
                         bufferedImage.setRGB(x, y, reader.getArgb(x, y));
                     }
                 }
-                // Convert BufferedImage to a PDImageXObject for PDF
+
                 PDImageXObject pdImage = LosslessFactory.createFromImage(document, bufferedImage);
 
-                // Add content to the PDF
                 try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                    // Draw the title
+                    // Titel auf Deutsch
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
                     contentStream.beginText();
                     contentStream.newLineAtOffset(100, 750);
-                    contentStream.showText(selectedMetric + " (" + selectedType + ", " + selectedStatus + ")");
+                    contentStream.showText("Statistik: " + selectedMetric + " (" + selectedType + ", " + selectedStatus + ")");
                     contentStream.endText();
 
-                    // Draw the bar chart image
+                    // Diagrammbild
                     contentStream.drawImage(pdImage, 100, 500, 400, 200);
 
-                    // Add column headers for the data table
+                    // Tabellenüberschriften auf Deutsch
                     contentStream.setFont(PDType1Font.HELVETICA, 12);
                     contentStream.beginText();
                     contentStream.newLineAtOffset(100, 480);
-                    contentStream.showText("Month");
+                    contentStream.showText("Monat");
                     contentStream.newLineAtOffset(150, 0);
-                    contentStream.showText("Value");
+                    contentStream.showText("Wert");
                     contentStream.endText();
 
-                    // Write each data row below the chart
                     int yPosition = 460;
                     for (XYChart.Series<String, Number> series : barChart.getData()) {
                         for (XYChart.Data<String, Number> data : series.getData()) {
                             contentStream.beginText();
                             contentStream.newLineAtOffset(100, yPosition);
-                            contentStream.showText(data.getXValue()); // Month
+                            contentStream.showText(data.getXValue()); // Monat
                             contentStream.newLineAtOffset(150, 0);
-                            contentStream.showText(data.getYValue().toString()); // Value
+                            contentStream.showText(data.getYValue().toString()); // Wert
                             contentStream.endText();
-                            yPosition -= 20; // Move to the next line
+                            yPosition -= 20;
                         }
                     }
                 }
 
-                // Save the PDF to the selected file
                 document.save(file);
-                showSuccess("Export Successful", "Data exported to PDF successfully!");
+                showSuccess("Export erfolgreich", "Daten wurden erfolgreich als PDF exportiert!");
             } catch (IOException e) {
-                showError("Export Error", "Failed to export PDF: " + e.getMessage());
+                showError("Fehler beim Export", "Export fehlgeschlagen: " + e.getMessage());
             }
         }
     }
+
 }

@@ -104,7 +104,7 @@ public class RefundController extends Controller {
             // If user confirms, save the new values
             if (confirmation.showAndWait().orElseThrow() == ButtonType.OK) {
                 Refund.setDailyRefunds(supermarketValue, restaurantValue, LocalDate.now(), Login.getCurrentUsername());
-                showAlert("Erfolg", "Rückerstattungssätze wurden aktualisiert.", Alert.AlertType.INFORMATION);
+                Controller.showSuccess("Erfolg", "Rückerstattungssätze wurden aktualisiert.");
 
                 // Refresh both the input fields and the table view
                 refreshRefundValues();
