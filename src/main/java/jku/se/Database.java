@@ -2,6 +2,7 @@ package jku.se;
 
 import javafx.application.Platform;
 import jku.se.controller.SubmitBillController;
+import jku.se.Login;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -12,6 +13,9 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import static java.time.LocalTime.now;
+import static jku.se.Login.getCurrentUsername;
 
 /**
  * Database:
@@ -294,7 +298,6 @@ public class Database {
 
             String updateQuery = "UPDATE rechnungen SET betrag = ?, datum = ?, typ = ?, username = ?, status = ?, image = ?, refund = ? WHERE id = ?";
             try (PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
-
                 stmt.setDouble(1, betrag);
                 stmt.setDate(2, datum);
                 stmt.setObject(3, typ, Types.OTHER);
@@ -304,8 +307,29 @@ public class Database {
                 stmt.setDouble(7, refund);
                 stmt.setInt(8, identifier);
                 int rows = stmt.executeUpdate();
-                return rows == 1;
+
+                if (rows == 1) {
+                    // Erfolgreiches Update
+
+                    // Jetzt INSERT in invoicechanges durchführen
+                    String insertQuery = "INSERT INTO invoicechanges (invoice, invoice_user, invoice_edit_by, date) VALUES (?, ?, ?, ?)";
+                    try (PreparedStatement insertStmt = conn.prepareStatement(insertQuery)) {
+                        insertStmt.setInt(1, identifier);  // Rechnung-ID
+                        insertStmt.setString(2, username); // Benutzername des Rechnungsbesitzers
+                        insertStmt.setString(3, getCurrentUsername()); // Benutzername des Bearbeiters
+                        insertStmt.setDate(4, Date.valueOf(LocalDate.now())); // Aktuelles Datum
+
+                        int insertRows = insertStmt.executeUpdate(); // Einfügen in invoicechanges
+                        return insertRows == 1;
+                    }
+                }
+                return false;
+
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+                return false;
             }
+
         } catch (SQLException exception) {
             exception.printStackTrace();
             return false;
@@ -446,7 +470,7 @@ public class Database {
                 double refund = invoice.getRefund();
 
                 // Insert invoice into the database
-                Database.uploadInvoice(connection, Login.getCurrentUsername(), sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
+                Database.uploadInvoice(connection, getCurrentUsername(), sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
 
             } catch (SQLException e) {
                 Platform.runLater(() -> controller.displayMessage("Fehler bei der Verbindung zur Datenbank: " + e.getMessage(), "red"));
