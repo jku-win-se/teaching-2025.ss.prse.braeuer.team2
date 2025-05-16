@@ -2,15 +2,19 @@ package jku.se.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
+import jku.se.DateUtils;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static jku.se.Database.getConnection;
 import static jku.se.Login.getCurrentUsername;
@@ -68,16 +72,26 @@ public class MessageAnomalyController extends Controller{
     }
 
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
-
         int id = rs.getInt("id");
-        String user = rs.getString("invoice_username");
+        String username = rs.getString("invoice_username");
         String message = rs.getString("message");
-        String date = rs.getString("date");
-        String delete = "delete";
+        Timestamp date = rs.getTimestamp("date");
 
-        gridMessages.add(new Label(user), 0, row);
-        gridMessages.add(new Label(message), 1, row);
-        gridMessages.add(new Label(date), 2, row);
+        String formattedDateTime = DateUtils.formatToDateAndTime(date);
+
+        Hyperlink userLink = new Hyperlink(username);
+        userLink.setOnAction(event -> openUserDetails(username));
+        gridMessages.add(userLink, 0, row);
+        GridPane.setHalignment(userLink, HPos.CENTER);
+
+        Label messageLabel = new Label(message);
+        gridMessages.add(messageLabel, 1, row);
+        GridPane.setHalignment(messageLabel, HPos.CENTER);
+
+        Label dateLabel = new Label(formattedDateTime);
+        gridMessages.add(dateLabel, 2, row);
+        GridPane.setHalignment(dateLabel, HPos.CENTER);
+
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(event -> {
             try {
@@ -87,8 +101,25 @@ public class MessageAnomalyController extends Controller{
             }
         });
         gridMessages.add(deleteButton, 3, row);
+        GridPane.setHalignment(deleteButton, HPos.CENTER);
     }
 
+    private void openUserDetails(String username) {//AI
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userSearchResults.fxml"));
+            Parent root = loader.load();
+
+            UserSearchResultsController controller = loader.getController();
+            controller.loadUserData(username);
+
+            Stage stage = new Stage();
+            stage.setTitle("Benutzerdetails: " + username);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showError("Fehler", "Benutzerdetails konnten nicht geladen werden: " + e.getMessage());
+        }
+    }
     private void deleteMessage(int id) throws SQLException {
         String query = "DELETE FROM anomalies WHERE id = ?";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {

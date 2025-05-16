@@ -8,24 +8,24 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.MessageAnomalyController">
+<AnchorPane prefHeight="468.0" prefWidth="783.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.MessageAnomalyController">
 
 
-<Label layoutX="342.0" layoutY="29.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Messages" />
+<Label layoutX="359.0" layoutY="29.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Messages" />
 <Button fx:id="btn_back" layoutX="14.0" layoutY="59.0" onAction="#goBack" text="⬅ Zurück" />
 
 <!-- ScrollPane für das dynamische Hinzufügen von Rechnungen -->
-<ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="350.0" prefWidth="742.0">
-    <GridPane fx:id="gridMessages" hgap="20.0" prefHeight="19.0" prefWidth="659.0" style="-fx-background-color: transparent;" vgap="10.0">
-        <Label alignment="CENTER" prefHeight="17.0" prefWidth="531.0" style="-fx-font-weight: bold;" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-        <Label alignment="CENTER" prefHeight="17.0" prefWidth="127.0" style="-fx-font-weight: bold;" text="Zeitpunkt" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-         <Label alignment="CENTER" prefHeight="17.0" prefWidth="531.0" style="-fx-font-weight: bold;" text="User" />
+<ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="355.0" prefWidth="752.0">
+    <GridPane fx:id="gridMessages" hgap="20.0" prefHeight="19.0" prefWidth="678.0" style="-fx-background-color: transparent;" vgap="10.0">
+        <Label alignment="CENTER" prefHeight="17.0" prefWidth="444.0" style="-fx-font-weight: bold;" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" prefHeight="17.0" prefWidth="125.0" style="-fx-font-weight: bold;" text="Zeitpunkt" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+         <Label alignment="CENTER" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="User" />
 
         <!-- Spaltenanpassungen -->
         <columnConstraints>
-            <ColumnConstraints minWidth="10.0" percentWidth="30.0" prefWidth="100.0" />
-            <ColumnConstraints percentWidth="126.0" />
-            <ColumnConstraints percentWidth="34.0" />
+            <ColumnConstraints minWidth="10.0" percentWidth="20.0" prefWidth="100.0" />
+            <ColumnConstraints percentWidth="133.0" />
+            <ColumnConstraints percentWidth="37.0" />
         </columnConstraints>
 
         <!-- Zeilenanpassungen (für die Daten) -->
