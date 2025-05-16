@@ -29,13 +29,13 @@ public class MessageAnomalyController extends Controller{
     @FXML
     private GridPane gridMessages;
 
-    private static final Connection connection;
+    private static final Connection CONNECTION;
 
     static {
         try {
-            connection = getConnection();
+            CONNECTION = getConnection();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new IllegalStateException("Datenbankverbindung fehlgeschlagen", e);
         }
     }
 
@@ -138,13 +138,13 @@ public class MessageAnomalyController extends Controller{
 
     public ResultSet getAllAnomalies() throws SQLException {
         String query = "SELECT * FROM anomalies ORDER BY date DESC";
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = CONNECTION.prepareStatement(query);
         return statement.executeQuery();
     }
 
     public static boolean hasNewMessages() throws SQLException {
         String query = "SELECT COUNT(*) FROM anomalies WHERE new_message = 'YES'";
-        PreparedStatement statement = connection.prepareStatement(query);
+        PreparedStatement statement = CONNECTION.prepareStatement(query);
 
         ResultSet resultSet = statement.executeQuery();
         if (resultSet.next()) {
@@ -155,7 +155,7 @@ public class MessageAnomalyController extends Controller{
 
     public static void markMessageAsRead() throws SQLException {//AI
         String updateQuery = "UPDATE anomalies SET new_message = 'NO'";
-        PreparedStatement statement = connection.prepareStatement(updateQuery);
+        PreparedStatement statement = CONNECTION.prepareStatement(updateQuery);
         statement.executeUpdate();
     }
 }
