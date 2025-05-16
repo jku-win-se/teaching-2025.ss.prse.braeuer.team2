@@ -3,6 +3,7 @@ package jku.se.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.HPos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -73,18 +74,24 @@ public class MessageAnomalyController extends Controller{
     }
 
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
-
         int id = rs.getInt("id");
-        String user = rs.getString("invoice_username");
+        String username = rs.getString("invoice_username");
         String message = rs.getString("message");
         String date = rs.getString("date");
 
-        Hyperlink userLink = new Hyperlink(user);
-        userLink.setOnAction(event -> openUserDetails(user));
-
+        Hyperlink userLink = new Hyperlink(username);
+        userLink.setOnAction(event -> openUserDetails(username));
         gridMessages.add(userLink, 0, row);
-        gridMessages.add(new Label(message), 1, row);
-        gridMessages.add(new Label(date), 2, row);
+        GridPane.setHalignment(userLink, HPos.CENTER);
+
+        Label messageLabel = new Label(message);
+        gridMessages.add(messageLabel, 1, row);
+        GridPane.setHalignment(messageLabel, HPos.CENTER);
+
+        Label dateLabel = new Label(date);
+        gridMessages.add(dateLabel, 2, row);
+        GridPane.setHalignment(dateLabel, HPos.CENTER);
+
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(event -> {
             try {
@@ -94,6 +101,7 @@ public class MessageAnomalyController extends Controller{
             }
         });
         gridMessages.add(deleteButton, 3, row);
+        GridPane.setHalignment(deleteButton, HPos.CENTER);
     }
 
     private void openUserDetails(String username) {//AI
