@@ -1,6 +1,7 @@
 package jku.se.controller;
 
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -52,16 +53,16 @@ public class MessagesController extends Controller{
     }
 
     private void addMessageToGrid(ResultSet rs, int row) throws SQLException {
-
         int id = rs.getInt("id");
         String text = rs.getString("text");
         Timestamp date = rs.getTimestamp("created_at");
 
         String formattedDateTime = DateUtils.formatToDateAndTime(date);
 
-        gridMessages.add(new Label(text), 0, row);
-        gridMessages.add(new Label(formattedDateTime), 1, row);
+        Label textLabel = new Label(text);
+        Label dateLabel = new Label(formattedDateTime);
         Button deleteButton = new Button("Delete");
+
         deleteButton.setOnAction(event -> {
             try {
                 deleteMessage(id);
@@ -69,7 +70,15 @@ public class MessagesController extends Controller{
                 showError("Fehler", "Datenbankfehler beim Löschen der Nachricht: " + e.getMessage());
             }
         });
+
+        gridMessages.add(textLabel, 0, row);
+        GridPane.setHalignment(textLabel, HPos.LEFT);
+
+        gridMessages.add(dateLabel, 1, row);
+        GridPane.setHalignment(dateLabel, HPos.CENTER);
+
         gridMessages.add(deleteButton, 2, row);
+        GridPane.setHalignment(deleteButton, HPos.CENTER);
     }
 
     private void deleteMessage(int id) throws SQLException {
