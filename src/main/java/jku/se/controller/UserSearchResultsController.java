@@ -21,18 +21,28 @@ public class UserSearchResultsController extends Controller {
     @FXML private ComboBox<String> statusComboBox;
     @FXML private TextField failedAttemptsField;
     @FXML private Label createdAtLabel;
+    @FXML private TextField passwordTextField;
+    @FXML private CheckBox showPasswordCheckBox;
 
     private String currentUsername;
 
     @FXML
     public void initialize() {
-        // Initialize dropdowns
         roleComboBox.getItems().clear();
-        roleComboBox.getItems().addAll(Role.ADMIN.name(), Role.USER.name());
+        roleComboBox.getItems().addAll(Role.USER.name(), Role.ADMIN.name());
 
         statusComboBox.getItems().clear();
         statusComboBox.getItems().addAll(Status.ACTIVE.name(), Status.BLOCKED.name());
+
+        passwordTextField.managedProperty().bind(showPasswordCheckBox.selectedProperty());
+        passwordTextField.visibleProperty().bind(showPasswordCheckBox.selectedProperty());
+
+        passwordField.managedProperty().bind(showPasswordCheckBox.selectedProperty().not());
+        passwordField.visibleProperty().bind(showPasswordCheckBox.selectedProperty().not());
+
+        passwordTextField.textProperty().bindBidirectional(passwordField.textProperty());
     }
+
 
     public void loadUserData(String username) {
         this.currentUsername = username;
@@ -64,7 +74,7 @@ public class UserSearchResultsController extends Controller {
             user.lastName = lastNameField.getText();
             user.username = usernameLabel.getText();
             user.email = emailField.getText();
-            user.password = passwordField.getText(); // Add this line
+            user.password = passwordField.getText();
             user.role = roleComboBox.getValue();
             user.status = statusComboBox.getValue();
             user.failedAttempts = Integer.parseInt(failedAttemptsField.getText());

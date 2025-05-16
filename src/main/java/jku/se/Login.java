@@ -15,8 +15,7 @@ public class Login {
     private static Role currentUserRole;
     private static Status currentUserStatus;
 
-    public static boolean validateLogin(String email, String password,
-                                        StringBuilder userRole, StringBuilder accountStatus) {
+    public static boolean validateLogin(String email, String password, StringBuilder userRole, StringBuilder accountStatus) {
         try (Connection conn = Database.getConnection()) {
             conn.setAutoCommit(false);
             try {
