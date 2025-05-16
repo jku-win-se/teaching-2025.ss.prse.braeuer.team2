@@ -11,12 +11,10 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import jku.se.DateUtils;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import static jku.se.Database.getConnection;
 import static jku.se.Login.getCurrentUsername;
@@ -77,7 +75,9 @@ public class MessageAnomalyController extends Controller{
         int id = rs.getInt("id");
         String username = rs.getString("invoice_username");
         String message = rs.getString("message");
-        String date = rs.getString("date");
+        Timestamp date = rs.getTimestamp("date");
+
+        String formattedDateTime = DateUtils.formatToDateAndTime(date);
 
         Hyperlink userLink = new Hyperlink(username);
         userLink.setOnAction(event -> openUserDetails(username));
@@ -88,7 +88,7 @@ public class MessageAnomalyController extends Controller{
         gridMessages.add(messageLabel, 1, row);
         GridPane.setHalignment(messageLabel, HPos.CENTER);
 
-        Label dateLabel = new Label(date);
+        Label dateLabel = new Label(formattedDateTime);
         gridMessages.add(dateLabel, 2, row);
         GridPane.setHalignment(dateLabel, HPos.CENTER);
 

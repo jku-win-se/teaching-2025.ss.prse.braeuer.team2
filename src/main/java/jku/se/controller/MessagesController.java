@@ -4,11 +4,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import jku.se.DateUtils;
+
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+
 import static jku.se.Database.getConnection;
 import static jku.se.Login.getCurrentUsername;
 
@@ -55,11 +55,12 @@ public class MessagesController extends Controller{
 
         int id = rs.getInt("id");
         String text = rs.getString("text");
-        String date = rs.getString("created_at");
-        String delete = "delete";
+        Timestamp date = rs.getTimestamp("created_at");
+
+        String formattedDateTime = DateUtils.formatToDateAndTime(date);
 
         gridMessages.add(new Label(text), 0, row);
-        gridMessages.add(new Label(date), 1, row);
+        gridMessages.add(new Label(formattedDateTime), 1, row);
         Button deleteButton = new Button("Delete");
         deleteButton.setOnAction(event -> {
             try {
