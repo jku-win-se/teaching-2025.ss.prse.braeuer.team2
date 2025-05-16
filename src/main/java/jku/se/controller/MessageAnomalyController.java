@@ -2,9 +2,14 @@ package jku.se.controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -73,9 +78,11 @@ public class MessageAnomalyController extends Controller{
         String user = rs.getString("invoice_username");
         String message = rs.getString("message");
         String date = rs.getString("date");
-        String delete = "delete";
 
-        gridMessages.add(new Label(user), 0, row);
+        Hyperlink userLink = new Hyperlink(user);
+        userLink.setOnAction(event -> openUserDetails(user));
+
+        gridMessages.add(userLink, 0, row);
         gridMessages.add(new Label(message), 1, row);
         gridMessages.add(new Label(date), 2, row);
         Button deleteButton = new Button("Delete");
@@ -89,6 +96,22 @@ public class MessageAnomalyController extends Controller{
         gridMessages.add(deleteButton, 3, row);
     }
 
+    private void openUserDetails(String username) {//AI
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userSearchResults.fxml"));
+            Parent root = loader.load();
+
+            UserSearchResultsController controller = loader.getController();
+            controller.loadUserData(username);
+
+            Stage stage = new Stage();
+            stage.setTitle("Benutzerdetails: " + username);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            showError("Fehler", "Benutzerdetails konnten nicht geladen werden: " + e.getMessage());
+        }
+    }
     private void deleteMessage(int id) throws SQLException {
         String query = "DELETE FROM anomalies WHERE id = ?";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(query)) {
