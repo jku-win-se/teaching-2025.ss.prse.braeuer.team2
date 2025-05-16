@@ -101,4 +101,39 @@ class UserManagementTest { //Tests mit AI generiert
         boolean result = UserManagement.deleteUser("nonexistentuser");
         assertFalse(result, "Should return false for non-existent user");
     }
+
+    @Test
+    void testCreateUserWithExistingUsername() throws SQLException {
+        boolean result = UserManagement.createUser(
+                "Duplicate",
+                "User",
+                TEST_USERNAME,  // Using existing username
+                "duplicate@example.com",
+                "password",
+                "USER"
+        );
+        assertFalse(result, "Should fail to create user with existing username");
+    }
+
+    @Test
+    void testUpdateNonExistentUser() throws SQLException {
+        UserManagement.User user = new UserManagement.User();
+        user.username = "nonexistent";
+        boolean result = UserManagement.updateUser(user);
+        assertFalse(result, "Should fail to update non-existent user");
+    }
+
+    @Test
+    void testUpdatePassword() throws SQLException {
+        UserManagement.User user = UserManagement.getUser(TEST_USERNAME);
+        String newPassword = "newSecurePassword123";
+        user.password = newPassword;
+
+        boolean result = UserManagement.updateUser(user);
+        assertTrue(result);
+
+        UserManagement.User updatedUser = UserManagement.getUser(TEST_USERNAME);
+        assertEquals(newPassword, updatedUser.password);
+    }
+
 }

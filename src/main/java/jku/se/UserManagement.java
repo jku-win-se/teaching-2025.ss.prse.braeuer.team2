@@ -93,7 +93,14 @@ public class UserManagement {
             stmt.setString(5, password);
             stmt.setString(6, role);
 
-            return stmt.executeUpdate() > 0;
+            try {
+                return stmt.executeUpdate() > 0;
+            } catch (SQLException e) {
+                if (e.getSQLState().equals("23505")) {
+                    return false;
+                }
+                throw e;
+            }
         }
     }
 }
