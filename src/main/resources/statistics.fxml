@@ -8,20 +8,30 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.StatisticsController">
     <children>
 
         <!-- Statistic Type Filter -->
-        <Label layoutX="34.0" layoutY="101.0" text="Statistik:" />
+        <Label layoutX="34.0" layoutY="101.0" text="Statistics">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
         <ComboBox fx:id="statSelector" layoutX="34.0" layoutY="128.0" prefHeight="26.0" prefWidth="200.0" />
 
         <!-- Receipt Type Filter -->
-        <Label layoutX="244.0" layoutY="101.0" text="Typ:" />
+        <Label layoutX="244.0" layoutY="101.0" text="Type">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
         <ComboBox fx:id="typeSelector" layoutX="244.0" layoutY="128.0" prefHeight="26.0" prefWidth="120.0" />
 
         <!-- Status Filter -->
-        <Label layoutX="379.0" layoutY="101.0" text="Status:" />
+        <Label layoutX="379.0" layoutY="101.0" text="Status">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Label>
         <ComboBox fx:id="statusSelector" layoutX="379.0" layoutY="128.0" prefHeight="26.0" prefWidth="142.0" />
 
         <BarChart fx:id="barChart" horizontalGridLinesVisible="false" layoutX="14.0" layoutY="173.0" prefHeight="310.0" prefWidth="422.0">
@@ -35,9 +45,15 @@
 
         <PieChart fx:id="pieChart" layoutX="468.0" layoutY="191.0" prefHeight="187.0" prefWidth="200.0" />
 
-        <Button fx:id="exportCSVButton" layoutX="578.0" layoutY="432.0" text="Export to CSV" />
-        <Button fx:id="exportPDFButton" layoutX="450.0" layoutY="432.0" text="Export to PDF" />
-        <Label layoutX="304.0" layoutY="32.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Statistik" />
-        <Button fx:id="btn_back" layoutX="14.0" layoutY="35.0" onAction="#handleBack" prefHeight="30.0" prefWidth="78.0" text="⬅ Zurück" />
+        <Button fx:id="exportCSVButton" layoutX="578.0" layoutY="432.0" text="Export to CSV">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+        <Button fx:id="exportPDFButton" layoutX="476.0" layoutY="432.0" text="Export to PDF">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
+        <Label layoutX="314.0" layoutY="32.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Statistics" />
+        <Button fx:id="btn_back" layoutX="14.0" layoutY="32.0" onAction="#handleBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
     </children>
 </AnchorPane>

@@ -9,19 +9,19 @@
 <?import javafx.scene.layout.RowConstraints?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.SubmittedBillsController">
-    <Label layoutX="259.0" layoutY="19.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Eingereichte Rechnungen" />
-    <Button fx:id="btn_back" layoutX="14.0" layoutY="59.0" onAction="#handleBack" text="⬅ Zurück" />
+    <Label layoutX="242.0" layoutY="30.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Submitted invoices" />
+    <Button fx:id="btn_back" layoutX="17.0" layoutY="33.0" onAction="#handleBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
 
     <!-- ScrollPane für das dynamische Hinzufügen von Rechnungen -->
-    <ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="350.0" prefWidth="666.0">
+    <ScrollPane layoutX="17.0" layoutY="100.0" prefHeight="385.0" prefWidth="666.0">
         <GridPane fx:id="gridInvoices" hgap="20.0" prefHeight="17.0" prefWidth="654.0" style="-fx-background-color: transparent;" vgap="10.0">
             <!-- Spaltenüberschriften (erste Zeile) -->
-            <Label style="-fx-font-weight: bold;" text="Rechnungs-ID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <Label prefHeight="17.0" prefWidth="73.0" style="-fx-font-weight: bold;" text="Betrag" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-            <Label style="-fx-font-weight: bold;" text="Typ" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-            <Label style="-fx-font-weight: bold;" text="Datum" GridPane.columnIndex="3" GridPane.rowIndex="0" />
-            <Label style="-fx-font-weight: bold;" text="Status" GridPane.columnIndex="4" GridPane.rowIndex="0" />
-            <Label prefHeight="17.0" prefWidth="60.0" style="-fx-font-weight: bold;" text="Aktion"  GridPane.columnIndex="5" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="111.0" style="-fx-font-weight: bold;" text="InvoiceID" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="81.0" style="-fx-font-weight: bold;" text="Amount" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="113.0" style="-fx-font-weight: bold;" text="Type" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="110.0" style="-fx-font-weight: bold;" text="Date" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="81.0" style="-fx-font-weight: bold;" text="Status" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+            <Label prefHeight="17.0" prefWidth="60.0" style="-fx-font-weight: bold;" text="Action" GridPane.columnIndex="5" GridPane.rowIndex="0" />
 
             <!-- Spaltenanpassungen -->
             <columnConstraints>
@@ -39,5 +39,5 @@
             </rowConstraints>
         </GridPane>
     </ScrollPane>
-    <Button fx:id="btn_filter" layoutX="659.0" layoutY="59.0" onAction="#openFilter" text="🔍" />
+    <Button fx:id="btn_filter" layoutX="655.0" layoutY="35.0" onAction="#openFilter" prefHeight="30.0" prefWidth="30.0" text="🔍" />
 </AnchorPane>

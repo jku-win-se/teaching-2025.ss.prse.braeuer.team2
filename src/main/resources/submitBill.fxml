@@ -4,26 +4,30 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.SubmitBillController">
 
     <children>
         <!-- Titel -->
-        <Label layoutX="211.0" layoutY="33.0" prefHeight="37.0" prefWidth="279.0" style="-fx-font-size: 16;" text="📄 Rechnung hochladen und einreichen" />
+        <Label alignment="CENTER" layoutX="210.0" layoutY="29.0" prefHeight="37.0" prefWidth="279.0" style="-fx-font-size: 24; -fx-font-weight: Bold;" text="Submit invoice" />
 
         <!-- Datei-Auswahl-Button -->
-        <Button layoutX="201.0" layoutY="80.0" onAction="#handleFileUpload" prefHeight="25.0" prefWidth="310.0" text="📂 Datei auswählen" />
+        <Button layoutX="201.0" layoutY="80.0" onAction="#handleFileUpload" prefHeight="25.0" prefWidth="310.0" text="📂 Choose file" />
 
         <!-- Textfeld für den Dateipfad -->
-        <TextField fx:id="filePathField" editable="false" layoutX="201.0" layoutY="114.0" prefHeight="146.0" prefWidth="310.0" promptText="Keine Datei ausgewählt..." />
+        <TextField fx:id="filePathField" editable="false" layoutX="201.0" layoutY="114.0" prefHeight="146.0" prefWidth="310.0" promptText="No file chosen..." />
 
         <!-- Erfolgsnachricht -->
-        <Label fx:id="successMessage" layoutX="201.0" layoutY="311.0" prefHeight="20.0" prefWidth="310.0" style="-fx-font-size: 14px; -fx-text-fill: green; -fx-font-weight: bold; " alignment="CENTER" />
+        <Label fx:id="successMessage" alignment="CENTER" layoutX="201.0" layoutY="311.0" prefHeight="20.0" prefWidth="310.0" style="-fx-font-size: 14px; -fx-text-fill: green; -fx-font-weight: bold; " />
 
         <!-- Einreichen-Button -->
-        <Button layoutX="367.0" layoutY="277.0" onAction="#handleUpload" text="✅ Rechnung hochladen" />
+        <Button layoutX="401.0" layoutY="269.0" onAction="#handleUpload" text="✅ Submit invoice">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
 
         <!-- Zurück-Button -->
-        <Button layoutX="20.0" layoutY="20.0" onAction="#goBackToDashboard" text="⬅ Zurück" />
+        <Button layoutX="14.0" layoutY="33.0" onAction="#goBackToDashboard" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
     </children>
 </AnchorPane>

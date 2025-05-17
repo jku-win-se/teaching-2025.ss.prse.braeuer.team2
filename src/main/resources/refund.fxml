@@ -17,22 +17,28 @@
   <VBox spacing="10.0" />
  </VBox>
 <TextField fx:id="refundSupermarket" layoutX="299.0" layoutY="137.0" prefHeight="26.0" prefWidth="262.0" />
-<Label layoutX="149.0" layoutY="100.0" text="Erstattung Restaurant (€):" />
+<Label layoutX="159.0" layoutY="99.0" text="Refund Restaurant (€)">
+      <font>
+         <Font name="System Bold" size="12.0" />
+      </font></Label>
 
-<Label layoutX="149.0" layoutY="142.0" prefWidth="165.0" text="Erstattung Supermarkt (€):" />
+<Label layoutX="149.0" layoutY="141.0" prefHeight="17.0" prefWidth="147.0" text="Refund Supermarket (€)">
+      <font>
+         <Font name="System Bold" size="12.0" />
+      </font></Label>
 
 <!-- Tabelle -->
 <TableView fx:id="refundTable" layoutX="110.0" layoutY="222.0" prefHeight="250.0" prefWidth="500.0">
 <columns>
- <TableColumn fx:id="dateColumn" prefWidth="150" text="Datum" />
+ <TableColumn fx:id="dateColumn" prefWidth="150" text="Date" />
  <TableColumn fx:id="restaurantColumn" prefWidth="175" text="Restaurant (€)" />
- <TableColumn fx:id="supermarketColumn" prefWidth="175" text="Supermarkt (€)" />
+ <TableColumn fx:id="supermarketColumn" prefWidth="175" text="Supermarket (€)" />
  <TableColumn fx:id="adminColumn" prefWidth="175" text="Admin" />
 </columns>
 </TableView>
-    <Label layoutX="250.0" layoutY="30.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Erstattung bearbeiten" />
-    <Button fx:id="btn_back" layoutX="14.0" layoutY="35.0" onAction="#handleBack" prefHeight="30.0" prefWidth="78.0" text="⬅ Zurück" />
-   <Button layoutX="299.0" layoutY="178.0" mnemonicParsing="false" onAction="#updateRefunds" prefHeight="25.0" prefWidth="121.0" text="Aktualisieren" textFill="#45a32f">
+    <Label layoutX="294.0" layoutY="32.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Edit Refund" />
+    <Button fx:id="btn_back" layoutX="14.0" layoutY="35.0" onAction="#handleBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
+   <Button layoutX="299.0" layoutY="178.0" mnemonicParsing="false" onAction="#updateRefunds" prefHeight="25.0" prefWidth="121.0" text="Update" textFill="#45a32f">
       <font>
          <Font name="System Bold" size="12.0" />
       </font>
