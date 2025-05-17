@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,18 +10,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.DatePicker?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.EditInvoiceController">
    <children>
       <VBox alignment="TOP_LEFT" layoutX="24.0" layoutY="21.0" prefHeight="304.0" prefWidth="555.0" spacing="10.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Rechnung bearbeiten">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Edit Invoice">
                <font>
-                  <Font name="Arial Black" size="18.0" />
+                  <Font name="System Bold" size="18.0" />
                </font></Label>
             <HBox spacing="10.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="93.0" text="RechnungID">
+                  <Label prefHeight="17.0" prefWidth="93.0" text="InvoiceID">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
@@ -29,29 +29,29 @@
             </HBox>
             <HBox spacing="10.0">
                <children>
-                  <Label prefHeight="25.0" prefWidth="93.0" text="Betrag">
+                  <Label prefHeight="25.0" prefWidth="93.0" text="Amount">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <TextField fx:id="textFieldBetrag" prefHeight="25.0" prefWidth="441.0" promptText="Betrag eingeben" />
+                  <TextField fx:id="textFieldBetrag" prefHeight="25.0" prefWidth="441.0" promptText="Insert amount" />
                </children>
             </HBox>
             <HBox prefHeight="25.0" prefWidth="353.0" spacing="10.0">
                <children>
-                  <Label prefHeight="25.0" prefWidth="93.0" text="Datum">
+                  <Label prefHeight="25.0" prefWidth="93.0" text="Date">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <DatePicker fx:id="datePickerDatum" prefHeight="25.0" prefWidth="441.0" promptText="Datum eingeben" />
+                  <DatePicker fx:id="datePickerDatum" prefHeight="25.0" prefWidth="441.0" promptText="Insert date" />
                </children>
             </HBox>
             <HBox spacing="10.0">
                <children>
-                  <Label prefHeight="25.0" prefWidth="94.0" text="Typ">
+                  <Label prefHeight="25.0" prefWidth="94.0" text="Type">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <ComboBox fx:id="comboBoxTyp" prefHeight="25.0" prefWidth="440.0" promptText="Typ auswählen" visibleRowCount="3" />
+                  <ComboBox fx:id="comboBoxTyp" prefHeight="25.0" prefWidth="440.0" promptText="Choose type" visibleRowCount="3" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
@@ -60,7 +60,7 @@
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <TextField fx:id="textfieldUsername" prefHeight="25.0" prefWidth="441.0" promptText="Username eingeben" />
+                  <TextField fx:id="textfieldUsername" prefHeight="25.0" prefWidth="441.0" promptText="Insert username" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
@@ -69,7 +69,7 @@
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <ComboBox fx:id="comboBoxStatus" prefHeight="25.0" prefWidth="440.0" promptText="Status auswählen" visibleRowCount="2" />
+                  <ComboBox fx:id="comboBoxStatus" prefHeight="25.0" prefWidth="440.0" promptText="Choose status" visibleRowCount="2" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
@@ -78,7 +78,7 @@
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
-                  <TextField fx:id="textfieldImage" prefHeight="25.0" prefWidth="441.0" promptText="Image eingeben" />
+                  <TextField fx:id="textfieldImage" prefHeight="25.0" prefWidth="441.0" promptText="Insert image" />
                </children>
             </HBox>
             <HBox prefHeight="33.0" prefWidth="519.0">
@@ -92,11 +92,12 @@
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="128.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToAllInvoices" prefHeight="25.0" prefWidth="121.0" text="Back">
+      <Button layoutX="445.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToAllInvoices" prefHeight="25.0" prefWidth="121.0" text="Back">
          <font>
             <Font name="System Bold" size="12.0" />
-         </font></Button>
-      <Button layoutX="449.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
+         </font>
+      </Button>
+      <Button layoutX="131.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

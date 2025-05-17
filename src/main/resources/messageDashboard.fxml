@@ -8,12 +8,12 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="503.0" prefWidth="766.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.MessagesController">
-   <Label layoutX="342.0" layoutY="29.0" style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Messages" />
-   <Button fx:id="btn_back" layoutX="14.0" layoutY="59.0" onAction="#goBack" text="⬅ Zurück" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="468.0" prefWidth="783.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.MessagesController">
+   <Label layoutX="338.0" layoutY="37.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Messages" />
+   <Button fx:id="btn_back" layoutX="16.0" layoutY="40.0" onAction="#goBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
 
    <!-- ScrollPane für das dynamische Hinzufügen von Rechnungen -->
-   <ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="350.0" prefWidth="742.0">
+   <ScrollPane layoutX="16.0" layoutY="98.0" prefHeight="355.0" prefWidth="752.0">
       <GridPane fx:id="gridMessages" hgap="20.0" prefHeight="19.0" prefWidth="671.0" style="-fx-background-color: transparent;" vgap="10.0">
          <Label alignment="CENTER" prefHeight="17.0" prefWidth="531.0" style="-fx-font-weight: bold;" text="Text" GridPane.rowIndex="0" />
          <Label prefHeight="17.0" prefWidth="127.0" style="-fx-font-weight: bold;" text="Änderungszeitpunkt" GridPane.columnIndex="1" GridPane.rowIndex="0" />

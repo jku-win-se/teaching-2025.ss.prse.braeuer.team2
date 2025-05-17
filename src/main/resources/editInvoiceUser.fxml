@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -8,8 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.DatePicker?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.EditInvoiceUserController">
    <children>
       <VBox alignment="TOP_LEFT" layoutX="24.0" layoutY="21.0" prefHeight="304.0" prefWidth="555.0" spacing="10.0">
@@ -20,7 +20,7 @@
                </font></Label>
             <HBox prefHeight="54.0" prefWidth="555.0" spacing="10.0">
                <children>
-                  <Label prefHeight="26.0" prefWidth="107.0" text="RechnungsID">
+                  <Label prefHeight="26.0" prefWidth="107.0" text="InvoiceID">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -30,41 +30,41 @@
             </HBox>
             <HBox prefHeight="53.0" prefWidth="555.0" spacing="10.0">
                <children>
-                  <Label prefHeight="26.0" prefWidth="107.0" text="Betrag">
+                  <Label prefHeight="26.0" prefWidth="107.0" text="Amount">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="textFieldBetrag" prefHeight="25.0" prefWidth="441.0" promptText="Betrag eingeben" />
+                  <TextField fx:id="textFieldBetrag" prefHeight="25.0" prefWidth="441.0" promptText="Insert amount" />
                </children>
             </HBox>
             <HBox prefHeight="49.0" prefWidth="555.0" spacing="10.0">
                <children>
-                  <Label prefHeight="26.0" prefWidth="107.0" text="Datum">
+                  <Label prefHeight="26.0" prefWidth="107.0" text="Date">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <DatePicker fx:id="datePickerDatum" prefHeight="25.0" prefWidth="441.0" promptText="Datum eingeben" />
+                  <DatePicker fx:id="datePickerDatum" prefHeight="25.0" prefWidth="441.0" promptText="Insert date" />
                </children>
             </HBox>
             <HBox prefHeight="43.0" prefWidth="555.0" spacing="10.0">
                <children>
-                  <Label prefHeight="26.0" prefWidth="107.0" text="Typ" textFill="#121212">
+                  <Label prefHeight="26.0" prefWidth="107.0" text="Type" textFill="#121212">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <ComboBox fx:id="comboBoxTyp" prefHeight="25.0" prefWidth="440.0" promptText="Typ auswählen" visibleRowCount="3" />
+                  <ComboBox fx:id="comboBoxTyp" prefHeight="25.0" prefWidth="440.0" promptText="Choose type" visibleRowCount="3" />
                </children>
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="139.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToInvoicesUser" prefHeight="25.0" prefWidth="121.0" text="Back">
+      <Button layoutX="457.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToInvoicesUser" prefHeight="25.0" prefWidth="121.0" text="Back">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button layoutX="457.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChangesUser" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
+      <Button layoutX="140.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChangesUser" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
