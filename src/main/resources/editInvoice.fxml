@@ -14,9 +14,9 @@
    <children>
       <VBox alignment="TOP_LEFT" layoutX="24.0" layoutY="21.0" prefHeight="304.0" prefWidth="555.0" spacing="10.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Edit Invoice">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Edit invoice">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="24.0" />
                </font></Label>
             <HBox spacing="10.0">
                <children>
@@ -92,16 +92,16 @@
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="445.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToAllInvoices" prefHeight="25.0" prefWidth="121.0" text="Back">
+      <Button layoutX="445.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToAllInvoices" prefHeight="30.0" prefWidth="121.0" text="Back">
          <font>
             <Font name="System Bold" size="12.0" />
          </font>
       </Button>
-      <Button layoutX="131.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
+      <Button layoutX="131.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChanges" prefHeight="30.0" prefWidth="121.0" text="Save" textFill="#45a32f">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button layoutX="291.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleDeleteInvoice" prefHeight="25.0" prefWidth="121.0" text="Delete" textFill="#d21414">
+      <Button layoutX="291.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleDeleteInvoice" prefHeight="30.0" prefWidth="121.0" text="Delete" textFill="#d21414">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

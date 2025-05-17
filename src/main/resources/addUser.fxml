@@ -67,8 +67,8 @@
         </GridPane>
 
         <HBox alignment="CENTER" prefHeight="33.0" prefWidth="364.0" spacing="20">
-            <Button onAction="#handleSave" style=" -fx-font-weight: bold; -fx-padding: 8 20;" text="Save" textFill="#45a32f"/>
-            <Button onAction="#handleCancel" style="-fx-font-weight: bold; -fx-padding: 8 20;" text="Cancel" textFill="#d21414" />
+            <Button onAction="#handleSave" prefHeight="30.0" prefWidth="121.0" style=" -fx-font-weight: bold; -fx-padding: 8 20;" text="Save" textFill="#45a32f" />
+            <Button onAction="#handleCancel" prefHeight="30.0" prefWidth="121.0" style="-fx-font-weight: bold; -fx-padding: 8 20;" text="Cancel" textFill="#d21414" />
         </HBox>
     </VBox>
 </AnchorPane>

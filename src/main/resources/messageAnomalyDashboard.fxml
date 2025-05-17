@@ -18,7 +18,7 @@
 <ScrollPane layoutX="16.0" layoutY="100.0" prefHeight="355.0" prefWidth="752.0">
     <GridPane fx:id="gridMessages" hgap="20.0" prefHeight="19.0" prefWidth="678.0" style="-fx-background-color: transparent;" vgap="10.0">
         <Label alignment="CENTER" prefHeight="17.0" prefWidth="444.0" style="-fx-font-weight: bold;" text="Text" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-        <Label alignment="CENTER" prefHeight="17.0" prefWidth="125.0" style="-fx-font-weight: bold;" text="Zeitpunkt" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+        <Label alignment="CENTER" prefHeight="17.0" prefWidth="125.0" style="-fx-font-weight: bold;" text="Time of change" GridPane.columnIndex="2" GridPane.rowIndex="0" />
          <Label alignment="CENTER" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="User" />
 
         <!-- Spaltenanpassungen -->

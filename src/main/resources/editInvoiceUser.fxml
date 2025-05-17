@@ -14,9 +14,9 @@
    <children>
       <VBox alignment="TOP_LEFT" layoutX="24.0" layoutY="21.0" prefHeight="304.0" prefWidth="555.0" spacing="10.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Rechnung bearbeiten">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="38.0" prefWidth="555.0" style="-fx-font-weight: bold;" text="Edit invoice">
                <font>
-                  <Font name="System Bold" size="18.0" />
+                  <Font name="System Bold" size="24.0" />
                </font></Label>
             <HBox prefHeight="54.0" prefWidth="555.0" spacing="10.0">
                <children>
@@ -60,15 +60,15 @@
             </HBox>
          </children>
       </VBox>
-      <Button layoutX="457.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToInvoicesUser" prefHeight="25.0" prefWidth="121.0" text="Back">
+      <Button layoutX="457.0" layoutY="339.0" mnemonicParsing="false" onAction="#goBackToInvoicesUser" prefHeight="30.0" prefWidth="121.0" text="Back">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button layoutX="140.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChangesUser" prefHeight="25.0" prefWidth="121.0" text="Save" textFill="#45a32f">
+      <Button layoutX="140.0" layoutY="339.0" mnemonicParsing="false" onAction="#saveChangesUser" prefHeight="30.0" prefWidth="121.0" text="Save" textFill="#45a32f">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-      <Button layoutX="300.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleDeleteInvoiceUser" prefHeight="25.0" prefWidth="121.0" text="Delete" textFill="#d21414">
+      <Button layoutX="300.0" layoutY="339.0" mnemonicParsing="false" onAction="#handleDeleteInvoiceUser" prefHeight="30.0" prefWidth="121.0" text="Delete" textFill="#d21414">
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>

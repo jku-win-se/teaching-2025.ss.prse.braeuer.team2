@@ -35,7 +35,7 @@
             <Font size="14.0" />
          </font>
       </PasswordField>
-      <Button fx:id="closeButton" layoutX="380.0" layoutY="10.0" onAction="#handleClose" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #ff5555; -fx-text-fill: white; -fx-font-weight: bold;" text="X">
+      <Button fx:id="closeButton" layoutX="380.0" layoutY="10.0" onAction="#handleClose" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #d21414; -fx-text-fill: white; -fx-font-weight: bold;" text="X">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
@@ -45,7 +45,7 @@
             <Font name="System Bold" size="12.0" />
          </font></Button>
 
-      <Label fx:id="messageLabel" alignment="CENTER" layoutX="14.0" layoutY="250.0" prefHeight="20.0" prefWidth="371.0" text="" textFill="red">
+      <Label fx:id="messageLabel" alignment="CENTER" layoutX="14.0" layoutY="250.0" prefHeight="20.0" prefWidth="371.0" text="" textFill="#d21414">
          <font>
             <Font size="14.0" />
          </font>
