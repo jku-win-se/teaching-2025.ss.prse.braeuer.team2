@@ -20,11 +20,31 @@ Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbes
 ## 3. Systemübersicht
 
 **Technologien:**
-- Java 21
-- JavaFX 
-- PostgreSQL (Supabase)
-- Maven
-- Tesseract (OCR)
+
+| Komponente           | Technologie |
+|-----------------|--------|
+| GUI             | JavaFX, FXML, |
+| Datenbank       | PostgresSQL (Supabase) |
+| Build-Tool |Maven |
+| OCR-Erkennung |Tesseract |
+| Tests | JUnit |
+
+**Projekt-Strutur:**
+
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── at/jku/se/            → Unterordner + Business-Logik-Klassen
+│   │       ├── controller        → GUI-Controller für FXML-Views
+│   │       ├── exceptions          
+│   └── resources/                → Unterordner + FXML-Datein
+│       └── Tesseract-OCR         → OCR Tesseract
+└── test/
+    ├── java                      → Testklassen
+    ├── ressources                → Foto einer Testrechnung
+    
+```
 
 **Benutzerrollen:**
 
