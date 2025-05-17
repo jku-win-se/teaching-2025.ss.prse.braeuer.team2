@@ -1,4 +1,7 @@
 # Benutzerdoku Lunchify
+
+## Installation
+
 ## Login
 ![image](https://github.com/user-attachments/assets/2a8867b7-38f8-4bb9-afb5-7450392d97be)
 
