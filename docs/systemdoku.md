@@ -186,6 +186,11 @@ src/
 - Deep-Learning-basierte Belegerkennung
 - Integration in Slack oder MS Teams
 
+## 11. Links
+[Supabase](https://supabase.com)
+
+[Tesseract-OCR](https://github.com/tesseract-ocr/tesseract)
+
 ---
 
 > 📁 Dieses Dokument ist Teil des Projekts *Lunchify*. Weitere technische Dokumentation und Code findest du im `/src`-Ordner.
