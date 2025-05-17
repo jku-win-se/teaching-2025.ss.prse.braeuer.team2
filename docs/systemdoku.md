@@ -88,11 +88,39 @@ src/
 
 ##  6. Systemarchitektur
 
-**Schichten:**
-- UI (JavaFX)
-- Business-Logik
-- Persistenz (JDBC)
-- Services (OCR, Export)
+```
+┌────────────────────────────────────────┐
+│               Benutzer                 │
+│           (GUI in JavaFX)              │
+└────────────────────────┬───────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────┐
+│         Präsentationsschicht           │
+│  → JavaFX Controller-Klassen           │
+│  → FXML-Views (UI)                     │
+└────────────────────────┬───────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────┐
+│            Business-Logik              │
+│  → Service-Klassen (z. B. InvoiceScan) │
+└────────────────────────┬───────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────┐
+│         Datenzugriffsschicht           │
+│  → JDBC               │
+│  → Verbindung zu PostgreSQL            │
+└────────────────────────┬───────────────┘
+                         │
+                         ▼
+┌────────────────────────────────────────┐
+│         PostgreSQL-Datenbank           │
+│  → Tabellen:                           |
+|   Account, Rechnungen, Message, Refund │
+└────────────────────────────────────────┘
+```
 
 **Externe Komponenten:**
 - Tesseract OCR (lokal)
