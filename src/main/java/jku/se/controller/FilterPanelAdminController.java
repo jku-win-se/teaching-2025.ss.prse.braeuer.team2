@@ -61,7 +61,7 @@ public class FilterPanelAdminController extends Controller {
             try {
                 mainController.loadAndDisplayInvoices();
             } catch (SQLException e) {
-                showError("Fehler", "Daten konnten nicht geladen werden");
+                showError("Error", "Data could not be read!");
             }
         }
     }

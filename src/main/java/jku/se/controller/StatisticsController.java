@@ -58,22 +58,22 @@ public class StatisticsController extends Controller {
     public void initialize() {
         // Populate dropdown options
         statSelector.getItems().addAll(
-                "Rückvergütung pro Monat",
-                "Anzahl Rechnungen pro Monat",
-                "Durchschnitt Rechnungen pro Benutzer"
+                "Refund per month",
+                "Amount of Invoices per month",
+                "Average invoices per user"
         );
 
         typeSelector.getItems().addAll(
-                "beide",
+                "both",
                 "Restaurant",
-                "Supermarkt"
+                "Supermarket"
         );
 
         statusSelector.getItems().addAll(
-                "nur akzeptierte",
-                "nur abgelehnte",
-                "nur ausstehende",
-                "alle"
+                "only accepted",
+                "only denied",
+                "only pending",
+                "all"
         );
 
         // Set default selections
@@ -119,9 +119,9 @@ public class StatisticsController extends Controller {
 
         // Apply filters for type and status
         switch (selectedStatus) {
-            case "nur akzeptierte" -> conditions.add("r.status = 'ACCEPTED'");
-            case "nur abgelehnte"  -> conditions.add("r.status = 'DENIED'");
-            case "nur ausstehende" -> conditions.add("r.status = 'PENDING'");
+            case "only accepted" -> conditions.add("r.status = 'ACCEPTED'");
+            case "only denied"  -> conditions.add("r.status = 'DENIED'");
+            case "only pending" -> conditions.add("r.status = 'PENDING'");
             // "alle" means no filter applied
         }
         if (filterRestaurant) conditions.add("r.typ = 'RESTAURANT'");
@@ -129,7 +129,7 @@ public class StatisticsController extends Controller {
 
         String sql;
 
-        if (selectedMetric.equals("Rückvergütung pro Monat")) {
+        if (selectedMetric.equals("Refund per month")) {
             sql = """
             WITH monate AS (
                 SELECT generate_series(
@@ -158,7 +158,7 @@ public class StatisticsController extends Controller {
                 monate.monat;
         """;
 
-        } else if (selectedMetric.equals("Anzahl Rechnungen pro Monat")) {
+        } else if (selectedMetric.equals("Amount of Invoices per month")) {
             sql = """
             WITH monate AS (
                 SELECT generate_series(
@@ -285,15 +285,15 @@ public class StatisticsController extends Controller {
         // Get filter values from UI dropdowns
         String selectedType = typeSelector.getValue();
         boolean filterRestaurant = selectedType.equals("Restaurant");
-        boolean filterSupermarkt = selectedType.equals("Supermarkt");
+        boolean filterSupermarkt = selectedType.equals("Supermarket");
         List<String> conditions = new ArrayList<>();
         String selectedStatus = statusSelector.getValue();
 
         // Add SQL conditions based on selected status
         switch (selectedStatus) {
-            case "nur akzeptierte" -> conditions.add("r.status = 'ACCEPTED'");
-            case "nur abgelehnte"  -> conditions.add("r.status = 'DENIED'");
-            case "nur ausstehende" -> conditions.add("r.status = 'PENDING'");
+            case "only accepted" -> conditions.add("r.status = 'ACCEPTED'");
+            case "only denied"  -> conditions.add("r.status = 'DENIED'");
+            case "only pending" -> conditions.add("r.status = 'PENDING'");
         }
         // Add SQL conditions based on selected type
         if (filterRestaurant) conditions.add("r.typ = 'RESTAURANT'");
@@ -302,7 +302,7 @@ public class StatisticsController extends Controller {
         String sql;
 
         // SQL for total refund by type
-        if (selectedMetric.equals("Rückvergütung pro Monat")) {
+        if (selectedMetric.equals("Refund per month")) {
             sql = """
             SELECT
                 r.typ,
@@ -318,7 +318,7 @@ public class StatisticsController extends Controller {
             sql += "GROUP BY r.typ;";
 
         // SQL for count of invoices by type
-        } else if (selectedMetric.equals("Anzahl Rechnungen pro Monat")) {
+        } else if (selectedMetric.equals("Amount of Invoices per month")) {
             sql = """
             SELECT
                 r.typ,
@@ -498,8 +498,8 @@ public class StatisticsController extends Controller {
         String selectedStatus = statusSelector.getValue();
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("CSV-Datei speichern");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV-Dateien", "*.csv"));
+        fileChooser.setTitle("Save CSV-file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV-file", "*.csv"));
         fileChooser.setInitialFileName(
                 selectedMetric.replace(" ", "_") + "_" +
                         selectedType + "_" +
@@ -510,7 +510,7 @@ public class StatisticsController extends Controller {
         if (file != null) {
             try (PrintWriter writer = new PrintWriter(file)) {
                 // Deutsche Spaltenüberschriften
-                writer.println("\"Monat\";\"Wert\"");
+                writer.println("\"Month\";\"Amount\"");
 
                 // Formatierung im deutschen Stil (z.B. 1.234,56)
                 NumberFormat germanFormat = NumberFormat.getInstance(Locale.GERMAN);
@@ -523,9 +523,9 @@ public class StatisticsController extends Controller {
                     }
                 }
 
-                showSuccess("Export erfolgreich", "Daten wurden erfolgreich als CSV exportiert!");
+                showSuccess("Export successful", "Data was successfully exported as a CSV-file!");
             } catch (FileNotFoundException e) {
-                showError("Fehler beim Export", "CSV-Export fehlgeschlagen: " + e.getMessage());
+                showError("Error", "CSV Export failed: " + e.getMessage());
             }
         }
     }
@@ -538,8 +538,8 @@ public class StatisticsController extends Controller {
         String selectedStatus = statusSelector.getValue();
 
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("PDF-Datei speichern");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF-Dateien", "*.pdf"));
+        fileChooser.setTitle("Safe PDF-file");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF-file", "*.pdf"));
         fileChooser.setInitialFileName(
                 selectedMetric.replace(" ", "_") + "_" +
                         selectedType + "_" +
@@ -573,7 +573,7 @@ public class StatisticsController extends Controller {
                     contentStream.setFont(PDType1Font.HELVETICA_BOLD, 16);
                     contentStream.beginText();
                     contentStream.newLineAtOffset(100, 750);
-                    contentStream.showText("Statistik: " + selectedMetric + " (" + selectedType + ", " + selectedStatus + ")");
+                    contentStream.showText("Statistics " + selectedMetric + " (" + selectedType + ", " + selectedStatus + ")");
                     contentStream.endText();
 
                     // Diagrammbild
@@ -583,9 +583,9 @@ public class StatisticsController extends Controller {
                     contentStream.setFont(PDType1Font.HELVETICA, 12);
                     contentStream.beginText();
                     contentStream.newLineAtOffset(100, 480);
-                    contentStream.showText("Monat");
+                    contentStream.showText("Month");
                     contentStream.newLineAtOffset(150, 0);
-                    contentStream.showText("Wert");
+                    contentStream.showText("Amount");
                     contentStream.endText();
 
                     int yPosition = 460;
@@ -603,9 +603,9 @@ public class StatisticsController extends Controller {
                 }
 
                 document.save(file);
-                showSuccess("Export erfolgreich", "Daten wurden erfolgreich als PDF exportiert!");
+                showSuccess("Export successful", "Data was successfully exported as PDF!");
             } catch (IOException e) {
-                showError("Fehler beim Export", "Export fehlgeschlagen: " + e.getMessage());
+                showError("Error", "Export failed: " + e.getMessage());
             }
         }
     }

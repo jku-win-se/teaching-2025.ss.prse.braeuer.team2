@@ -35,7 +35,7 @@ public class MessageAnomalyController extends Controller{
         try {
             CONNECTION = getConnection();
         } catch (SQLException e) {
-            throw new IllegalStateException("Datenbankverbindung fehlgeschlagen", e);
+            throw new IllegalStateException("Database connection failed", e);
         }
     }
 
@@ -97,7 +97,7 @@ public class MessageAnomalyController extends Controller{
             try {
                 deleteMessage(id);
             } catch (SQLException e) {
-                showError("Fehler", "Datenbankfehler beim Löschen der Nachricht: " + e.getMessage());
+                showError("Error", "Database error when deleting the message: " + e.getMessage());
             }
         });
         gridMessages.add(deleteButton, 3, row);
@@ -113,11 +113,11 @@ public class MessageAnomalyController extends Controller{
             controller.loadUserData(username);
 
             Stage stage = new Stage();
-            stage.setTitle("Benutzerdetails: " + username);
+            stage.setTitle("User details: " + username);
             stage.setScene(new Scene(root));
             stage.show();
         } catch (IOException e) {
-            showError("Fehler", "Benutzerdetails konnten nicht geladen werden: " + e.getMessage());
+            showError("Error", "User details could not be loaded: " + e.getMessage());
         }
     }
     private void deleteMessage(int id) throws SQLException {
@@ -129,10 +129,10 @@ public class MessageAnomalyController extends Controller{
                 //showAlertSuccess("Erfolg", "Nachricht erfolgreich gelöscht.");
                 loadAndDisplayMessages(); // Nach dem Löschen die Liste neu laden
             } else {
-                showError("Fehler", "Die Nachricht konnte nicht gelöscht werden, da sie bereits gelöscht wurde.");
+                showError("Error", "The message could not be deleted because it has already been deleted.");
             }
         } catch (SQLException e) {
-            showError("Fehler", "Nachricht konnte nicht gelöscht werden: " + e.getMessage());
+            showError("Error", "Message could not be deleted: " + e.getMessage());
         }
     }
 

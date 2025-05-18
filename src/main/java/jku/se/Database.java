@@ -357,14 +357,14 @@ public class Database {
 
             //Check if the entered date is within the current month
             if(!InvoiceScan.isWithinCurrentMonth(datum)) {
-                controller.displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");
+                controller.displayMessage("Date must be within the current month.", "red");
                 connection.rollback();  // rollback on error
                 return;
             }
 
             //Check if an invoice already exists for the date
             if (invoiceExists(connection, username, datum)) {
-                controller.displayMessage("Rechnung für dieses Datum existiert bereits!", "red");
+                controller.displayMessage("Invoice already exists for this date!", "red");
                 connection.rollback();  // rollback on error
                 return;
             }
@@ -389,7 +389,7 @@ public class Database {
                 //check if the insert was successfully
                 int rowsAffected = pstmt.executeUpdate();
                 if (rowsAffected > 0) {
-                    controller.displayMessage("Rechnung erfolgreich eingefügt!", "green");
+                    controller.displayMessage("Invoice inserted successfully!", "green");
                     connection.commit();  // complete transaction successfully
                 } else {
                     connection.rollback();  // rollback on error
@@ -455,7 +455,7 @@ public class Database {
                 InvoiceScan invoiceScan = new InvoiceScan(controller);
                 invoice = invoiceScan.scanInvoice(path); //Specify the path to the image file
             } catch (Exception e) {
-                Platform.runLater(() -> controller.displayMessage("Fehler beim Scannen der Rechnung: " + e.getMessage(), "red"));
+                Platform.runLater(() -> controller.displayMessage("Error scanning the invoice: " + e.getMessage(), "red"));
                 return; //if an error occurs, abort the method
             }
 
@@ -473,7 +473,7 @@ public class Database {
                 Database.uploadInvoice(connection, getCurrentUsername(), sum, date, invoiceType, invoiceStatus, imageFile, refund,controller);
 
             } catch (SQLException e) {
-                Platform.runLater(() -> controller.displayMessage("Fehler bei der Verbindung zur Datenbank: " + e.getMessage(), "red"));
+                Platform.runLater(() -> controller.displayMessage("Error connecting to the database: " + e.getMessage(), "red"));
             }
         }).start(); //starts the background thread
     }

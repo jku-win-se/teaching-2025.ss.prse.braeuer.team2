@@ -126,7 +126,7 @@ public class RequestManagementController extends Controller {
             controller.setMainController(this);
 
             filterStage = new Stage();
-            filterStage.setTitle("Rechnungen filtern (Admin)");
+            filterStage.setTitle("Filter invoices (Admin)");
             filterStage.setScene(new Scene(root));
             filterStage.initModality(Modality.NONE);
             filterStage.initOwner(((Node)event.getSource()).getScene().getWindow());
@@ -134,7 +134,7 @@ public class RequestManagementController extends Controller {
             filterStage.show();
 
         } catch (IOException e) {
-            showError("Fehler", "Filter konnte nicht geöffnet werden");
+            showError("Error", "Filter could not be opened!");
         }
     }
 

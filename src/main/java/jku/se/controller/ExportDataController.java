@@ -180,7 +180,7 @@ public class ExportDataController extends Controller{
 
             // FileChooser öffnen
             javafx.stage.FileChooser fileChooser = new javafx.stage.FileChooser();
-            fileChooser.setTitle("Exportiere Rechnungen als JSON");
+            fileChooser.setTitle("Export invoice as JSON");
 
             // Standard-Dateiname
             String monthName = getMonthName(month).toLowerCase();
@@ -202,10 +202,10 @@ public class ExportDataController extends Controller{
                         year,
                         month
                 );
-                showSuccess("Erfolg", "Export erfolgreich gespeichert:\n" + file.getAbsolutePath());
+                showSuccess("Success", "Export succesfully saved:\n" + file.getAbsolutePath());
             }
         } catch (Exception e) {
-            showError("Fehler", "Export fehlgeschlagen:\n" + e.getMessage());
+            showError("Error", "Export failed:\n" + e.getMessage());
         }
     }
 

@@ -52,7 +52,7 @@ public class SubmitBillController extends Controller {
                 successMessage.setText(message);
                 successMessage.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: normal;");
 
-                if (uploadAnimation != null && !message.contains("hochgeladen")) {
+                if (uploadAnimation != null && !message.contains("uploaded")) {
                     uploadAnimation.stop();
                 }
             }
@@ -67,10 +67,10 @@ public class SubmitBillController extends Controller {
     @FXML
     private void handleFileUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Rechnung auswählen");
+        fileChooser.setTitle("Choose Invoice");
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Bilder (JPEG, PNG)", "*.jpg", "*.jpeg", "*.png"),
-                new FileChooser.ExtensionFilter("PDF-Dateien", "*.pdf")
+                new FileChooser.ExtensionFilter("Fotos (JPEG, PNG)", "*.jpg", "*.jpeg", "*.png"),
+                new FileChooser.ExtensionFilter("PDF-files", "*.pdf")
         );
         File selectedFile = fileChooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
 
@@ -78,7 +78,7 @@ public class SubmitBillController extends Controller {
             filePathField.setText(selectedFile.getAbsolutePath());
             displayMessage("", "black");
         } else {
-            filePathField.setText("Keine Datei ausgewählt...");
+            filePathField.setText("No file selected...");
         }
     }
 
@@ -86,8 +86,8 @@ public class SubmitBillController extends Controller {
     private void handleUpload(ActionEvent event) {
         String filePath = filePathField.getText();
 
-        if (filePath.isEmpty() || filePath.equals("Keine Datei ausgewählt...")) {
-            displayMessage("Keine Datei ausgewählt!", "red");
+        if (filePath.isEmpty() || filePath.equals("No file selected...")) {
+            displayMessage("No file selected!", "red");
             return;
         }
 
@@ -96,8 +96,10 @@ public class SubmitBillController extends Controller {
         }
 
         uploadAnimation = new Timeline(
-                new KeyFrame(Duration.seconds(0.5), e -> successMessage.setText("Rechnung wird hochgeladen")),
-                new KeyFrame(Duration.seconds(1.0), e -> successMessage.setText("Rechnung wird hochgeladen..."))
+                new KeyFrame(Duration.seconds(0.5), e -> successMessage.setText("Invoice uploading")),
+                new KeyFrame(Duration.seconds(1.0), e -> successMessage.setText("Invoice uploading.")),
+                new KeyFrame(Duration.seconds(1.5), e -> successMessage.setText("Invoice uploading..")),
+                new KeyFrame(Duration.seconds(2.0), e -> successMessage.setText("Invoice uploading..."))
         );
         uploadAnimation.setCycleCount(Timeline.INDEFINITE);
         uploadAnimation.play();
@@ -118,12 +120,12 @@ public class SubmitBillController extends Controller {
         Platform.runLater(() -> {
             // Create a new Stage (window) for the date input
             Stage stage = new Stage();
-            stage.setTitle("Datum manuell eingeben");
+            stage.setTitle("Insert date manually");
 
             // Create the label, text field for date input, and the confirm button
-            Label label = new Label("Bitte geben Sie das Datum ein (DD.MM.YYYY):");
+            Label label = new Label("Please insert date (DD.MM.YYYY):");
             TextField dateInput = new TextField();
-            Button confirmButton = new Button("Bestätigen");
+            Button confirmButton = new Button("Confirm");
 
             // Layout for the stage: VBox with vertical spacing
             VBox layout = new VBox(10, label, dateInput, confirmButton);
@@ -145,29 +147,29 @@ public class SubmitBillController extends Controller {
 
                     //Check if the entered date is not in the future
                     if (!InvoiceScan.isDateInThePastOrToday(parsedDate)) {
-                        displayMessage("Datum darf nicht in der Zukunft liegen.", "red");
+                        displayMessage("Date must not be in the future.", "red");
                         return;
                     }
 
                     // Check if the entered date is within the current month
                     if (!InvoiceScan.isWithinCurrentMonth(parsedDate)){
-                        displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");
+                        displayMessage("Date must be within the current month.", "red");
                         return;
                     }
 
                     // Check if the entered date is a workday (business day)
                     if (!InvoiceScan.isWorkday(parsedDate)) {
-                        displayMessage("Kein Arbeitstag!", "red");
+                        displayMessage("Not a working day!", "red");
                         return; // Fenster bleibt offen, Benutzer muss neues Datum eingeben
                     }
 
                     enteredDate[0] = parsedDate; // Store the entered date
-                    displayMessage("Datum erfolgreich eingegeben: " + parsedDate.format(formatter), "green");
+                    displayMessage("Date entered successfully: " + parsedDate.format(formatter), "green");
                     stage.close(); // Close the window
                     latch.countDown(); // Release the latch, allowing the main thread to continue
                 } catch (DateTimeParseException ex) {
                     // Display error message if the date format is invalid
-                    displayMessage("Ungültiges Datum! Bitte im Format DD.MM.YYYY eingeben.", "red");
+                    displayMessage("Invalid date! Please enter in format: 'DD.MM.YYYY'.", "red");
                 }
             });
         });
@@ -188,11 +190,11 @@ public class SubmitBillController extends Controller {
 
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            stage.setTitle("Betrag manuell eingeben");
+            stage.setTitle("Insert amount manually");
 
-            Label label = new Label("Bitte geben Sie den Betrag ein (z. B. 123.45):");
+            Label label = new Label("Please enter the amount (e.g. 123.45):");
             TextField amountInput = new TextField();
-            Button confirmButton = new Button("Bestätigen");
+            Button confirmButton = new Button("Confirm");
 
             VBox layout = new VBox(10, label, amountInput, confirmButton);
             layout.setPadding(new Insets(10));
@@ -205,14 +207,14 @@ public class SubmitBillController extends Controller {
             confirmButton.setOnAction(e -> {
                 try {
                     double parsedAmount = Double.parseDouble(amountInput.getText().replace(',', '.'));
-                    if (parsedAmount < 0) throw new NumberFormatException("Negativer Betrag nicht erlaubt");
+                    if (parsedAmount < 0) throw new NumberFormatException("Negative amount not allowed");
 
                     enteredAmount[0] = parsedAmount;
-                    displayMessage("Betrag erfolgreich eingegeben: " + parsedAmount, "green");
+                    displayMessage("Amount entered successfully: " + parsedAmount, "green");
                     stage.close();
                     latch.countDown();
                 } catch (NumberFormatException ex) {
-                    displayMessage("Ungültiger Betrag! Bitte eine Zahl im Format 123.45 eingeben.", "red");
+                    displayMessage("Invalid amount! Please enter a number in format '123.45'.", "red");
                 }
             });
         });
@@ -233,10 +235,10 @@ public class SubmitBillController extends Controller {
 
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            stage.setTitle("Rechnungstyp wählen");
+            stage.setTitle("Choose invoice type");
 
-            Label label = new Label("Bitte wählen Sie den Rechnungstyp:");
-            Button supermarketButton = new Button("Supermarkt");
+            Label label = new Label("Please choose invoice type:");
+            Button supermarketButton = new Button("Supermarket");
             Button restaurantButton = new Button("Restaurant");
 
             VBox layout = new VBox(10, label, supermarketButton, restaurantButton);
@@ -250,7 +252,7 @@ public class SubmitBillController extends Controller {
             // button "Supermarket"
             supermarketButton.setOnAction(e -> {
                 selectedType[0] = InvoiceType.SUPERMARKET;
-                displayMessage("Rechnungstyp: Supermarkt", "green");
+                displayMessage("Invoice type: Supermarket", "green");
                 stage.close();
                 latch.countDown();
             });
@@ -258,7 +260,7 @@ public class SubmitBillController extends Controller {
             // button "Restaurant"
             restaurantButton.setOnAction(e -> {
                 selectedType[0] = InvoiceType.RESTAURANT;
-                displayMessage("Rechnungstyp: Restaurant", "green");
+                displayMessage("Invoice type: Restaurant", "green");
                 stage.close();
                 latch.countDown();
             });
@@ -281,9 +283,9 @@ public class SubmitBillController extends Controller {
 
         Platform.runLater(() -> {
             Stage stage = new Stage();
-            stage.setTitle("Rechnungsdaten bearbeiten");
+            stage.setTitle("Edit invoice data");
             stage.setOnCloseRequest(event -> {
-                displayMessage("Abgebrochen Rechnung wurde nicht hochgeladen","red");
+                displayMessage("Cancelled invoice was not uploaded","red");
             });
 
             // UI-Elemente
@@ -299,15 +301,15 @@ public class SubmitBillController extends Controller {
             amountError.setTextFill(Color.RED);
 
             ToggleGroup typeGroup = new ToggleGroup();
-            RadioButton supermarketRadio = new RadioButton("Supermarkt");
+            RadioButton supermarketRadio = new RadioButton("Supermarket");
             RadioButton restaurantRadio = new RadioButton("Restaurant");
             Label typeError = new Label();
             typeError.setTextFill(Color.RED);
 
 
-            Button cancelButton = new Button("Abbrechen");
+            Button cancelButton = new Button("Cancel");
             cancelButton.setOnAction(e -> {
-                displayMessage("Abgebrochen – Rechnung wurde nicht hochgeladen", "red");
+                displayMessage("Cancelled – invoice was not uploaded", "red");
                 stage.close();
             });;
 
@@ -327,33 +329,33 @@ public class SubmitBillController extends Controller {
             Supplier<Boolean> validateDate = () -> {
                 try {
                     if (dateField.getText().trim().isEmpty()) {
-                        dateError.setText("Datum ist erforderlich");
+                        dateError.setText("Date is required");
                         return false;
                     }
 
                     LocalDate date = LocalDate.parse(dateField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
                     if (!InvoiceScan.isDateInThePastOrToday(date)) {
-                        dateError.setText("Datum darf nicht in der Zukunft liegen");
+                        dateError.setText("Date must not be in the future");
                         return false;
                     }
                     if (!InvoiceScan.isWithinCurrentMonth(date)) {
-                        dateError.setText("Datum muss im aktuellen Monat liegen");
+                        dateError.setText("Date must be in the current month");
                         return false;
                     }
                     if (!InvoiceScan.isWorkday(date)) {
-                        dateError.setText("Kein Arbeitstag (Wochenende/Feiertag)");
+                        dateError.setText("Not a work day (weekend/public holiday)");
                         return false;
                     }
 
                     // NEU: Prüfung auf existierende Rechnung
                     try (Connection connection = Database.getConnection()) {
                         if (invoiceExists(connection, Login.getCurrentUsername(), date)) {
-                            dateError.setText("Rechnung für dieses Datum existiert bereits");
+                            dateError.setText("Invoice for this date already exists");
                             return false;
                         }
                     } catch (SQLException e) {
-                        dateError.setText("Datenbankfehler bei der Prüfung");
+                        dateError.setText("Database error during testing");
                         return false;
                     }
 
@@ -362,7 +364,7 @@ public class SubmitBillController extends Controller {
                     dateError.setText("");
                     return true;
                 } catch (DateTimeParseException e) {
-                    dateError.setText("Ungültiges Format (DD.MM.YYYY)");
+                    dateError.setText("Invalid format (DD.MM.YYYY)");
                     return false;
                 }
             };
@@ -370,27 +372,27 @@ public class SubmitBillController extends Controller {
             Supplier<Boolean> validateAmount = () -> {
                 try {
                     if (amountField.getText().trim().isEmpty()) {
-                        amountError.setText("Betrag ist erforderlich");
+                        amountError.setText("Amount is required");
                         return false;
                     }
 
                     double amount = Double.parseDouble(amountField.getText().replace(',', '.'));
                     if (amount <= 0) {
-                        amountError.setText("Betrag muss positiv sein");
+                        amountError.setText("Amount has to be positive");
                         return false;
                     }
 
                     amountError.setText("");
                     return true;
                 } catch (NumberFormatException e) {
-                    amountError.setText("Ungültiger Betrag (z.B. 12.99)");
+                    amountError.setText("Invalid amount (e.g. 12.99)");
                     return false;
                 }
             };
 
             Supplier<Boolean> validateType = () -> {
                 if (!supermarketRadio.isSelected() && !restaurantRadio.isSelected()) {
-                    typeError.setText("Bitte Typ auswählen");
+                    typeError.setText("Please choose type");
                     return false;
                 }
                 typeError.setText("");
@@ -401,7 +403,7 @@ public class SubmitBillController extends Controller {
             dateField.setOnAction(e -> validateDate.get());
             amountField.setOnAction(e -> validateAmount.get());
 
-            Button saveButton = new Button("Speichern");
+            Button saveButton = new Button("Save");
             saveButton.setOnAction(e -> {
                 boolean dateValid = validateDate.get();
                 boolean amountValid = validateAmount.get();
@@ -431,10 +433,10 @@ public class SubmitBillController extends Controller {
                         stage.close();
                         latch.countDown();
                     } catch (Exception ex) {
-                        errorLabel.setText("Fehler bei der Verarbeitung: " + ex.getMessage());
+                        errorLabel.setText("Error in processing: " + ex.getMessage());
                     }
                 } else {
-                    errorLabel.setText("Bitte korrigieren Sie die markierten Felder");
+                    errorLabel.setText("Please correct the marked fields");
                 }
             });
 
@@ -442,9 +444,9 @@ public class SubmitBillController extends Controller {
 
             // Layout
             VBox layout = new VBox(10,
-                    new VBox(5, new Label("Datum (DD.MM.YYYY):"), dateField, dateError),
-                    new VBox(5, new Label("Betrag:"), amountField, amountError),
-                    new VBox(5, new Label("Rechnungstyp:"),
+                    new VBox(5, new Label("Date (DD.MM.YYYY):"), dateField, dateError),
+                    new VBox(5, new Label("Amount:"), amountField, amountError),
+                    new VBox(5, new Label("Invoice type:"),
                             new HBox(10, supermarketRadio, restaurantRadio), typeError),
                     errorLabel,
                     new HBox(10, saveButton, cancelButton)

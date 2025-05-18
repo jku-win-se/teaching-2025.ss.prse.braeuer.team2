@@ -37,7 +37,7 @@ public class LoginController extends Controller {
         String password = passwordField.getText();
 
         if (email.isEmpty() || password.isEmpty()) {
-            showError("Error", "Bitte E-Mail und Passwort eingeben!");
+            showError("Error", "Please enter email and password!");
             return;
         }
 
@@ -55,9 +55,9 @@ public class LoginController extends Controller {
 
         } else {
             if (Status.BLOCKED.name().equalsIgnoreCase(accountStatus.toString())) {
-                showError("Error", "Konto nach 3 fehlgeschlagenen Versuchen gesperrt!");
+                showError("Error", "Account blocked after 3 failed attempts!");
             } else {
-                showError("Error","E-Mail oder Passwort falsch!");
+                showError("Error","E-Mail oder Password is incorrect!");
             }
         }
     }
