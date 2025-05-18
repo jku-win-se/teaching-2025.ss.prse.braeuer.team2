@@ -57,8 +57,7 @@ Nachdem eine Datei ausgewählt wurde, werden deren Pfad und Dateiname hier angez
 Nachdem eine Datei ausgewählt wurde, kann hier der Upload gestartet und die automatische Erkennung der Rechnung durchgeführt werden.
 
 ### Rechnungsdaten bestätigen
-![rechnung-bestaetigen](https://github.com/user-attachments/assets/587c6561-41e2-4f7b-864d-fac2b0349167)
-
+![Screenshot 2025-05-18 204042](https://github.com/user-attachments/assets/a1440666-e831-4b5a-8ea9-ea11402b9854)
 
 Sobald die automatische Texterkennung abgeschlossen ist oder fehlende Angaben manuell eingegeben wurden, erscheint eine Übersicht der Rechnungsdaten.
 
@@ -81,11 +80,13 @@ Mit einem Klick auf diesen Button wird der Vorgang abgebrochen, und der Prozess 
 Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen mehr erforderlich sind, wird die Rechnung automatisch bestätigt und erfordert keine manuelle Überprüfung durch einen Administrator.
 
 ### 2. Eingereichte Rechnungen
-![image](https://github.com/user-attachments/assets/8e781675-76c5-4902-9ad2-431a2aae4dd6)
+![Screenshot 2025-05-18 203735](https://github.com/user-attachments/assets/1d9647f2-6299-404d-80db-b8fedc784883)
+
 #### 1.) Anträge können bearbeitet werden
 
 #### 2.) Filter öffnen
-![image](https://github.com/user-attachments/assets/b4bd6f6a-7712-4e49-8fbf-927593d42b68)
+![Screenshot 2025-05-18 204203](https://github.com/user-attachments/assets/a01f4cf4-ed48-4dc0-abc6-ef1c23b8633f)
+
    1. nach Rechnungs-ID filtern
    2. nach Rechnungstyp filtern (SUPERMARKET | RESTAURANT)
    3. nach Rechnungsstatus filtern (ACCEPTED | PENDING | DENIED)
@@ -94,10 +95,10 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 
 #### 3.) Zurück zu User Aktionen
 
-### 3. Genehmigte Rechnungen
-### 4. Offene Anträge
-### 5. Eingereichte Rechnungen bearbeiten
-![Screenshot 2025-04-21 191949](https://github.com/user-attachments/assets/ff0e5445-5e29-4293-a1ac-ed14765f36f5)
+### 3. Eingereichte Rechnungen bearbeiten
+
+![Screenshot 2025-05-18 204342](https://github.com/user-attachments/assets/0f3010a9-d620-4192-bafa-4cd50509ab37)
+
  #### 1.) RechnungsID
  Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
  
@@ -119,12 +120,13 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
  #### 7.) Save
  Der Benutzer kann die bearbeitete Rechnung speichern.
  
-### 6. Gesamterstttungsbetrag
-### 7. Mitteilungszentrale
- ![Screenshot 2025-04-21 192311](https://github.com/user-attachments/assets/962c9c25-6c9f-4da2-89cb-50bde1805c59)
- 
+### 4. Mitteilungszentrale
+ ![Screenshot 2025-05-18 204500](https://github.com/user-attachments/assets/7b6ad83b-0f18-4344-a09f-43d3344a93fb)
+
  #### 1.) Text und Änderungszeitpunkt 
- Der Benutzer sieht eine Liste von Nachrichten, die verschiedene Änderungen an Rechnungen betreffen. Jede Nachricht beschreibt eine Änderung des Status einer Rechnung, wie z.B. eine Änderung von "PENDING" auf "ACCEPTED" oder das Einreichen einer neuen Rechnung. Jede Nachricht enthält die Rechnungs-ID, den Betrag, den Refund und den Status.
+ Der Benutzer sieht eine Liste von Nachrichten, die verschiedene Änderungen an Rechnungen betreffen. Jede Nachricht beschreibt eine Änderung des 
+ Status einer Rechnung, wie z.B. eine Änderung von "PENDING" auf "ACCEPTED" oder das Einreichen einer neuen Rechnung. Jede Nachricht enthält die 
+ Rechnungs-ID, den Betrag, den Refund und den Status.
  
  Der Benutzer sieht den Zeitstempel, wann die jeweilige Änderung vorgenommen wurde. Das hilft, den Verlauf der Änderungen nachzuvollziehen.
  
