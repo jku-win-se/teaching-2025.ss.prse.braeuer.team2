@@ -1,5 +1,5 @@
 # Klasse Database
-Verantworklich für die Interaktion mit der Datenbank.
+Verantwortlich für die Interaktion mit der Datenbank.
 
 ## Methodenübersicht 
 static boolean deleteImage(String imageUrl) // Fotos aus der Datenbank löschen
@@ -31,7 +31,7 @@ static String getInvoiceUsername(int identifier) // get username of the invoice
 
 
 # Login
-Verantworlich für den Login.
+Verantwortlich für den Login.
 
 ## Methodenübersicht 
 static boolean validateLogin(String email, String password, StringBuilder userRole, StringBuilder accountStatus) // Einloggen
