@@ -221,10 +221,10 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 
 Anträge können bearbeitet, Filter können über den Suchbutton eingestellt und zur vorherigen Seite zurückgekehrt werden.
 
-#### 1.) Rechnungen bearbeiten:
+#### 1.) Rechnungen bearbeiten
 ![Screenshot 2025-05-18 205657](https://github.com/user-attachments/assets/f50d67b0-a748-4fda-82cb-2c013a6ea1b8)
 
-#### 1.) RechnungsID:
+#### 1.) RechnungsID
 Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
 
 #### 2.) Betrag
@@ -267,6 +267,7 @@ Der Benutzer kann die änderungen speichern.
    4. nach Rechnungsstatus filtern (ACCEPTED | PENDING | DENIED)
    5. nur nach aktuellem Monat filtern
    6. Filter anwenden
+   
 3. Zurück zu Admin Aktionen
 
 ### 3. Statistik
@@ -301,7 +302,6 @@ Angezeigt wird die Verteilung der letzten 12 Monate – abhängig von den gewäh
 
 #### 6.) Export
 Es stehen zwei Buttons zur Verfügung – einer für den PDF-Export und einer für den CSV-Export. Nach dem Klick kann der gewünschte Speicherort ausgewählt werden. Die CSV-Datei ist so optimiert, dass sie sich direkt als Tabelle in Excel öffnen lässt. Beim PDF-Export werden sowohl das Balkendiagramm als auch eine Tabelle mit den entsprechenden Daten exportiert.
-
 
 ### 4. Erstattung bearbeiten
 
