@@ -2,6 +2,35 @@
 
 ## Installation
 
+1.) Lade Java Runtime Environment 21 oder höher herunter bzw. überprüfe ob es vorhanden ist 
+
+2.) Lade die Lunchify .jar-Datei herunter.
+
+3.) Starte das Programm mit einem Doppelklick.
+
+Falls dies nicht funktionieren sollte kann die .jar_Datei auch so geöffnet werden.
+
+1.) Lade zusaätlich zu Java auch noch javafx-sdk herunter
+
+2.) Erstelle eine batch-datei mit diesem Inhalt:
+
+@echo off
+set PATH_TO_FX="<Pfad zu javafxsdk>"
+set PATH_TO_JAR="<Pfad zu .jar Datei" 
+java --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -jar %PATH_TO_JAR%
+pause
+
+z.B.:
+
+@echo off
+set PATH_TO_FX="C:\Users\Lukas\Documents\javafx-sdk-21.0.6\lib"
+set PATH_TO_JAR="%~dp0lunchify.jar"   Das JAR im gleichen Verzeichnis wie die Batch-Datei
+java --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -jar %PATH_TO_JAR%
+pause
+
+3.) Doppelklick auf batch-Datei
+
+
 ## Login
 ![image](https://github.com/user-attachments/assets/2a8867b7-38f8-4bb9-afb5-7450392d97be)
 
