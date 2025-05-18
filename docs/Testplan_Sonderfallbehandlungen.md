@@ -1,3 +1,10 @@
+# OCR Test
+![image](https://github.com/user-attachments/assets/952e15cb-b0fc-47ea-89c6-da56036be6df)
+
+Der Test testInvoiceExists_False überprüft, ob die Methode invoiceExists korrekt erkennt, dass für einen bestimmten Benutzer an einem bestimmten Datum keine Rechnung in der Datenbank vorhanden ist. Dazu wird eine Datenbankverbindung geöffnet. 
+
+Dieses Beispiel wurde so gewählt, dass in der Datenbank keine Rechnung für diesen Benutzer an diesem Datum existiert. Die Methode führt eine SQL-Abfrage aus, die prüft, ob mindestens ein Eintrag in der Tabelle rechnungen mit dem angegebenen Benutzernamen und Datum vorhanden ist, und gibt entsprechend true oder false zurück. Im Test wird mit assertFalse überprüft, dass die Methode false zurückgibt, also bestätigt, dass keine Rechnung existiert. Damit stellt der Test sicher, dass die Methode invoiceExists korrekt funktioniert und keine falschen Treffer meldet, wenn tatsächlich keine entsprechende Rechnung vorliegt.
+
 # Login Test
 ![image](https://github.com/user-attachments/assets/75422ad2-ce93-4e40-aaf1-7ddab5e22c92)
 
