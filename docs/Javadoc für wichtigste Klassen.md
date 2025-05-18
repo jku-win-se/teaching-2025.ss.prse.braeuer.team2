@@ -18,6 +18,7 @@ static String uploadImage(File imageFile) // lädt das Bild/PDF der Rechnung in 
 
 static void uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile, Double refund, SubmitBillController controller) // Lädt die Rechnungsdaten in die Tabelle Rechnungen
 
+// Getter
 static LocalDate getInvoiceDate(int identifier) // Rechnungsdatum erahlten
 
 static String getInvoiceImage(int identifier) // Foto von Rechnung erhalten
@@ -28,7 +29,30 @@ static String getInvoiceStatus(int identifier) //get status of the Invoice
 
 static String getInvoiceUsername(int identifier) // get username of the invoice
 
-- # Abstract Klasse Controller
+
+# Login
+Verantworlich für den Login.
+
+## Methodenübersicht 
+static boolean validateLogin(String email, String password, StringBuilder userRole, StringBuilder accountStatus) // Einloggen
+
+static void logout() // Ausloggen
+
+//Getter
+static String getCurrentUserEmail()
+ 
+static String getCurrentUsername()
+ 
+static Role getCurrentUserRole()
+ 
+static Status getCurrentUserStatus()
+ 
+static int getMaxFailedAttempts()
+ 
+static String getUsername()
+
+
+# Abstract Klasse Controller
 Dient als Vorlage für alle verwendeten Controller Klassen.
 
 ## Methodenübersicht 
