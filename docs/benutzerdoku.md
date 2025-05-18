@@ -32,19 +32,19 @@ pause
 
 
 ## Login
-![image](https://github.com/user-attachments/assets/2a8867b7-38f8-4bb9-afb5-7450392d97be)
+![Screenshot 2025-05-18 200756](https://github.com/user-attachments/assets/4edf5d1c-c83d-40bf-aa1a-5921befd3f67)
 
 1. E-Mail-Adresse eingeben
 2. Passwort eingeben 
 3. Klick auf Login Button, um zu verifizieren
 
 ## User
-![image](https://github.com/user-attachments/assets/e1bbba09-26ee-4ba5-baca-5fb2fdc8a41a)
+![Screenshot 2025-05-18 203443](https://github.com/user-attachments/assets/1ac8b99d-92b8-4cfc-b081-58cf3aab06b9)
+
 
 ### 1. Rechnung einreichen
 
-![Rechnung-hochladen](https://github.com/user-attachments/assets/6eb93743-ce0c-4429-9383-571e73d2070a)
-
+![Screenshot 2025-05-18 203606](https://github.com/user-attachments/assets/2ff53a3a-4832-43fe-b6ea-b42889274c62)
 
 #### 1.)  Datei auswählen
 Nach dem Klick auf den Button öffnet sich der Datei-Explorer. Dort kann eine Rechnung im PDF-, PNG- oder JPEG-Format hochgeladen werden.
@@ -322,6 +322,10 @@ Der Benutzer (Admin) kann den Monat und das Jahr auswählen, für den er die Dat
  
 #### 2.) JSON Export 
 Der Admin kann die Daten im JSON-Format exportieren. Durch den Export im JSON-Format erhält der Admin eine strukturierte und maschinenlesbare Datei, die für die Weiterverarbeitung oder Analyse in anderen Systemen genutzt werden kann. Der Nutzer kann sich den Speicherort selber aussuchen. Es wird unter dem Format "invoices-Monatsnamen-Jahr.json" abgespeichert.
+
+### 6. Mitteilungszentrale
+![Screenshot 2025-05-18 200626](https://github.com/user-attachments/assets/d5ac599f-a30c-4de8-92a5-fb3238226ccf)
+Der Admin bekommt eine Benachrichtung, wenn ein User mehrmals seine eigenen Rechnungen bearbeitet hat. Er kann über den Link (1) auf das Profil direkt zugreifen. Man sieht desweiteren auch den Zeitpunkt der Nachricht. Diese Nachricht kann auch wieder gelöscht werden (3).
 
 ### 6. Zurück zu Admin Rollenauswahl
 
