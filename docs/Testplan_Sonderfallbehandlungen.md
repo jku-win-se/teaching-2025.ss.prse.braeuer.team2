@@ -1,3 +1,10 @@
+# Invoice Test
+![image](https://github.com/user-attachments/assets/87b6119d-01c3-45ce-9eff-6f6dd7179665)
+Der Test testUpdateInvoiceRefundInvalid überprüft, ob die Methode updateInvoice korrekt auf einen ungültigen oder fehlerhaften Aktualisierungsversuch einer Rechnung reagiert.
+
+Im Test wird die Methode updateInvoice mit spezifischen Parametern aufgerufen. Dabei wird erwartet, dass die Aktualisierung fehlschlägt, weshalb mit assertFalse(success) geprüft wird, dass die Methode false zurückgibt. Dieser Test sichert ab, dass die updateInvoice-Methode bei ungültigen Eingaben oder nicht erfüllten Bedingungen die Aktualisierung verweigert und keinen Erfolg meldet. So wird gewährleistet, dass fehlerhafte Daten nicht in die Datenbank übernommen werden.
+
+
 # OCR Test
 ![image](https://github.com/user-attachments/assets/952e15cb-b0fc-47ea-89c6-da56036be6df)
 
@@ -22,3 +29,11 @@ Der Test CalculateRefundSupermarktLower überprüft, ob die Rückerstattungsfunk
 Im Test wird die Methode refundCalculation mit folgenden Parametern aufgerufen: ein Rechnungsbetrag von 2,0, der Rechnungstyp SUPERMARKET sowie das Rechnungsdatum 1. Januar 1999.
 
 Da der Rückerstattungssatz für Supermarkt-Rechnungen, der über die Methode getRefundForDate ermittelt wird, in der Regel höher als 2,0 ist, prüft der Test, ob die tatsächlich zurückerstattete Summe auf den tatsächlichen Rechnungsbetrag begrenzt wird. Das erwartete Ergebnis ist, dass die Methode den Wert 2,0 zurückgibt, also den vollen Rechnungsbetrag, da die Rückerstattung niemals den Rechnungsbetrag übersteigen darf. Der Test stellt somit sicher, dass die Rückerstattung nicht mehr als die Rechnungssumme betragen kann, selbst wenn der Erstattungssatz höher liegt.
+
+
+# Export Test
+![image](https://github.com/user-attachments/assets/00600aee-2fdb-4cda-b736-73a7a65677ab)
+
+Der Test testExportIncludesInvoicesAndSum überprüft die Funktionalität des Exports, welcher die eingereichten Rechnungen für einen bestimmten Monat aus der Datenbank abruft und dabei eine Gesamtsumme der Rückerstattungen berechnet. 
+
+Im Test wird zunächst die Methode getInvoicesForMonth für April 2025 aufgerufen, die eine Instanz von InvoicesTotal zurückliefert. Diese enthält eine Liste von Rechnungen für den angegebenen Monat sowie eine Gesamtsumme der Rückerstattungsbeträge. Der Test prüft zunächst ob die Liste der Rechnungen mindestens einen Eintrag enthält. Anschließend wird die Summe der Rückerstattungswerte aller Rechnungen in der Liste berechnet, indem alle refund-Werte aufsummiert werden. Zum Schluss wird überprüft, dass diese berechnete Summe mit dem in InvoicesTotal gespeicherten Gesamtbetrag (totalRefund) übereinstimmt. Dabei wird eine kleine Toleranz (delta) von 0,01 zugelassen, um Rundungsfehler zu berücksichtigen. Damit stellt der Test sicher, dass die Exportfunktion die Rechnungen vollständig und korrekt abruft und dass die aggregierte Rückerstattungssumme im Ergebnis korrekt berechnet und ausgewiesen wird.
