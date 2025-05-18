@@ -47,7 +47,7 @@ public class InvoiceScan {
             initializeOCR(); // Initialize OCR by extracting traineddata from the JAR
         } catch (IOException e) {
             e.printStackTrace();
-            controller.displayMessage("Fehler beim Laden der Tesseract-Sprachdateien.", "red");
+            controller.displayMessage("Error loading Tesseract language files.", "red");
         }
 
         tesseract.setLanguage("deu+eng"); // Set language to German and English
@@ -133,25 +133,25 @@ public class InvoiceScan {
 
         // If sum is not correct, display error message and prompt users to enter it manually
         if (!isValidSum(sum)) {
-            controller.displayMessage("Betrag konnte nicht gelesen werden.", "red");
+            controller.displayMessage("Amount could not be read.", "red");
             sum = controller.requestManualSum();
         }
 
         // If date is null, display error message and prompt users to enter it manually
         if (lDate == null) {
-            controller.displayMessage("Datum konnte nicht gelesen werden.", "red");
+            controller.displayMessage("Date could not be read.", "red");
             date = controller.requestManualDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
             lDate = stringToDate(date);
         }
 
         // If date is not within the current month, display error message
         if (!isWithinCurrentMonth(lDate)) {
-            controller.displayMessage("Datum muss innerhalb des aktuellen Monats liegen.", "red");
+            controller.displayMessage("Date must be within the current month.", "red");
         }
 
         // If type is UNDEFINED, invoice could not be categorized
         if (type == InvoiceType.UNDEFINED) {
-            controller.displayMessage("Typ konnte nicht erkannt werden.", "red");
+            controller.displayMessage("Type could not be recognized.", "red");
             type = controller.requestManualType();
         }
 

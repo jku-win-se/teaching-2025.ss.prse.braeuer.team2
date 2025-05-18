@@ -25,7 +25,7 @@ public class UserSearchController extends Controller {
         String username = searchField.getText().trim();
 
         if (username.isEmpty()) {
-            showError("Eingabefehler", "Bitte geben Sie einen Benutzernamen ein");
+            showError("Input error", "Please enter a username!");
             return;
         }
 
@@ -41,16 +41,16 @@ public class UserSearchController extends Controller {
                 controller.loadUserData(username);
 
                 Stage stage = new Stage();
-                stage.setTitle("Benutzerdetails: " + username);
+                stage.setTitle("User details: " + username);
                 stage.setScene(new Scene(root));
                 stage.show();
             } else {
-                showInfo("Info", "Benutzer nicht gefunden");
+                showInfo("Info", "User not found");
             }
         } catch (SQLException e) {
-            showError("Datenbankfehler", "Fehler bei der Benutzersuche: " + e.getMessage());
+            showError("Database error", "Error searching for users: " + e.getMessage());
         } catch (IOException e) {
-            showError("Fehler", "Fenster konnte nicht geöffnet werden: " + e.getMessage());
+            showError("Error", "Window could not be opened: " + e.getMessage());
         }
     }
 

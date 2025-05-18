@@ -95,14 +95,14 @@ public class EditInvoiceController extends Controller{
 
         // Prüfen, ob NUR gültige Zahlen drin ist (z.B. 12, 12.0, 12.34)
         if (!input.matches("\\d+(\\.\\d{1,2})?")) {
-            showError("Fehler", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
+            showError("Error", "Enter a valid amount! E.g. 12.00");
             return;
         }
 
         try {
             betrag = Double.parseDouble(textFieldBetrag.getText());
         } catch (NumberFormatException exc) {
-            showError("Error", "Bitte geben Sie einen gültigen Betrag ein! Z.B. 12.00");
+            showError("Error", "Enter a valid amount! E.g. 12.00");
             return;
         }
 
@@ -155,7 +155,7 @@ public class EditInvoiceController extends Controller{
         }
 
         if (betrag < 0) {//negativer Rechnungsbetrag
-            showError("Error", "Negative Beträge sind nicht erlaubt!");
+            showError("Error", "Negative amounts are not allowed!");
             return; // Update wird abgebrochen
         }
 
@@ -164,14 +164,14 @@ public class EditInvoiceController extends Controller{
 
         boolean success = updateInvoice(betrag, datum, typ, username, status, image, refund, id);
         if (success) {
-            showSuccess("Erfolg", "Rechnung wurde erfolgreich aktualisiert. Folgende Werte sind nun eingetragen:" +
+            showSuccess("Success", "The invoice was successfully updated. The following values are now inserted:" +
                     "\nID: " + id +
-                    "\nBetrag: " + betrag +
-                    "\nDatum: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
+                    "\nAmount: " + betrag +
+                    "\nDate: " + datum + //Status wurde hier rausgenommen, wegen Platzgründen in der Erfolgsnachricht
                     "\nStatus: " + status +
                     "\nRefund: " + refund);
         } else {
-            showError("Fehler", "Rechnung konnte nicht aktualisiert werden.");
+            showError("Error", "Invoice could not be updated!");
         }
     }
 

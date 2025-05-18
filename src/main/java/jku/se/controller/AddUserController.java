@@ -47,15 +47,15 @@ public class AddUserController extends Controller {
 
             if (success) {
                 Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Erfolg");
+                successAlert.setTitle("Success");
                 successAlert.setHeaderText(null);
-                successAlert.setContentText("Benutzer wurde angelegt");
+                successAlert.setContentText("User has been created");
                 successAlert.showAndWait();
 
                 switchScene(event, "userOverviewDashboard.fxml");
             }
         } catch (SQLException e) {
-            showError("Datenbankfehler", "Fehler beim Anlegen: " + e.getMessage());
+            showError("Database error", "Error while creating: " + e.getMessage());
         } catch (IOException e) {
             showError("Navigation Error", "Could not return to user overview");
         }

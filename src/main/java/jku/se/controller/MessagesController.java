@@ -67,7 +67,7 @@ public class MessagesController extends Controller{
             try {
                 deleteMessage(id);
             } catch (SQLException e) {
-                showError("Fehler", "Datenbankfehler beim Löschen der Nachricht: " + e.getMessage());
+                showError("Error", "Database error when deleting the message: " + e.getMessage());
             }
         });
 
@@ -90,10 +90,10 @@ public class MessagesController extends Controller{
                 //showAlertSuccess("Erfolg", "Nachricht erfolgreich gelöscht.");
                 loadAndDisplayMessages(); // Nach dem Löschen die Liste neu laden
             } else {
-                showError("Fehler", "Die Nachricht konnte nicht gelöscht werden, da sie bereits gelöscht wurde.");
+                showError("Error", "The message could not be deleted because it has already been deleted.");
             }
         } catch (SQLException e) {
-            showError("Fehler", "Nachricht konnte nicht gelöscht werden: " + e.getMessage());
+            showError("Error", "Message could not be deleted: " + e.getMessage());
         }
     }
 

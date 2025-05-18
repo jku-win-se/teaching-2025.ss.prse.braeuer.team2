@@ -89,22 +89,26 @@ public class RefundController extends Controller {
 
             // Validate that both values are positive
             if (restaurantValue < 0 || supermarketValue < 0) {
-                showAlert("Ungültige Werte", "Beträge müssen positiv sein.", Alert.AlertType.ERROR);
+                showAlert("Invalid values", "Amounts have to be positive.", Alert.AlertType.ERROR);
                 return;
             }
 
             // Show confirmation dialog to the user
             Alert confirmation = new Alert(Alert.AlertType.CONFIRMATION);
-            confirmation.setTitle("Bestätigung");
-            confirmation.setHeaderText("Rückerstattungssätze aktualisieren");
+            confirmation.setTitle("Confirmation");
+            confirmation.setHeaderText("Update refund rates");
             confirmation.setContentText(String.format(
-                    "Neue Werte:\nSupermarkt: %.2f€\nRestaurant: %.2f€\n\nFortfahren?",
+                    "New values:\n" +
+                            "Supermarket: %.2f€\n" +
+                            "Restaurant: %.2f€\n" +
+                            "\n" +
+                            "Continue?",
                     supermarketValue, restaurantValue));
 
             // If user confirms, save the new values
             if (confirmation.showAndWait().orElseThrow() == ButtonType.OK) {
                 Refund.setDailyRefunds(supermarketValue, restaurantValue, LocalDate.now(), Login.getCurrentUsername());
-                Controller.showSuccess("Erfolg", "Rückerstattungssätze wurden aktualisiert.");
+                Controller.showSuccess("Success", "Refund was updated succesfully.");
 
                 // Refresh both the input fields and the table view
                 refreshRefundValues();
@@ -112,12 +116,12 @@ public class RefundController extends Controller {
             }
 
         } catch (NumberFormatException e) {
-            showAlert("Eingabefehler", "Ungültige Zahleneingabe. Bitte Zahlen im Format 12.34 oder 12,34 eingeben.", Alert.AlertType.ERROR);
+            showAlert("Input error", "Invalid number input. Please enter numbers like '12.34' or '12,34'.", Alert.AlertType.ERROR);
         } catch (SQLException e) {
-            showAlert("Datenbankfehler", "Fehler beim Speichern: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Database error", "Error saving: " + e.getMessage(), Alert.AlertType.ERROR);
             e.printStackTrace();
         } catch (Exception e) {
-            showAlert("Fehler", "Unbekannter Fehler: " + e.getMessage(), Alert.AlertType.ERROR);
+            showAlert("Error", "Unknown error: " + e.getMessage(), Alert.AlertType.ERROR);
         }
     }
 

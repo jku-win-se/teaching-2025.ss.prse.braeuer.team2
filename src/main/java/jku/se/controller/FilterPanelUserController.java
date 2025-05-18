@@ -68,7 +68,7 @@ public class FilterPanelUserController extends Controller {
             try {
                 mainController.loadUserInvoices();
             } catch (SQLException e) {
-                showError("Fehler", "Daten konnten nicht geladen werden");
+                showError("Fehler", "Data could not be loaded");
             }
         }
     }

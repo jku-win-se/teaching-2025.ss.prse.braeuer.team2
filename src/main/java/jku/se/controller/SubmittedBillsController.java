@@ -159,7 +159,7 @@ public class SubmittedBillsController extends Controller {
             controller.setMainController(this);
 
             filterStage = new Stage();
-            filterStage.setTitle("Rechnungen filtern");
+            filterStage.setTitle("Filter invoices");
             filterStage.setScene(new Scene(root));
             //filterStage.initModality(Modality.APPLICATION_MODAL);
             filterStage.initModality(Modality.NONE); // <- Changed to NON-MODAL
@@ -168,7 +168,7 @@ public class SubmittedBillsController extends Controller {
             filterStage.show();
 
         } catch (IOException e) {
-            showError("Fehler", "Filter konnte nicht geöffnet werden");
+            showError("Error", "Filter could not be opened");
         }
     }
 }
