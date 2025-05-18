@@ -28,7 +28,7 @@ set PATH_TO_JAR="%~dp0lunchify.jar"   Das JAR im gleichen Verzeichnis wie die Ba
 java --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -jar %PATH_TO_JAR%
 pause
 
-3.) Doppelklick auf batch-Datei
+3.) Starte das Programm mit einem Doppelklick auf die batch-Datei
 
 
 ## Login
