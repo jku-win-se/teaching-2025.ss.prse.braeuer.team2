@@ -119,15 +119,20 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 #### Admin Aktionen
 ![image](https://github.com/user-attachments/assets/385f3ea8-bf9d-48c4-a028-4959c441b365)
 ### 1. User anzeigen
-![image](https://github.com/user-attachments/assets/d0c059ce-abb2-4eab-a731-303db6c9e645)
-#### 1. User suchen
+<img width="350" alt="image" src="https://github.com/user-attachments/assets/147c6332-22be-4d0c-8b31-7c59214720ad" />
+
+#### 1. User anzeigen
+<img width="350" alt="image" src="https://github.com/user-attachments/assets/a116bbb5-1893-4af5-b243-976601a46e6b" />
+
+#### 2. User suchen
 ![image](https://github.com/user-attachments/assets/6897e135-2cb2-4ca4-9388-a78d24201508)
 
  1.) Nutzernamen eingeben
  
  2.) Suchen --> neues Fenster öffnet sich
- ![image](https://github.com/user-attachments/assets/aea05272-e43b-49d7-95a4-3b8a2be958dc)
  
+ <img width="298" alt="image" src="https://github.com/user-attachments/assets/4c66b737-472a-4ac3-aa80-5e29832e4700" />
+
   1. Vorname (änderbar)
 
   2. Nachname (änderbar)
@@ -135,18 +140,26 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
   3. Username (nicht änderbar)
      
   4. Email (änderbar)
+
+  5. Password (änderbar)
      
-  5. Rolle (änderbar: USER | ADMIN)
+  6. Rolle (änderbar: USER | ADMIN)
       
-  6. Status (änderbar: ACTIVE | BLOCKED)
+  7. Status (änderbar: ACTIVE | BLOCKED)
       
-  7. Fehlgeschlagene Anmeldeversuche (änderbar - ab 10 Benutzer --> BLOCKED)
+  8. Fehlgeschlagene Anmeldeversuche (änderbar - ab 10 Benutzer --> BLOCKED)
       
-  8. Erstellungsdatum des Benutzers (nicht änderbar)
+  9. Erstellungsdatum des Benutzers (nicht änderbar)
+
+  10. Speicher
+
+  11. Abbrechen
+
+  12. Zurück
 
  3.) Zurück zu User suchen Startseite
 
-#### 2. User hinzufügen
+#### 3. User hinzufügen
 ![image](https://github.com/user-attachments/assets/ae2d6be2-5ef7-4122-8117-c1dfe4d85c33)
 
 1.) Vorname 
@@ -167,6 +180,9 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 
 9.) Abbrechen
 
+#### 4. Logout
+
+#### 5. Zurück zum Admin Dashboard
 
 ### 2. Eingereichte Rechnungen bearbeiten
 ![image](https://github.com/user-attachments/assets/f634670a-fdb4-4910-bde2-b7c90cc4cc77)
