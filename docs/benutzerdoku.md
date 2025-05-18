@@ -148,7 +148,8 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 3. Logout
 
 #### Admin Aktionen
-![image](https://github.com/user-attachments/assets/385f3ea8-bf9d-48c4-a028-4959c441b365)
+![Screenshot 2025-05-18 200806](https://github.com/user-attachments/assets/c7be5ac2-9e88-442e-9702-bae7dd650880)
+
 ### 1. User anzeigen
 <img width="350" alt="image" src="https://github.com/user-attachments/assets/147c6332-22be-4d0c-8b31-7c59214720ad" />
 
@@ -156,7 +157,7 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 <img width="350" alt="image" src="https://github.com/user-attachments/assets/a116bbb5-1893-4af5-b243-976601a46e6b" />
 
 #### 2. User suchen
-![image](https://github.com/user-attachments/assets/6897e135-2cb2-4ca4-9388-a78d24201508)
+![Screenshot 2025-05-18 205151](https://github.com/user-attachments/assets/d7d1572f-b910-4ded-936c-d6c25a975431)
 
  1.) Nutzernamen eingeben
  
@@ -191,7 +192,7 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
  3.) Zurück zu User suchen Startseite
 
 #### 3. User hinzufügen
-![image](https://github.com/user-attachments/assets/ae2d6be2-5ef7-4122-8117-c1dfe4d85c33)
+![Screenshot 2025-05-18 205319](https://github.com/user-attachments/assets/f8f2a13a-5df1-4fd9-b6bd-ea8689b9235a)
 
 1.) Vorname 
 
@@ -216,11 +217,12 @@ Wenn alle Daten von der Software korrekt erkannt wurden und keine Änderungen me
 #### 5. Zurück zum Admin Dashboard
 
 ### 2. Eingereichte Rechnungen bearbeiten
-![image](https://github.com/user-attachments/assets/f634670a-fdb4-4910-bde2-b7c90cc4cc77)
+![Screenshot 2025-05-18 205436](https://github.com/user-attachments/assets/8e265104-d622-477c-a206-d14e27d67663)
 
-1. Anträge können bearbeitet werden
+Anträge können bearbeitet, Filter können über den Suchbutton eingestellt und zur vorherigen Seite zurückgekehrt werden.
 
-![Screenshot 2025-04-21 185218](https://github.com/user-attachments/assets/5633560d-a176-47d0-8248-d8c898beaf37)
+#### 1.) Rechnungen bearbeiten:
+![Screenshot 2025-05-18 205657](https://github.com/user-attachments/assets/f50d67b0-a748-4fda-82cb-2c013a6ea1b8)
 
 #### 1.) RechnungsID:
 Der Benutzer kann die ID der Rechnung sehen, die er im Moment bearbeitet.
@@ -257,7 +259,7 @@ Der Benutzer kann die änderungen speichern.
    
 ### 2. Filter öffnen
 
-![image](https://github.com/user-attachments/assets/575d31b6-e7f1-4a25-b365-971d57f18bbd)
+![Screenshot 2025-05-18 204203](https://github.com/user-attachments/assets/8f1d4455-4b45-43c4-a289-687a02fa67bd)
 
    1. nach Rechnungs-ID filtern
    2. nach Rechnungstyp filtern (SUPERMARKET | RESTAURANT)
@@ -268,8 +270,7 @@ Der Benutzer kann die änderungen speichern.
 3. Zurück zu Admin Aktionen
 
 ### 3. Statistik
-![Statistik](https://github.com/user-attachments/assets/73ea8418-7476-4156-93b8-64b9c9efc4b3)
-
+![Screenshot 2025-05-18 205946](https://github.com/user-attachments/assets/f294f8da-2c75-48b1-81ed-a81e25add6d0)
 
 #### 1.) Statistik-Filter
 Hier kann man filtern zwischen:
