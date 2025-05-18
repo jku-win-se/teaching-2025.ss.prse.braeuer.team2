@@ -305,7 +305,7 @@ Es stehen zwei Buttons zur Verfügung – einer für den PDF-Export und einer f�
 
 ### 4. Erstattung bearbeiten
 
-![Refund](https://github.com/user-attachments/assets/7e2157d1-5738-4a6b-82bc-8d75b64b2024)
+![Screenshot 2025-05-18 210104](https://github.com/user-attachments/assets/e57af506-c580-4378-b213-675976a23fc9)
 
 #### 1.) Erstattung-Restaurant
 Hier siehst du den aktuellen Erstattungsbetrag für Restaurant-Rechnungen. Du kannst ihn ändern, indem du einen neuen Wert eingibst und auf den Button „Aktualisieren“ klickst.
@@ -330,6 +330,6 @@ Der Admin kann die Daten im JSON-Format exportieren. Durch den Export im JSON-Fo
 ![Screenshot 2025-05-18 200626](https://github.com/user-attachments/assets/d5ac599f-a30c-4de8-92a5-fb3238226ccf)
 Der Admin bekommt eine Benachrichtung, wenn ein User mehrmals seine eigenen Rechnungen bearbeitet hat. Er kann über den Link (1) auf das Profil direkt zugreifen. Man sieht desweiteren auch den Zeitpunkt der Nachricht. Diese Nachricht kann auch wieder gelöscht werden (3).
 
-### 6. Zurück zu Admin Rollenauswahl
+### 7. Zurück zu Admin Rollenauswahl
 
-### 7. Logout
+### 8. Logout
