@@ -12,3 +12,27 @@ protected void switchScene(javafx.event.ActionEvent event, String fxmlFile) // z
 
 ### Bekannte direkte Unterklassen:
 AddUserController, AdminPanelController, DashboardAdminController, DashboardUserController, EditInvoiceController, EditInvoiceUserController, ExportDataController, FilterPanelAdminController, FilterPanelUserController, LoginController, MessageAnomalyController, MessagesController, RefundController, RequestManagementController, StatisticsController, SubmitBillController, SubmittedBillsController, UserOverviewDashboardController, UserSearchController, UserSearchResultsController, UserTabularController
+
+
+# Enums
+## InvoiceStatus
+Rechnungsstatus:
+- ACCEPTED
+- DENIED
+- PENDING
+
+## InvoiceType
+Rechnungsart: 
+- RESTAURANT
+- SUPERMARKET
+- UNDEFINED
+ 
+## Role
+Rolle des Benutzeraccounts:
+- ADMIN
+- USER
+
+## Status
+Status des Benutzeraccounts:
+- ACTIVE
+- BLOCKED
