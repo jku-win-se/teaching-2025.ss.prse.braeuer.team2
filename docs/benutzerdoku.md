@@ -8,9 +8,10 @@
 
 3.) Starte das Programm mit einem Doppelklick.
 
+
 Falls dies nicht funktionieren sollte kann die .jar_Datei auch so geöffnet werden.
 
-1.) Lade zusaätlich zu Java auch noch javafx-sdk herunter
+1.) Lade zusätlich zu Java auch noch javafx-sdk herunter
 
 2.) Erstelle eine batch-datei mit diesem Inhalt:
 
