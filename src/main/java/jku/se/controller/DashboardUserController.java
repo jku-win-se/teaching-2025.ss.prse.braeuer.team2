@@ -9,12 +9,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import static jku.se.Login.getCurrentUsername;
 import javafx.scene.control.Label;
+import jku.se.AccountData;
 import jku.se.DashboardUser;
+import jku.se.Login;
+import jku.se.UserManagement;
 
 
 public class DashboardUserController extends Controller {
@@ -103,6 +108,28 @@ public class DashboardUserController extends Controller {
             checkForNewMessages();
         } catch (SQLException e) {
             showError("Database Error", "Failed to check for new messages: " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleChangePassword(ActionEvent event) {
+        try {
+            String currentUsername = Login.getCurrentUsername();
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/userChangePassword.fxml"));
+            Parent root = loader.load();
+
+            UserChangePasswordController controller = loader.getController();
+            controller.loadUserData(currentUsername); // Ensure this method exists in the controller
+
+            Stage stage = new Stage();
+            stage.setTitle("Change Password for: " + currentUsername);
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Block interaction with parent window
+            stage.show();
+
+        } catch (IOException e) {
+            showError("Error", "Failed to open password change window: " + e.getMessage());
         }
     }
 }

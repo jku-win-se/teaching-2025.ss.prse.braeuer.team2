@@ -24,7 +24,7 @@ public class LunchifyApplication extends Application {
         stage.setScene(scene);
         stage.setTitle("Lunchify - Login");
         stage.setResizable(false);
-        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.DECORATED);
 
         stage.show();
     }
