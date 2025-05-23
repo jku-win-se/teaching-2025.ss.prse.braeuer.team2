@@ -1,6 +1,7 @@
 package jku.se.controller;
 
 
+import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -60,10 +61,10 @@ public class AdminPanelController extends Controller{
 
         if (hasNewMessages) {
             // Setze den Button auf rot, wenn neue Nachrichten vorhanden sind
-            messages.setStyle("-fx-background-color: #7734db;");
+            messages.setStyle("-fx-background-color: #7734db; -fx-text-fill: white;");
         } else {
             // Setze den Button auf die normale Farbe zurück, wenn keine neuen Nachrichten vorhanden sind
-            messages.setStyle("-fx-background-color: lightgray;");
+            messages.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
         }
     }
 
