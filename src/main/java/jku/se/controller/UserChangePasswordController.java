@@ -16,7 +16,7 @@ public class UserChangePasswordController extends Controller {
 
     public void loadUserData(String username) {
         this.username = username;
-        usernameLabel.setText("Change password" );
+        usernameLabel.setText("Change password");
     }
 
     @FXML

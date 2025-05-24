@@ -20,6 +20,7 @@ public class UserSearchController extends Controller {
     @FXML
     private TextField searchField;
 
+    // Mit Hilfe von KI erstellt
     @FXML
     private void searchUser() {
         String username = searchField.getText().trim();
