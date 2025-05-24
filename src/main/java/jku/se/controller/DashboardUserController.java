@@ -112,7 +112,7 @@ public class DashboardUserController extends Controller {
     }
 
     @FXML
-    private void handleChangePassword(ActionEvent event) {
+    private void handleChangePassword() {
         try {
             String currentUsername = Login.getCurrentUsername();
 
@@ -120,12 +120,12 @@ public class DashboardUserController extends Controller {
             Parent root = loader.load();
 
             UserChangePasswordController controller = loader.getController();
-            controller.loadUserData(currentUsername); // Ensure this method exists in the controller
+            controller.loadUserData(currentUsername);
 
             Stage stage = new Stage();
-            stage.setTitle("Change Password for: " + currentUsername);
+            stage.setTitle("Change Password");
             stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL); // Block interaction with parent window
+            stage.initModality(Modality.APPLICATION_MODAL); // Blocking the window in the backround
             stage.show();
 
         } catch (IOException e) {
