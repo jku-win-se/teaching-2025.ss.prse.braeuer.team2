@@ -1,7 +1,5 @@
 package jku.se.controller;
 
-
-import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -12,7 +10,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import jku.se.DashboardUser;
 
 import static jku.se.Login.getCurrentUsername;
 

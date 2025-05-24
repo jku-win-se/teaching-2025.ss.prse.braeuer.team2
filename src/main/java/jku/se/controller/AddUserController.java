@@ -22,20 +22,20 @@ public class AddUserController extends Controller {
 
     @FXML
     public void initialize() {
-        // Initialize role dropdown with only ADMIN and USER
+        // Dropdown mit USER und ADMIN befüllen
         roleComboBox.getItems().clear();
         roleComboBox.getItems().addAll(Role.USER.name(), Role.ADMIN.name());
         roleComboBox.getSelectionModel().selectFirst();
     }
 
     @FXML
-    private void handleSave(ActionEvent event) {  // ActionEvent als Parameter hinzugefügt
+    private void handleSave(ActionEvent event) {
         try {
-            // Input validation
             if (!validateInput()) {
                 return;
             }
 
+            //add User
             boolean success = UserManagement.createUser(
                     firstNameField.getText(),
                     lastNameField.getText(),
@@ -45,13 +45,9 @@ public class AddUserController extends Controller {
                     roleComboBox.getValue()
             );
 
+            //show Success
             if (success) {
-                Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                successAlert.setTitle("Success");
-                successAlert.setHeaderText(null);
-                successAlert.setContentText("User has been created");
-                successAlert.showAndWait();
-
+                showSuccess("Success", "User has been created");
                 switchScene(event, "userOverviewDashboard.fxml");
             }
         } catch (SQLException e) {
@@ -71,7 +67,6 @@ public class AddUserController extends Controller {
     }
 
     private boolean validateInput() {
-        // Check for empty fields
         if (firstNameField.getText().isEmpty() || lastNameField.getText().isEmpty() ||
                 usernameField.getText().isEmpty() || emailField.getText().isEmpty() ||
                 passwordField.getText().isEmpty() || confirmPasswordField.getText().isEmpty()) {

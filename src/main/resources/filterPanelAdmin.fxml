@@ -14,39 +14,26 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="300.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.FilterPanelAdminController">
 
     <VBox alignment="TOP_LEFT" layoutX="15.0" layoutY="15.0" spacing="10">
-        <!-- Titel -->
         <Label style="-fx-font-weight: bold; -fx-padding: 0 0 5 0;" text="Invoice filter" />
-
-        <!-- Rechnungs-ID Filter -->
         <HBox alignment="CENTER_LEFT" spacing="10">
             <CheckBox fx:id="checkboxRechnungsID" minWidth="100" text="InvoiceID" />
             <TextField fx:id="textfieldRechnungsID" prefWidth="150.0" />
         </HBox>
-
-        <!-- Typ Filter -->
         <HBox alignment="CENTER_LEFT" spacing="10">
             <CheckBox fx:id="checkboxTyp" minWidth="100" text="Type" />
             <ComboBox fx:id="comboBoxTyp" prefWidth="150.0" />
         </HBox>
-
-        <!-- Benutzer Filter -->
         <HBox alignment="CENTER_LEFT" spacing="10">
             <CheckBox fx:id="checkboxBenutzer" minWidth="100" text="User" />
             <TextField fx:id="textfieldBenutzer" prefWidth="150.0" />
         </HBox>
-
-        <!-- Status Filter -->
         <HBox alignment="CENTER_LEFT" spacing="10">
             <CheckBox fx:id="checkboxStatus" minWidth="100" text="Status" />
             <ComboBox fx:id="comboBoxStatus" prefWidth="150.0" />
         </HBox>
-
-        <!-- Aktueller Monat Filter -->
         <HBox alignment="CENTER_LEFT" spacing="10">
             <CheckBox fx:id="checkboxCurrentMonth" minWidth="100" text="Current month" />
         </HBox>
-
-        <!-- Filter Button -->
         <Button onAction="#applyFilters" prefHeight="27.0" prefWidth="261.0" text="Apply filter" HBox.hgrow="ALWAYS">
             <padding>
                 <Insets bottom="5" left="10" right="10" top="5" />

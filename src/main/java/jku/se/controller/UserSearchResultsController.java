@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import jku.se.UserManagement;
 import jku.se.Role;
 import jku.se.Status;
-
 import java.sql.SQLException;
 import java.util.Optional;
 
@@ -125,6 +124,7 @@ public class UserSearchResultsController extends Controller {
         closeWindow();
     }
 
+    // Mit Hilfe von KI erstellt
     private void closeWindow() {
         ((Stage) usernameLabel.getScene().getWindow()).close();
     }

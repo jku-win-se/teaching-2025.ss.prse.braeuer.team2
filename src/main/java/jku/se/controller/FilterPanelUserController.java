@@ -25,7 +25,7 @@ public class FilterPanelUserController extends Controller {
     private SubmittedBillsController mainController;
 
     @FXML
-    public void initialize() {
+    public void initialize() { //Dropdown
         if (comboBoxTyp != null) {
             comboBoxTyp.getItems().addAll(
                     InvoiceType.SUPERMARKET.name(),
@@ -55,7 +55,6 @@ public class FilterPanelUserController extends Controller {
     }
 
     @FXML
-    //private void applyFilters(ActionEvent event) {
     private void applyFilters() {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
@@ -63,7 +62,7 @@ public class FilterPanelUserController extends Controller {
         activeFilters[3] = getStatusFilterValue();
         activeFilters[4] = checkboxCurrentMonth.isSelected() ? "current_month" : null;
 
-        // Refresh main view if possible
+        // Refresh main view
         if (mainController != null) {
             try {
                 mainController.loadUserInvoices();

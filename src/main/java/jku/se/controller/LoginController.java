@@ -29,9 +29,6 @@ public class LoginController extends Controller {
     private Label messageLabel;
 
     @FXML
-    private Button closeButton;
-
-    @FXML
     private void handleLoginAction() throws IOException {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
@@ -68,13 +65,4 @@ public class LoginController extends Controller {
         Stage stage = (Stage) loginButton.getScene().getWindow();
         stage.setScene(new Scene(fxmlLoader.load()));
     }
-
-    /*
-    @FXML
-    private void handleClose() {
-        Stage stage = (Stage) closeButton.getScene().getWindow();
-        stage.close();
-    }
-     */
-
 }

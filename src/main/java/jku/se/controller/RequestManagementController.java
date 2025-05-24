@@ -57,6 +57,7 @@ public class RequestManagementController extends Controller {
                 GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
     }
 
+    // Mit Hilfe von Deepseek generiert
     private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
         int id = rs.getInt("id");
         String image = rs.getString("image");
