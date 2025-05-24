@@ -35,11 +35,13 @@
             <Font size="14.0" />
          </font>
       </PasswordField>
+      <!--
       <Button fx:id="closeButton" layoutX="380.0" layoutY="10.0" onAction="#handleClose" prefHeight="20.0" prefWidth="20.0" style="-fx-background-color: #d21414; -fx-text-fill: white; -fx-font-weight: bold;" text="X">
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
+      -->
       <Button fx:id="loginButton" layoutX="327.0" layoutY="200.0" onAction="#handleLoginAction" text="Login">
          <font>
             <Font name="System Bold" size="12.0" />

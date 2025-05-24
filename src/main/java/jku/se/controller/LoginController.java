@@ -69,10 +69,12 @@ public class LoginController extends Controller {
         stage.setScene(new Scene(fxmlLoader.load()));
     }
 
+    /*
     @FXML
     private void handleClose() {
         Stage stage = (Stage) closeButton.getScene().getWindow();
         stage.close();
     }
+     */
 
 }

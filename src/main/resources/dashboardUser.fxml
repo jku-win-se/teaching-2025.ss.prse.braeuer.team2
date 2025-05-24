@@ -30,11 +30,12 @@
         <Label fx:id="labelSumme" alignment="CENTER" prefHeight="35.0" prefWidth="157.0" style="-fx-font-size: 24;" text="💶 134,50€" />
         <Label alignment="CENTER" prefHeight="17.0" prefWidth="181.0" text="Total refund" />
     </VBox>
-    <Button fx:id="btn_logout" layoutX="606.0" layoutY="32.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="80.0" text="⍈ Logout">
+    <Button fx:id="btn_logout" layoutX="613.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="80.0" text="⍈ Logout">
         <font>
             <Font size="14.0" />
         </font>
     </Button>
+
     <!-- Title Label -->
     <Label layoutX="237.0" layoutY="27.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Lunchify Dashboard" />
 
@@ -43,5 +44,6 @@
 
     <!-- Rechnung einreichen Button -->
     <Button fx:id="tile_submit" layoutX="231.0" layoutY="119.0" mnemonicParsing="false" onAction="#openSubmitBill" prefHeight="100.0" prefWidth="239.0" style="-fx-background-color: #3498DB;             -fx-text-fill: white; -fx-font-size: 16px;             -fx-border-radius: 5px; -fx-padding: 10px;" text="➕ Submit invoice" />
-    <Button fx:id="messages" layoutX="14.0" layoutY="32.0" mnemonicParsing="false" onAction="#openMessages" text="🔔" />
+    <Button fx:id="messages" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#openMessages" text="🔔" />
+   <Button fx:id="btn_changePassword" layoutX="42.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleChangePassword" text="🔑" />
 </AnchorPane>
