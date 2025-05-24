@@ -2,6 +2,7 @@ import jku.se.Database;
 import jku.se.Login;
 import jku.se.Role;
 import jku.se.Status;
+import jku.se.exceptions.DatabaseOperationException;
 import org.junit.jupiter.api.*;
 import java.sql.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,6 +30,9 @@ public class LoginTest { //Tests mit AI generiert
 
     private static final String INVALID_EMAIL = "invalid@jku.at";
     private static final String INVALID_PASSWORD = "wrongpass";
+
+    private static final String EMPTY_STRING = "";
+    private static final String NULL_STRING = null;
 
     @BeforeEach
     void setUp() throws SQLException {
@@ -236,7 +240,154 @@ public class LoginTest { //Tests mit AI generiert
         );
     }
 
+    @Test
+    void testEmptyEmailLogin() {
+        StringBuilder role = new StringBuilder();
+        StringBuilder status = new StringBuilder();
+
+        boolean result = Login.validateLogin(EMPTY_STRING, USER_PASSWORD, role, status);
+
+        assertAll(
+                () -> assertFalse(result, "Login should fail with empty email"),
+                () -> assertTrue(role.toString().isEmpty()),
+                () -> assertTrue(status.toString().isEmpty())
+        );
+    }
+
+    @Test
+    void testNullEmailLogin() {
+        StringBuilder role = new StringBuilder();
+        StringBuilder status = new StringBuilder();
+
+        boolean result = Login.validateLogin(NULL_STRING, USER_PASSWORD, role, status);
+
+        assertAll(
+                () -> assertFalse(result, "Login should fail with null email"),
+                () -> assertTrue(role.toString().isEmpty()),
+                () -> assertTrue(status.toString().isEmpty())
+        );
+    }
+
+    @Test
+    void testEmptyPasswordLogin() {
+        StringBuilder role = new StringBuilder();
+        StringBuilder status = new StringBuilder();
+
+        boolean result = Login.validateLogin(USER_EMAIL, EMPTY_STRING, role, status);
+
+        assertAll(
+                () -> assertFalse(result, "Login should fail with empty password"),
+                () -> assertEquals(Role.USER.name(), role.toString()),
+                () -> assertEquals(Status.ACTIVE.name(), status.toString())
+        );
+    }
+
+    @Test
+    void testMultipleFailedAttempts() throws SQLException {
+        StringBuilder role = new StringBuilder();
+        StringBuilder status = new StringBuilder();
+
+        // First failed attempt
+        Login.validateLogin(USER_EMAIL, INVALID_PASSWORD, role, status);
+        assertEquals(1, getFailedAttempts(USER_EMAIL));
+
+        // Second failed attempt
+        Login.validateLogin(USER_EMAIL, INVALID_PASSWORD, role, status);
+        assertEquals(2, getFailedAttempts(USER_EMAIL));
+
+        // Third failed attempt (should block)
+        Login.validateLogin(USER_EMAIL, INVALID_PASSWORD, role, status);
+        assertEquals(3, getFailedAttempts(USER_EMAIL));
+        assertEquals(Status.BLOCKED.name(), getAccountStatus(USER_EMAIL));
+    }
+
+    @Test
+    void testGetCurrentUserMethodsWhenLoggedOut() {
+        assertAll(
+                () -> assertNull(Login.getCurrentUsername()),
+                () -> assertNull(Login.getCurrentUserEmail()),
+                () -> assertNull(Login.getCurrentUserRole()),
+                () -> assertNull(Login.getCurrentUserStatus())
+        );
+    }
+
+    @Test
+    void testLogoutWhenAlreadyLoggedOut() {
+        // Should not throw any exceptions
+        assertDoesNotThrow(() -> Login.logout());
+    }
+
+    @Test
+    void testCaseSensitivePassword() {
+        String mixedCasePassword = "UsEr123"; // Different case than USER_PASSWORD
+        StringBuilder role = new StringBuilder();
+        StringBuilder status = new StringBuilder();
+
+        boolean result = Login.validateLogin(USER_EMAIL, mixedCasePassword, role, status);
+
+        assertAll(
+                () -> assertFalse(result, "Login should be case sensitive for password"),
+                () -> assertEquals(1, getFailedAttempts(USER_EMAIL))
+        );
+    }
+
+    @Test
+    void testMaxFailedAttemptsConstant() {
+        assertEquals(3, Login.getMaxFailedAttempts(),
+                "MAX_FAILED_ATTEMPTS should match the constant value");
+    }
+
+    @Test
+    void testConsecutiveLogins() {
+        // First login
+        assertTrue(Login.validateLogin(USER_EMAIL, USER_PASSWORD, new StringBuilder(), new StringBuilder()));
+        assertEquals(USER_USERNAME, Login.getCurrentUsername());
+
+        // Logout
+        Login.logout();
+        assertNull(Login.getCurrentUsername());
+
+        // Second login
+        assertTrue(Login.validateLogin(ADMIN_EMAIL, ADMIN_PASSWORD, new StringBuilder(), new StringBuilder()));
+        assertEquals(ADMIN_USERNAME, Login.getCurrentUsername());
+    }
+
+    @Test
+    void testAccountStatusTransition() throws SQLException {
+        // Start with active account
+        assertEquals(Status.ACTIVE.name(), getAccountStatus(USER_EMAIL));
+
+        // First failed attempt
+        Login.validateLogin(USER_EMAIL, INVALID_PASSWORD, new StringBuilder(), new StringBuilder());
+        assertEquals(Status.ACTIVE.name(), getAccountStatus(USER_EMAIL));
+
+        // Second failed attempt
+        Login.validateLogin(USER_EMAIL, INVALID_PASSWORD, new StringBuilder(), new StringBuilder());
+        assertEquals(Status.ACTIVE.name(), getAccountStatus(USER_EMAIL));
+
+        // Third failed attempt - should block
+        Login.validateLogin(USER_EMAIL, INVALID_PASSWORD, new StringBuilder(), new StringBuilder());
+        assertEquals(Status.BLOCKED.name(), getAccountStatus(USER_EMAIL));
+
+        // Successful login should unblock
+        setFailedAttempts(USER_EMAIL, 0);
+        updateAccountStatus(USER_EMAIL, Status.ACTIVE);
+        assertTrue(Login.validateLogin(USER_EMAIL, USER_PASSWORD, new StringBuilder(), new StringBuilder()));
+        assertEquals(Status.ACTIVE.name(), getAccountStatus(USER_EMAIL));
+    }
+
     // Helper methods
+    private void updateAccountStatus(String email, Status status) throws SQLException {
+        try (Connection conn = Database.getConnection()) {
+            try (PreparedStatement stmt = conn.prepareStatement(
+                    "UPDATE accounts SET status = ?::account_status WHERE email = ?")) {
+                stmt.setString(1, status.name());
+                stmt.setString(2, email);
+                stmt.executeUpdate();
+            }
+        }
+    }
+
     private int getFailedAttempts(String email) throws SQLException {
         try (Connection conn = Database.getConnection()) {
             try (PreparedStatement stmt = conn.prepareStatement(

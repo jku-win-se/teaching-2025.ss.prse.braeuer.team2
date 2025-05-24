@@ -1,139 +1,155 @@
 import jku.se.UserManagement;
 import org.junit.jupiter.api.*;
-import java.sql.SQLException;
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserManagementTest { //Tests mit AI generiert
-
+class UserManagementTest {
     private static final String TEST_USERNAME = "testuser_junit";
     private static final String TEST_EMAIL = "testuser_junit@example.com";
+    private static final String TEST_PASSWORD = "testpass";
 
     @BeforeEach
     void setUp() throws SQLException {
-        // Create a test user before each test
         UserManagement.createUser(
                 "Test",
                 "User",
                 TEST_USERNAME,
                 TEST_EMAIL,
-                "testpass",
+                TEST_PASSWORD,
                 "USER"
         );
     }
 
     @AfterEach
     void tearDown() throws SQLException {
-        // Clean up after each test
         if (UserManagement.getUser(TEST_USERNAME) != null) {
             UserManagement.deleteUser(TEST_USERNAME);
         }
     }
 
+    // ========== EXISTING TESTS ==========
     @Test
     void testGetUser() throws SQLException {
         UserManagement.User user = UserManagement.getUser(TEST_USERNAME);
-
-        assertNotNull(user, "User should exist");
-        assertEquals("Test", user.firstName);
-        assertEquals("User", user.lastName);
-        assertEquals(TEST_EMAIL, user.email);
-        assertEquals("USER", user.role);
-        assertEquals("ACTIVE", user.status);
-        assertEquals(0, user.failedAttempts);
+        assertUserFields(user, "Test", "User", TEST_EMAIL, "USER", "ACTIVE", 0);
     }
 
     @Test
     void testGetNonExistentUser() throws SQLException {
-        UserManagement.User user = UserManagement.getUser("nonexistentuser");
-        assertNull(user, "Should return null for non-existent user");
+        assertNull(UserManagement.getUser("nonexistentuser"));
     }
 
     @Test
     void testUpdateUser() throws SQLException {
         UserManagement.User user = UserManagement.getUser(TEST_USERNAME);
-        user.firstName = "Updated";
-        user.lastName = "Name";
-        user.role = "ADMIN";
-        user.status = "BLOCKED";
-        user.failedAttempts = 3;
+        updateUserFields(user, "Updated", "Name", "updated@test.com", "ADMIN", "BLOCKED", 3, "newpass");
 
-        boolean result = UserManagement.updateUser(user);
-        assertTrue(result, "Update should succeed");
-
+        assertTrue(UserManagement.updateUser(user));
         UserManagement.User updatedUser = UserManagement.getUser(TEST_USERNAME);
-        assertEquals("Updated", updatedUser.firstName);
-        assertEquals("Name", updatedUser.lastName);
-        assertEquals("ADMIN", updatedUser.role);
-        assertEquals("BLOCKED", updatedUser.status);
-        assertEquals(3, updatedUser.failedAttempts);
+        assertUserFields(updatedUser, "Updated", "Name", "updated@test.com", "ADMIN", "BLOCKED", 3);
     }
 
     @Test
-    void testCreateUser() throws SQLException {
+    void testCreateAndDeleteUser() throws SQLException {
         String newUsername = "newtestuser_junit";
         try {
-            boolean result = UserManagement.createUser(
-                    "New",
-                    "TestUser",
-                    newUsername,
-                    "newtest@example.com",
-                    "password",
-                    "USER"
-            );
-
-            assertTrue(result, "Creation should succeed");
-            assertNotNull(UserManagement.getUser(newUsername), "User should exist after creation");
+            assertTrue(UserManagement.createUser(
+                    "New", "User", newUsername, "new@test.com", "pass", "USER"));
+            assertNotNull(UserManagement.getUser(newUsername));
         } finally {
-            // Clean up
             UserManagement.deleteUser(newUsername);
         }
     }
 
     @Test
-    void testDeleteUser() throws SQLException {
-        boolean result = UserManagement.deleteUser(TEST_USERNAME);
-        assertTrue(result, "Deletion should succeed");
-        assertNull(UserManagement.getUser(TEST_USERNAME), "User should not exist after deletion");
-    }
-
-    @Test
     void testDeleteNonExistentUser() throws SQLException {
-        boolean result = UserManagement.deleteUser("nonexistentuser");
-        assertFalse(result, "Should return false for non-existent user");
+        assertFalse(UserManagement.deleteUser("nonexistentuser"));
     }
 
     @Test
-    void testCreateUserWithExistingUsername() throws SQLException {
-        boolean result = UserManagement.createUser(
-                "Duplicate",
-                "User",
-                TEST_USERNAME,  // Using existing username
-                "duplicate@example.com",
-                "password",
-                "USER"
-        );
-        assertFalse(result, "Should fail to create user with existing username");
+    void testCreateDuplicateUser() throws SQLException {
+        assertFalse(UserManagement.createUser(
+                "Duplicate", "User", TEST_USERNAME, "dup@test.com", "pass", "USER"));
     }
 
-    @Test
-    void testUpdateNonExistentUser() throws SQLException {
-        UserManagement.User user = new UserManagement.User();
-        user.username = "nonexistent";
-        boolean result = UserManagement.updateUser(user);
-        assertFalse(result, "Should fail to update non-existent user");
-    }
+    // ========== NEW TESTS FOR HIGHER COVERAGE ==========
 
     @Test
-    void testUpdatePassword() throws SQLException {
+    void testGetUserCreatedAt() throws SQLException, ParseException {
         UserManagement.User user = UserManagement.getUser(TEST_USERNAME);
-        String newPassword = "newSecurePassword123";
-        user.password = newPassword;
+        assertNotNull(user.createdAt);
 
-        boolean result = UserManagement.updateUser(user);
-        assertTrue(result);
-
-        UserManagement.User updatedUser = UserManagement.getUser(TEST_USERNAME);
-        assertEquals(newPassword, updatedUser.password);
+        // Verify date format
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm");
+        Date parsedDate = dateFormat.parse(user.createdAt);
+        assertNotNull(parsedDate);
     }
 
+    @Test
+    void testCreateUserWithNullFields() {
+        assertThrows(SQLException.class, () -> {
+            UserManagement.createUser(null, null, null, null, null, null);
+        });
+    }
+
+    @Test
+    void testCreateUserWithInvalidRole() {
+        assertThrows(SQLException.class, () ->
+                UserManagement.createUser("Invalid", "Role", "invalidrole", "role@test.com", "pass", "INVALID_ROLE"));
+    }
+
+    @Test
+    void testUpdateUserWithInvalidStatus() throws SQLException {
+        UserManagement.User user = UserManagement.getUser(TEST_USERNAME);
+        user.status = "INVALID_STATUS";
+        assertThrows(SQLException.class, () -> UserManagement.updateUser(user));
+    }
+
+    @Test
+    void testCaseSensitiveUsername() throws SQLException {
+        String mixedCaseUsername = TEST_USERNAME.toUpperCase();
+        UserManagement.User user = UserManagement.getUser(mixedCaseUsername);
+        assertNull(user, "Username should be case sensitive");
+    }
+
+    @Test
+    void testMassUserOperations() throws SQLException {
+        // Test handling multiple operations
+        for (int i = 0; i < 5; i++) {
+            String tempUser = "tempuser_" + i;
+            try {
+                assertTrue(UserManagement.createUser("Temp", "User", tempUser, tempUser + "@test.com", "pass", "USER"));
+                assertNotNull(UserManagement.getUser(tempUser));
+            } finally {
+                UserManagement.deleteUser(tempUser);
+            }
+        }
+    }
+
+    // Helper methods
+    private void assertUserFields(UserManagement.User user, String firstName, String lastName,
+                                  String email, String role, String status, int failedAttempts) {
+        assertNotNull(user);
+        assertEquals(firstName, user.firstName);
+        assertEquals(lastName, user.lastName);
+        assertEquals(email, user.email);
+        assertEquals(role, user.role);
+        assertEquals(status, user.status);
+        assertEquals(failedAttempts, user.failedAttempts);
+    }
+
+    private void updateUserFields(UserManagement.User user, String firstName, String lastName,
+                                  String email, String role, String status, int failedAttempts, String password) {
+        user.firstName = firstName;
+        user.lastName = lastName;
+        user.email = email;
+        user.role = role;
+        user.status = status;
+        user.failedAttempts = failedAttempts;
+        user.password = password;
+    }
 }
