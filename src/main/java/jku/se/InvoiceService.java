@@ -21,7 +21,7 @@ public class InvoiceService {
     }
 
     // Deepseek Anfang
-    private String buildQuery(String[] filters) {
+    public String buildQuery(String[] filters) {
         final String baseQuery = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
         StringBuilder queryBuilder = new StringBuilder(baseQuery);
         List<String> whereConditions = new ArrayList<>();
@@ -48,7 +48,7 @@ public class InvoiceService {
     }
     // Deepseek Ende
 
-    private void setParameters(PreparedStatement stmt, String[] filters) throws SQLException {
+    public void setParameters(PreparedStatement stmt, String[] filters) throws SQLException {
         int paramIndex = 1;
 
         if (notEmpty(filters[0])) stmt.setInt(paramIndex++, Integer.parseInt(filters[0]));
