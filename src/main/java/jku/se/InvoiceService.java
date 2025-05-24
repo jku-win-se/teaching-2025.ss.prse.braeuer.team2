@@ -20,7 +20,7 @@ public class InvoiceService {
         return stmt.executeQuery();
     }
 
-    // Deepseek Anfang
+    // // Mit Hilfe von KI erstellt
     public String buildQuery(String[] filters) {
         final String baseQuery = "SELECT id, betrag, datum, typ, username, status, image FROM rechnungen";
         StringBuilder queryBuilder = new StringBuilder(baseQuery);
@@ -46,7 +46,6 @@ public class InvoiceService {
 
         return queryBuilder.toString();
     }
-    // Deepseek Ende
 
     public void setParameters(PreparedStatement stmt, String[] filters) throws SQLException {
         int paramIndex = 1;
@@ -57,7 +56,7 @@ public class InvoiceService {
         if (notEmpty(filters[3])) stmt.setString(paramIndex, filters[3]);
     }
 
-    // Chat GPT Anfang
+    // Mit Hilfe von KI erstellt
     public void openInvoiceLink(String link) {
         try {
             java.awt.Desktop.getDesktop().browse(java.net.URI.create(link));
@@ -70,8 +69,8 @@ public class InvoiceService {
         }
     }
 
+    // Mit Hilfe von KI erstellt
     private boolean notEmpty(String str) {
         return str != null && !str.isEmpty();
     }
-    // Chat GPT Ende
 }

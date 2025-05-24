@@ -6,14 +6,8 @@
 <?import javafx.scene.layout.AnchorPane?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.UserSearchController">
-
-    <!-- Überschrift -->
     <Label layoutX="285.0" layoutY="30.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Search user" />
-
-    <!-- Suchfeld -->
     <TextField fx:id="searchField" alignment="CENTER" layoutX="150.0" layoutY="194.0" prefWidth="400.0" promptText="Insert username..." style="-fx-font-size: 14px;     -fx-padding: 10px; -fx-border-color: #bdc3c7;     -fx-border-radius: 5px;" />
-
-    <!-- Such-Button -->
     <Button fx:id="btn_search" layoutX="305.0" layoutY="250.0" onAction="#searchUser" style="-fx-font-size: 14px; -fx-background-color: #7734db;     -fx-text-fill: white; -fx-padding: 8px 15px;     -fx-background-radius: 5px;" text="🔍 Search" />
    <Button fx:id="btn_back" layoutX="14.0" layoutY="33.0" onAction="#handleBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
 </AnchorPane>

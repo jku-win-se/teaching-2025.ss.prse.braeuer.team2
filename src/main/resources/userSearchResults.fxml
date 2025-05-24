@@ -15,47 +15,28 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="500.0" prefWidth="600.0" style="-fx-padding: 20;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.UserSearchResultsController">
-
     <VBox layoutX="127.0" layoutY="79.0" prefHeight="325.0" prefWidth="387.0" spacing="15" AnchorPane.leftAnchor="127.0" AnchorPane.rightAnchor="126.33333333333337" AnchorPane.topAnchor="79.0">
-
         <GridPane hgap="10" prefHeight="335.0" prefWidth="453.0" vgap="10">
-            <!-- Row 0 -->
             <Label style="-fx-font-weight: bold;" text="First Name" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <TextField fx:id="firstNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-
-            <!-- Row 1 -->
             <Label style="-fx-font-weight: bold;" text="Last Name" GridPane.columnIndex="0" GridPane.rowIndex="1" />
             <TextField fx:id="lastNameField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-
-            <!-- Row 2 -->
             <Label style="-fx-font-weight: bold;" text="Username" GridPane.columnIndex="0" GridPane.rowIndex="2" />
             <Label fx:id="usernameLabel" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-
-            <!-- Row 3 -->
             <Label style="-fx-font-weight: bold;" text="Email" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-
-            <!-- Row 4 -->
             <Label style="-fx-font-weight: bold;" text="Password" GridPane.columnIndex="0" GridPane.rowIndex="4" />
             <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="4">
                 <TextField fx:id="passwordTextField" managed="false" visible="false" />
                 <PasswordField fx:id="passwordField" />
                 <CheckBox fx:id="showPasswordCheckBox" alignment="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="Show" />
             </HBox>
-
-            <!-- Row 5 -->
             <Label style="-fx-font-weight: bold;" text="Role" GridPane.columnIndex="0" GridPane.rowIndex="5" />
             <ComboBox fx:id="roleComboBox" prefHeight="25.0" prefWidth="207.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-
-            <!-- Row 6 -->
             <Label style="-fx-font-weight: bold;" text="Status" GridPane.columnIndex="0" GridPane.rowIndex="6" />
             <ComboBox fx:id="statusComboBox" prefHeight="25.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-
-            <!-- Row 7 -->
             <Label style="-fx-font-weight: bold;" text="Failed Attempt" GridPane.columnIndex="0" GridPane.rowIndex="7" />
             <TextField fx:id="failedAttemptsField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-
-            <!-- Row 8 -->
             <Label style="-fx-font-weight: bold;" text="Created At" GridPane.columnIndex="0" GridPane.rowIndex="8" />
             <Label fx:id="createdAtLabel" GridPane.columnIndex="1" GridPane.rowIndex="8" />
             <columnConstraints>
@@ -74,7 +55,6 @@
                 <RowConstraints />
             </rowConstraints>
         </GridPane>
-   
         <HBox alignment="CENTER" prefHeight="0.0" prefWidth="109.0" spacing="10">
             <Button onAction="#handleUpdate" prefHeight="30.0" prefWidth="80.0" style=" -fx-padding: 8 15;" text="Save" textFill="#45a32f">
             <font>
