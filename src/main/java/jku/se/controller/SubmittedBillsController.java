@@ -56,6 +56,7 @@ public class SubmittedBillsController extends Controller {
         }
     }
 
+    // Mit Hilfe von KI erstellt
     private void addInvoiceToGrid(ResultSet rs, int row) throws SQLException {
         int id = rs.getInt("id");
         double amount = rs.getDouble("betrag");
@@ -116,12 +117,11 @@ public class SubmittedBillsController extends Controller {
         }
     }
 
-    // Deepseek Anfang
+    // // Mit Hilfe von KI erstellt
     private void clearGridContent() {
         gridInvoices.getChildren().removeIf(node ->
                 GridPane.getRowIndex(node) != null && GridPane.getRowIndex(node) > 0);
     }
-    // Deepseek Ende
 
     private String getStatusStyle(String status) {
         if (status == null) return "";
@@ -142,6 +142,7 @@ public class SubmittedBillsController extends Controller {
         switchScene(event, "dashboardUser.fxml");
     }
 
+    // Mit Hilfe von KI erstellt
     @FXML
     private void openFilter(ActionEvent event) throws SQLException {
         loadUserInvoices();
@@ -161,8 +162,7 @@ public class SubmittedBillsController extends Controller {
             filterStage = new Stage();
             filterStage.setTitle("Filter invoices");
             filterStage.setScene(new Scene(root));
-            //filterStage.initModality(Modality.APPLICATION_MODAL);
-            filterStage.initModality(Modality.NONE); // <- Changed to NON-MODAL
+            filterStage.initModality(Modality.NONE);
             filterStage.initOwner(((Node)event.getSource()).getScene().getWindow());
 
             filterStage.show();

@@ -22,7 +22,7 @@ public class FilterPanelAdminController extends Controller {
     private RequestManagementController mainController;
 
     @FXML
-    public void initialize() {
+    public void initialize() { //Dropdowns
         comboBoxTyp.getItems().addAll(
                 InvoiceType.SUPERMARKET.name(),
                 InvoiceType.RESTAURANT.name()
@@ -48,7 +48,6 @@ public class FilterPanelAdminController extends Controller {
     }
 
     @FXML
-    //private void applyFilters(ActionEvent event) {
     private void applyFilters() {
         activeFilters[0] = getFilterValue(checkboxRechnungsID, textfieldRechnungsID);
         activeFilters[1] = getTypFilterValue();
@@ -56,7 +55,7 @@ public class FilterPanelAdminController extends Controller {
         activeFilters[3] = getStatusFilterValue();
         activeFilters[4] = checkboxCurrentMonth.isSelected() ? "current_month" : null;
 
-        // Refresh main view if possible
+        // Refresh main view
         if (mainController != null) {
             try {
                 mainController.loadAndDisplayInvoices();

@@ -64,6 +64,7 @@ public class SubmitBillController extends Controller {
         switchScene(event, "dashboardUser.fxml");
     }
 
+    // Mit Hilfe von KI generiert
     @FXML
     private void handleFileUpload(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -83,7 +84,7 @@ public class SubmitBillController extends Controller {
     }
 
     @FXML
-    private void handleUpload(ActionEvent event) {
+    private void handleUpload() {
         String filePath = filePathField.getText();
 
         if (filePath.isEmpty() || filePath.equals("No file selected...")) {
@@ -440,8 +441,6 @@ public class SubmitBillController extends Controller {
                 }
             });
 
-
-
             // Layout
             VBox layout = new VBox(10,
                     new VBox(5, new Label("Date (DD.MM.YYYY):"), dateField, dateError),
@@ -467,6 +466,4 @@ public class SubmitBillController extends Controller {
 
         return resultInvoice[0];
     }
-
-
 }
