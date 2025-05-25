@@ -17,8 +17,6 @@ import java.io.IOException;
 import java.sql.*;
 
 import static jku.se.Database.getConnection;
-import static jku.se.Login.getCurrentUsername;
-
 
 public class MessageAnomalyController extends Controller{
     @FXML
