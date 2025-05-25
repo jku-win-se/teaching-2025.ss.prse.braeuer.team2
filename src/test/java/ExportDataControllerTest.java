@@ -2,12 +2,7 @@ import jku.se.controller.ExportDataController;
 import jku.se.InvoicesTotal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.io.File;
-import java.nio.file.Paths;
-
 import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ExportDataControllerTest { //Alles von AI generiert
@@ -46,5 +41,7 @@ public class ExportDataControllerTest { //Alles von AI generiert
         // Vergleiche die berechnete Summe mit der totalRefund-Summe
         // delta = 0.01, d.h. der Unterschied darf maximal 0.01 betragen
         assertEquals(invoicesTotal.getTotalRefund(), calculatedSum, 0.01);
+
     }
+
 }
