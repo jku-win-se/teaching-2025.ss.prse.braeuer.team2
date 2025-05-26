@@ -29,9 +29,7 @@ public class Refund {
     public double getSupermarket() {
         return this.supermarket;
     }
-    public LocalDate getChangeDate() {
-        return this.changeDate;
-    }
+
     public String getAdmin() {
         return this.admin;
     }
@@ -41,6 +39,7 @@ public class Refund {
     public static double getRefundRestaurant() throws SQLException {
         return getRefundForDate(LocalDate.now(), "restaurant");
     }
+
     public static double getRefundForDate(LocalDate date, String column) throws SQLException {
         // Only allow specific, known-safe column names
         List<String> allowedColumns = List.of("restaurant", "supermarket");
@@ -120,4 +119,7 @@ public class Refund {
         }
         return refunds; // Return the full list of refunds
     }
+
+
+
 }

@@ -241,7 +241,7 @@ public class InvoiceScan {
     }
 
     /**
-     * converts the different types of dates to a LocalDate (AI)
+     * converts the different types of dates to a LocalDate
      * @param dateString
      * @return date in the correct format
      */
@@ -274,7 +274,7 @@ public class InvoiceScan {
         return null;
     }
 
-    //checks if the found/inserted date is a workday in austria (AI)
+    //checks if the found/inserted date is a workday in austria
     public static boolean isWorkday(LocalDate date) {
 
         //get all the austrian holidays for the current year and save them in a set
@@ -298,7 +298,7 @@ public class InvoiceScan {
         return true;
     }
 
-    //checks if the invoice date is within the current month (AI)
+    //checks if the invoice date is within the current month
     public static boolean isWithinCurrentMonth(LocalDate date) {
         if (date == null) {
             return false; // Falls das Datum null ist, geben wir false zurück.
@@ -316,7 +316,7 @@ public class InvoiceScan {
         SUM
      */
 
-    //finds the sum from the extracted OCR-text (AI)
+    //finds the sum from the extracted OCR-text
     public static Double extractSum(String text) {
         Pattern pattern = Pattern.compile("(SUMME|PREIS|Preis|Summe|Total|zahlen|summe|Sunne|Mastercard|Betrag:|EC)" +
                 "\\s*(EUR|€|:)?\\s*(\\d{1,3}[.,]\\d{2})");
@@ -338,7 +338,7 @@ public class InvoiceScan {
      * @param amount
      * @return true, if it is a correct sum, else false
      */
-    private boolean isValidSum(Double amount) {
+    public static boolean isValidSum(Double amount) {
         return amount != null && amount >= 0;
     }
 

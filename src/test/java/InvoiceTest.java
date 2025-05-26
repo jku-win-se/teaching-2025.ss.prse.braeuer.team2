@@ -1,3 +1,4 @@
+import jku.se.Invoice;
 import jku.se.InvoiceExport;
 import jku.se.InvoiceStatus;
 import jku.se.InvoiceType;
@@ -28,7 +29,7 @@ public class InvoiceTest {//AI generated
     }
 
     @Test
-    void testSetters() {
+    void testExportSetters() {
         InvoiceExport invoice = new InvoiceExport(
                 LocalDate.now(), 0, InvoiceType.RESTAURANT, InvoiceStatus.PENDING, 0, 0, "");
 
@@ -61,6 +62,57 @@ public class InvoiceTest {//AI generated
         assertEquals(0.0, invoice.getRefundToPay());
     }
 
+    @Test
+    public void testConstructorAndGetters() {
+        LocalDate date = LocalDate.of(2024, 5, 20);
+        double sum = 150.75;
+        InvoiceType type = InvoiceType.SUPERMARKET;
+        InvoiceStatus status = InvoiceStatus.ACCEPTED;
+        double refund = 30.0;
+
+        Invoice invoice = new Invoice(date, sum, type, status, refund);
+
+        assertEquals(date, invoice.getDate());
+        assertEquals(sum, invoice.getSum());
+        assertEquals(type, invoice.getTyp());
+        assertEquals(status, invoice.getStatus());
+        assertEquals(refund, invoice.getRefund());
+    }
+
+    @Test
+    public void testSetters() {
+        Invoice invoice = new Invoice(LocalDate.now(), 0, null, null, 0);
+
+        LocalDate newDate = LocalDate.of(2025, 1, 1);
+        invoice.setDate(newDate);
+        assertEquals(newDate, invoice.getDate());
+
+        invoice.setSum(200.0);
+        assertEquals(200.0, invoice.getSum());
+
+        invoice.setTyp(InvoiceType.RESTAURANT);
+        assertEquals(InvoiceType.RESTAURANT, invoice.getTyp());
+
+        invoice.setStatus(InvoiceStatus.PENDING);
+        assertEquals(InvoiceStatus.PENDING, invoice.getStatus());
+
+        invoice.setRefund(50.0);
+        assertEquals(50.0, invoice.getRefund());
+    }
+
+    @Test
+    public void testToString() {
+        Invoice invoice = new Invoice(
+                LocalDate.of(2024, 12, 1),
+                123.45,
+                InvoiceType.SUPERMARKET,
+                InvoiceStatus.ACCEPTED,
+                0.0
+        );
+
+        String expected = "Rechnung [Datum=2024-12-01, Summe=123.45 EUR, Typ=SUPERMARKET]";
+        assertEquals(expected, invoice.toString());
+    }
 
 }
 
