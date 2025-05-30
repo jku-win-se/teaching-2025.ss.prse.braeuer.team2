@@ -122,8 +122,85 @@ Relationale Datenbanken sind den Studierenden nach Abschluss von Vorlesung \/ Ü
 - Möglichkeit komplexer Abfragen und Integritätsprüfungen.
 
 ## Implementierung
-Beschreibung wichtiger Aspekte der Implementierung (eventuell mit ausgewählten 
-Codestücken), Projektstruktur, Abhängigkeiten, verwendete Bibliotheken.
+Die Implementierung des Projekts folgt einem klaren und modularen Aufbau. Die wichtigsten Komponenten umfassen eine zentrale Datenbank-Interaktionsklasse, eine Login-Management-Klasse, eine abstrakte Controller-Basis sowie mehrere Enums zur Typisierung und Statusverwaltung.
+
+---
+
+### 1. **Klasse `Database`**
+**Verantwortung:**  
+Die Klasse `Database` bündelt alle Datenbankoperationen sowie Bild-Uploads über Supabase. Sie enthält ausschließlich `static` Methoden, wodurch ein einfacher Zugriff ohne Instanziierung möglich ist.
+
+**Wichtige Methoden:**
+```java
+static Connection getConnection();
+static void uploadInvoice(Connection connection, String username, double betrag, LocalDate datum, InvoiceType typ, InvoiceStatus status, File imageFile, Double refund, SubmitBillController controller);
+static boolean updateInvoice(double betrag, Date datum, InvoiceType typ, String username, InvoiceStatus status, String image, double refund, int identifier);
+static boolean deleteInvoice(Connection connection, String username, LocalDate date);
+static boolean deleteImage(String imageUrl);
+static String uploadImage(File imageFile);
+static boolean invoiceExists(Connection connection, String username, LocalDate datum);
+static void invoiceScanUpload(String path, SubmitBillController controller);
+// Getter-Methoden für Rechnungsdaten
+static LocalDate getInvoiceDate(int identifier);
+static String getInvoiceImage(int identifier);
+static double getInvoiceRefund(int identifier);
+static String getInvoiceStatus(int identifier);
+static String getInvoiceUsername(int identifier);
+```
+
+**Technologien/Bibliotheken:**
+- JDBC für Datenbankzugriffe
+- Supabase API/SDK für Datei-Uploads
+- OCR-Bibliothek (z. B. Tesseract) für Texterkennung
+
+---
+
+### 2. **Klasse `Login`**
+**Verantwortung:**  
+Zentrale Verwaltung der Authentifizierung und Sitzungsverwaltung.
+
+**Wichtige Methoden:**
+```java
+static boolean validateLogin(String email, String password, StringBuilder userRole, StringBuilder accountStatus);
+static void logout();
+static String getCurrentUserEmail();
+static String getCurrentUsername();
+static Role getCurrentUserRole();
+static Status getCurrentUserStatus();
+static int getMaxFailedAttempts();
+static String getUsername();
+```
+
+---
+
+### 3. **Abstrakte Klasse `Controller`**
+**Verantwortung:**  
+Stellt eine Basisklasse für alle GUI-Controller zur Verfügung und ermöglicht einheitliches Fehler- und Erfolgsmanagement sowie Szenenwechsel.
+
+**Wichtige Methoden:**
+```java
+static void showError(String title, String message);
+static void showInfo(String title, String message);
+static void showSuccess(String title, String message);
+protected void switchScene(ActionEvent event, String fxmlFile);
+```
+
+**Bekannte direkte Unterklassen:**
+AddUserController, AdminPanelController, DashboardAdminController, DashboardUserController, EditInvoiceController, EditInvoiceUserController, ExportDataController, FilterPanelAdminController, FilterPanelUserController, LoginController, MessageAnomalyController, MessagesController, RefundController, RequestManagementController, StatisticsController, SubmitBillController, SubmittedBillsController, UserOverviewDashboardController, UserSearchController, UserSearchResultsController, UserTabularController
+
+---
+
+### 4. **Enums**
+Definieren zentrale Status und Typen:
+```java
+enum InvoiceStatus { ACCEPTED, DENIED, PENDING }
+enum InvoiceType { RESTAURANT, SUPERMARKET, UNDEFINED }
+enum Role { ADMIN, USER }
+enum Status { ACTIVE, BLOCKED }
+```
+
+---
+
 
 ## Code Qualität
 
