@@ -228,6 +228,16 @@ Alle genannten Findings wurden im Zuge der Qualitätssicherung behoben.
 Beschreibung der Akzeptanztests für 3 ausgewählte Requirements.
 * [Testplan](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/blob/main/docs/Testplan.md)
 
+* Testabdeckung
+
+![image](https://github.com/user-attachments/assets/296340d5-9e91-43d4-8f91-2b7af89c9bce)
+
+Die Testabdeckung in den Controller-Klassen ist gering, da diese die Backend-Klassen verwenden. 
+Daher werden hauptsächlich die Backend-Klassen getestet.
+
+
+
+
 # JavaDoc für wichtige Klassen, Interfaces und Methoden
 * [JavaDoc](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/blob/main/docs/Javadoc%20f%C3%BCr%20wichtigste%20Klassen.md)
 
