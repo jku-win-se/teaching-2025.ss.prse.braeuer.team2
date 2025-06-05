@@ -2,14 +2,9 @@
 Lunchify ist eine interne Softwarelösung zur automatisierten Rückvergütung von Essensausgaben für Mitarbeiter:innen. Ziel ist es, eine intuitive Plattform bereitzustellen, über die Essensrechnungen digital eingereicht, automatisch verarbeitet und zur Gehaltsabrechnung übergeben werden können. Das Projekt wird **agil** entwickelt, um schnelles Feedback und iterative Verbesserungen zu ermöglichen. Die Anwendung basiert auf **Java** und verwendet **Tesseract OCR** zur automatischen Auslesung von Belegdaten.
 
 # Umgesetzte Anforderungen
-* Welche der Anforderungen haben Sie umgesetzt, wer aus dem Team war verantwortlich und welches Stundenausmaß ist damit verknüpft?
-* Falls Anforderungen nicht umgesetzt wurden muss das pro Anforderung begründet werden.
-* [Closed Issues](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/issues?q=is%3Aissue%20state%3Aclosed)
+* [Umgestzte Anforderungen](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/issues?q=is%3Aissue%20state%3Aclosed)
 
 # Überblick über die Applikation aus Benutzersicht
-* Wie wurden die Anforderungen in der Benutzeroberfläche umgesetzt (Screenshots der 
-Benutzeroberfläche und Beschreibung der Funktionalität anhand von Szenarien)
-* Wie wird die Applikation verwendet?
 * [Benutzerdoku](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/blob/main/docs/benutzerdoku.md)
 
 # Überblick über die Applikation aus Entwicklersicht
@@ -30,8 +25,6 @@ src/
 ## Entwurf
 
 ### Überblick über die Applikation
-* UML Diagramm mit Erläuterungen
-* Verwendete Design Muster (z.B. Model-View-Controller)
 ```
 ┌────────────────────────────────────────┐
 │               Benutzer                 │
