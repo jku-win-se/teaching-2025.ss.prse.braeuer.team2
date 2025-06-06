@@ -29,6 +29,9 @@ public class Refund {
     public double getSupermarket() {
         return this.supermarket;
     }
+    public LocalDate getChangeDate() {
+        return changeDate;
+    }
 
     public String getAdmin() {
         return this.admin;
