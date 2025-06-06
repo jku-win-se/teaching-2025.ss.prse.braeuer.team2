@@ -276,17 +276,16 @@ public class SubmitBillController extends Controller {
         return selectedType[0];
     }
 
-    //user can check invoice (AI)
     public Invoice requestManualAll(LocalDate defaultDate, double defaultAmount, InvoiceType defaultType, InvoiceStatus defaultStatus) {
         CountDownLatch latch = new CountDownLatch(1);
         Invoice[] resultInvoice = new Invoice[1];
-        displayMessage(" ","green");
+        displayMessage(" ", "green");
 
         Platform.runLater(() -> {
             Stage stage = new Stage();
             stage.setTitle("Edit invoice data");
             stage.setOnCloseRequest(event -> {
-                displayMessage("Cancelled invoice was not uploaded","red");
+                displayMessage("Cancelled – invoice was not uploaded", "red");
             });
 
             // UI-Elemente
@@ -301,18 +300,17 @@ public class SubmitBillController extends Controller {
             Label amountError = new Label();
             amountError.setTextFill(Color.RED);
 
-            ToggleGroup typeGroup = new ToggleGroup();
-            RadioButton supermarketRadio = new RadioButton("Supermarket");
-            RadioButton restaurantRadio = new RadioButton("Restaurant");
+            ComboBox<InvoiceType> typeComboBox = new ComboBox<>();
+            typeComboBox.getItems().addAll(InvoiceType.SUPERMARKET, InvoiceType.RESTAURANT);
+            typeComboBox.setPromptText("Choose invoice type");
             Label typeError = new Label();
             typeError.setTextFill(Color.RED);
-
 
             Button cancelButton = new Button("Cancel");
             cancelButton.setOnAction(e -> {
                 displayMessage("Cancelled – invoice was not uploaded", "red");
                 stage.close();
-            });;
+            });
 
             // Default-Werte setzen
             if (defaultDate != null) {
@@ -322,8 +320,7 @@ public class SubmitBillController extends Controller {
                 amountField.setText(String.format("%.2f", defaultAmount));
             }
             if (defaultType != null) {
-                if (defaultType == InvoiceType.SUPERMARKET) supermarketRadio.setSelected(true);
-                else if (defaultType == InvoiceType.RESTAURANT) restaurantRadio.setSelected(true);
+                typeComboBox.setValue(defaultType);
             }
 
             // Validierungsmethoden
@@ -349,7 +346,6 @@ public class SubmitBillController extends Controller {
                         return false;
                     }
 
-                    // NEU: Prüfung auf existierende Rechnung
                     try (Connection connection = Database.getConnection()) {
                         if (invoiceExists(connection, Login.getCurrentUsername(), date)) {
                             dateError.setText("Invoice for this date already exists");
@@ -359,8 +355,6 @@ public class SubmitBillController extends Controller {
                         dateError.setText("Database error during testing");
                         return false;
                     }
-
-
 
                     dateError.setText("");
                     return true;
@@ -392,7 +386,7 @@ public class SubmitBillController extends Controller {
             };
 
             Supplier<Boolean> validateType = () -> {
-                if (!supermarketRadio.isSelected() && !restaurantRadio.isSelected()) {
+                if (typeComboBox.getValue() == null) {
                     typeError.setText("Please choose type");
                     return false;
                 }
@@ -414,20 +408,19 @@ public class SubmitBillController extends Controller {
                     try {
                         LocalDate newDate = LocalDate.parse(dateField.getText(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
                         double newAmount = Double.parseDouble(amountField.getText().replace(',', '.'));
-                        InvoiceType newType = supermarketRadio.isSelected() ? InvoiceType.SUPERMARKET : InvoiceType.RESTAURANT;
+                        InvoiceType newType = typeComboBox.getValue();
 
-                        // Änderungsprüfung
                         boolean changed = (defaultDate != null && !defaultDate.equals(newDate)) ||
                                 (defaultAmount != newAmount) ||
                                 (defaultType != newType);
 
                         InvoiceStatus status;
-
                         if (!changed && defaultStatus == InvoiceStatus.ACCEPTED) {
                             status = InvoiceStatus.ACCEPTED;
                         } else {
                             status = InvoiceStatus.PENDING;
                         }
+
                         double refund = Refund.refundCalculation(newAmount, newType, newDate);
                         resultInvoice[0] = new Invoice(newDate, newAmount, newType, status, refund);
 
@@ -445,8 +438,7 @@ public class SubmitBillController extends Controller {
             VBox layout = new VBox(10,
                     new VBox(5, new Label("Date (DD.MM.YYYY):"), dateField, dateError),
                     new VBox(5, new Label("Amount:"), amountField, amountError),
-                    new VBox(5, new Label("Invoice type:"),
-                            new HBox(10, supermarketRadio, restaurantRadio), typeError),
+                    new VBox(5, new Label("Invoice type:"), typeComboBox, typeError),
                     errorLabel,
                     new HBox(10, saveButton, cancelButton)
             );
@@ -466,4 +458,5 @@ public class SubmitBillController extends Controller {
 
         return resultInvoice[0];
     }
+
 }
