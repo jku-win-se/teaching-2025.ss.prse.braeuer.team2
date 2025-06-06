@@ -241,7 +241,7 @@ public class StatisticsController extends Controller {
              PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM yyyy", Locale.GERMAN);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM yyyy", Locale.ENGLISH);
 
             while (rs.next()) {
                 LocalDate monatDate = rs.getDate("monat").toLocalDate();
