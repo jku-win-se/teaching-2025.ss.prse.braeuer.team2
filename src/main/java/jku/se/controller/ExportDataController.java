@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.time.chrono.IsoChronology;
 import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.*;
@@ -33,12 +34,16 @@ public class ExportDataController extends Controller{
 
     @FXML
     public void initialize() {
-        // Verhindert, dass Tage angezeigt werden
+        // Sprache auf Englisch setzen
+        Locale.setDefault(Locale.ENGLISH); // <-- GANZ WICHTIG!
+
         datumExport.setShowWeekNumbers(false);
 
-        // Nur Monatsanzeige
+        datumExport.setChronology(java.time.chrono.IsoChronology.INSTANCE);
+
+        // Monatsanzeige auf Englisch
         datumExport.setConverter(new StringConverter<LocalDate>() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM yyyy", Locale.ENGLISH); // <-- Englisch hier
 
             @Override
             public String toString(LocalDate date) {
@@ -51,11 +56,11 @@ public class ExportDataController extends Controller{
                     return null;
                 }
                 YearMonth ym = YearMonth.parse(string, formatter);
-                return ym.atDay(1); // gibt z.B. 2025-04-01 zurück
+                return ym.atDay(1); // Gibt z.B. 2025-04-01 zurück
             }
         });
 
-
+        // Eingrenzen der auswählbaren Daten
         datumExport.setDayCellFactory(picker -> new DateCell() {
             @Override
             public void updateItem(LocalDate date, boolean empty) {
@@ -64,7 +69,7 @@ public class ExportDataController extends Controller{
             }
         });
 
-        // Standardwert setzen
+        // Standardwert setzen (aktueller Monat, Tag 1)
         datumExport.setValue(LocalDate.now().withDayOfMonth(1));
     }
 
@@ -135,9 +140,9 @@ public class ExportDataController extends Controller{
         // Summary
         double totalAmount = invoices.stream().mapToDouble(InvoiceExport::getSum).sum();
         Map<String, Object> summary = new LinkedHashMap<>();
-        summary.put("totalAmount", totalAmount);
-        summary.put("totalRefund", totalRefund);
-        summary.put("refundToPay", refundToPay);
+        summary.put("totalAmount", round(totalAmount));
+        summary.put("totalRefund", round(totalRefund));
+        summary.put("refundToPay", round(refundToPay));
         exportData.summary = summary;
 
         // User-spezifische Gruppierung
@@ -151,10 +156,10 @@ public class ExportDataController extends Controller{
             Map<String, Object> invoiceMap = new LinkedHashMap<>();
             invoiceMap.put("id", inv.getId());
             invoiceMap.put("date", inv.getDate());
-            invoiceMap.put("amount", inv.getSum());
+            invoiceMap.put("amount", round(inv.getSum()));
             invoiceMap.put("type", inv.getTyp().name());
             invoiceMap.put("status", inv.getStatus().name());
-            invoiceMap.put("refund", inv.getRefund());
+            invoiceMap.put("refund", round(inv.getRefund()));
 
             ui.invoices.add(invoiceMap);
             ui.totalInvoices++;
@@ -238,5 +243,9 @@ public class ExportDataController extends Controller{
         public Map<String, Object> metadata;
         public Map<String, Object> summary;
         public List<UserInvoices> users;
+    }
+
+    private static double round(double value) { //KI
+        return new java.math.BigDecimal(value).setScale(2, java.math.RoundingMode.HALF_UP).doubleValue();
     }
 }
