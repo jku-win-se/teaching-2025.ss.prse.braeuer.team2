@@ -113,6 +113,7 @@ public class MessageAnomalyController extends Controller{
             Stage stage = new Stage();
             stage.setTitle("User details: " + username);
             stage.setScene(new Scene(root));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             showError("Error", "User details could not be loaded: " + e.getMessage());

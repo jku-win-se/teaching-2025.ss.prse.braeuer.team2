@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.UserTabularController">
     <Label layoutX="296.0" layoutY="29.0" prefHeight="35.0" prefWidth="106.0" style="-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Overview" />
-    <Button fx:id="btn_back" layoutX="14.0" layoutY="32.0" onAction="#handleBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
+    <Button fx:id="btn_back" layoutX="14.0" layoutY="34.0" onAction="#handleBack" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
     <ScrollPane layoutX="16.0" layoutY="82.0" prefHeight="401.0" prefWidth="666.0" style="-fx-padding: 0 0 20 0;">
         <GridPane fx:id="gridUsers" hgap="10.0" prefWidth="665.0" style="-fx-background-color: transparent;" vgap="10.0">
             <!-- Column headers -->

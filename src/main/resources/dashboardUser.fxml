@@ -7,45 +7,33 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="jku.se.controller.DashboardUserController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.DashboardUserController">
     <HBox layoutX="170.0" layoutY="60.0" spacing="15" />
     <HBox layoutX="170.0" layoutY="200.0" spacing="15" />
-    <VBox layoutX="14.0" layoutY="131.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;
-    -fx-border-color: #BDC3C7;
-    -fx-padding: 10px;">
-        <Label fx:id="labelEingereichteRechnungen" alignment="CENTER" prefHeight="35.0" prefWidth="160.0" style="
-        -fx-font-size: 24;" text="📑 12" />
+    <VBox layoutX="14.0" layoutY="131.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;     -fx-border-color: #BDC3C7;     -fx-padding: 10px;">
+        <Label fx:id="labelEingereichteRechnungen" alignment="CENTER" prefHeight="35.0" prefWidth="160.0" style="         -fx-font-size: 24;" text="📑 12" />
         <Label alignment="CENTER" prefHeight="17.0" prefWidth="155.0" text="Amount of invoices" />
     </VBox>
-    <VBox layoutX="517.0" layoutY="131.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;
-    -fx-border-color: #BDC3C7;     -fx-padding: 10px;">
-        <Label fx:id="labelGenehmigteRechnungen" alignment="CENTER" prefHeight="35.0" prefWidth="151.0" style="
-        -fx-font-size: 24;" text="✅ 8" />
+    <VBox layoutX="517.0" layoutY="131.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;     -fx-border-color: #BDC3C7;     -fx-padding: 10px;">
+        <Label fx:id="labelGenehmigteRechnungen" alignment="CENTER" prefHeight="35.0" prefWidth="151.0" style="         -fx-font-size: 24;" text="✅ 8" />
         <Label alignment="CENTER" prefHeight="17.0" prefWidth="152.0" text="Closed refunds" />
     </VBox>
-    <VBox layoutX="517.0" layoutY="283.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;
-    -fx-border-color: #BDC3C7; -fx-padding: 10px;">
+    <VBox layoutX="517.0" layoutY="283.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1;     -fx-border-color: #BDC3C7; -fx-padding: 10px;">
         <Label fx:id="labelOffeneRechnungen" alignment="CENTER" prefHeight="35.0" prefWidth="173.0" style="-fx-font-size: 24;" text="⏳ 4" />
         <Label alignment="CENTER" prefHeight="17.0" prefWidth="159.0" text="Open refunds" />
     </VBox>
-    <VBox layoutX="14.0" layoutY="283.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1; -fx-border-color: #BDC3C7;
-    -fx-padding: 10px;">
+    <VBox layoutX="14.0" layoutY="283.0" prefHeight="63.0" prefWidth="169.0" style="-fx-background-color: #ECF0F1; -fx-border-color: #BDC3C7;     -fx-padding: 10px;">
         <Label fx:id="labelSumme" alignment="CENTER" prefHeight="35.0" prefWidth="157.0" style="-fx-font-size: 24;" text="💶 134,50€" />
         <Label alignment="CENTER" prefHeight="17.0" prefWidth="181.0" text="Total refund" />
     </VBox>
-    <Button fx:id="btn_logout" layoutX="613.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="80.0" text="⍈ Logout">
+    <Button fx:id="btn_logout" layoutX="602.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleLogout" prefHeight="30.0" prefWidth="80.0" text="⍈ Logout">
         <font>
             <Font size="14.0" />
         </font>
     </Button>
     <Label layoutX="237.0" layoutY="27.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Lunchify Dashboard" />
-    <Button fx:id="tile_view" layoutX="231.0" layoutY="271.0" mnemonicParsing="false" onAction="#openSubmittedBills" prefHeight="100.0" prefWidth="239.0" style="-fx-background-color: #3498DB;
-    -fx-text-fill: white; -fx-font-size: 16px;
-    -fx-border-radius: 5px; -fx-padding: 10px;" text="📄 Your invoices" />
-    <Button fx:id="tile_submit" layoutX="231.0" layoutY="119.0" mnemonicParsing="false" onAction="#openSubmitBill" prefHeight="100.0" prefWidth="239.0" style="-fx-background-color: #3498DB;
-    -fx-text-fill: white; -fx-font-size: 16px;
-    -fx-border-radius: 5px; -fx-padding: 10px;" text="➕ Submit invoice" />
-    <Button fx:id="messages" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#openMessages" text="🔔" />
-   <Button fx:id="btn_changePassword" layoutX="42.0" layoutY="36.0" mnemonicParsing="false" onAction="#handleChangePassword" text="🔑" />
+    <Button fx:id="tile_view" layoutX="231.0" layoutY="271.0" mnemonicParsing="false" onAction="#openSubmittedBills" prefHeight="100.0" prefWidth="239.0" style="-fx-background-color: #3498DB;     -fx-text-fill: white; -fx-font-size: 16px;     -fx-border-radius: 5px; -fx-padding: 10px;" text="📄 Your invoices" />
+    <Button fx:id="tile_submit" layoutX="231.0" layoutY="119.0" mnemonicParsing="false" onAction="#openSubmitBill" prefHeight="100.0" prefWidth="239.0" style="-fx-background-color: #3498DB;     -fx-text-fill: white; -fx-font-size: 16px;     -fx-border-radius: 5px; -fx-padding: 10px;" text="➕ Submit invoice" />
+    <Button fx:id="messages" layoutX="14.0" layoutY="34.0" mnemonicParsing="false" onAction="#openMessages" text="🔔" />
+   <Button fx:id="btn_changePassword" layoutX="42.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleChangePassword" text="🔑" />
 </AnchorPane>
