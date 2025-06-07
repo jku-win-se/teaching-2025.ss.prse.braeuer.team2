@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jku.se.controller.UserOverviewDashboardController">
-    <Button fx:id="btn_back" layoutX="14.0" layoutY="35.0" onAction="#handleBack" prefHeight="30.0" prefWidth="78.0" text="⬅ Back" />
+    <Button fx:id="btn_back" layoutX="14.0" layoutY="34.0" onAction="#handleBack" prefHeight="30.0" prefWidth="78.0" text="⬅ Back" />
     <Label layoutX="299.0" layoutY="32.0" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" text="Edit User" />
     <VBox layoutX="231.0" layoutY="120.0" prefHeight="200.0" prefWidth="246.0" spacing="15" style="-fx-alignment: center; -fx-padding: 20px;">
         <Button fx:id="btn_show_users" onAction="#showUsers" prefHeight="45.0" prefWidth="199.0" style="-fx-font-size: 16px; -fx-background-color: #7734db;         -fx-text-fill: white; -fx-padding: 10px 20px;         -fx-background-radius: 10px;" text="Show user">
@@ -23,7 +23,7 @@
             <Font name="System Bold" size="12.0" />
          </font></Button>
         </VBox>
-    <Button fx:id="btn_logout" layoutX="608.0" layoutY="33.0" mnemonicParsing="false" onAction="#handleLogout" text="⍈ Logout">
+    <Button fx:id="btn_logout" layoutX="602.0" layoutY="34.0" mnemonicParsing="false" onAction="#handleLogout" text="⍈ Logout">
         <font>
             <Font size="14.0" />
         </font>

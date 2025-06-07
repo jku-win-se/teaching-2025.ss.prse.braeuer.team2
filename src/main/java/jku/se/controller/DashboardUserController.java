@@ -84,8 +84,8 @@ public class DashboardUserController extends Controller {
             // Setze den Button auf rot, wenn neue Nachrichten vorhanden sind
             messages.setStyle("-fx-background-color: #3498DB;");
         } else {
-            // Setze den Button auf die normale Farbe zurück, wenn keine neuen Nachrichten vorhanden sind
-            messages.setStyle("-fx-background-color: lightgray;");
+            // Setzt den Button auf die normale Farbe zurück, wenn keine neuen Nachrichten vorhanden sind
+            messages.setStyle(null);
         }
     }
 

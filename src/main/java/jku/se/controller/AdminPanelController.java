@@ -61,7 +61,7 @@ public class AdminPanelController extends Controller{
             messages.setStyle("-fx-background-color: #7734db; -fx-text-fill: white;");
         } else {
             // Setze den Button auf die normale Farbe zurück, wenn keine neuen Nachrichten vorhanden sind
-            messages.setStyle("-fx-background-color: lightgray; -fx-text-fill: black;");
+            messages.setStyle(null);
         }
     }
 

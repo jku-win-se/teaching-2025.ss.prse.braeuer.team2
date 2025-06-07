@@ -44,6 +44,7 @@ public class UserSearchController extends Controller {
                 Stage stage = new Stage();
                 stage.setTitle("User details: " + username);
                 stage.setScene(new Scene(root));
+                stage.setResizable(false);
                 stage.show();
             } else {
                 showInfo("Info", "User not found");

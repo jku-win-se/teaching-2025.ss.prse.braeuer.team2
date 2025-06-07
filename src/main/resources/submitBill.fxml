@@ -16,6 +16,6 @@
          <font>
             <Font name="System Bold" size="12.0" />
          </font></Button>
-        <Button layoutX="14.0" layoutY="33.0" onAction="#goBackToDashboard" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
+        <Button layoutX="14.0" layoutY="34.0" onAction="#goBackToDashboard" prefHeight="30.0" prefWidth="80.0" text="⬅ Back" />
     </children>
 </AnchorPane>
