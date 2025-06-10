@@ -13,7 +13,7 @@ Falls dies nicht funktionieren sollte, kann die .jar-Datei auch so geöffnet wer
 
 1.) Lade zusätlich zu Java auch noch javafx-sdk herunter
 
-2.) Erstelle eine batch-Datei * [batch-Datei](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/blob/main/docs/Lunchify.bat) mit diesem Inhalt:
+2.) Erstelle eine * [batch-Datei](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/blob/main/docs/Lunchify.bat) mit diesem Inhalt:
 
 ```
 @echo off
