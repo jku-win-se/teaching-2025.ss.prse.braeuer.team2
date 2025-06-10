@@ -236,31 +236,37 @@ Daher werden hauptsächlich die Backend-Klassen getestet.
 
 # Installationsanleitung
 Beschreibung wie man die Applikation installiert und startet.
+
+
 1.) Lade Java Runtime Environment 21 oder höher herunter bzw. überprüfe ob es vorhanden ist 
 
-2.) Lade die Lunchify .jar-Datei herunter.
+2.) Lade die Lunchify .jar-Datei herunter. 
 
 3.) Starte das Programm mit einem Doppelklick.
 
 
-Falls dies nicht funktionieren sollte kann die .jar_Datei auch so geöffnet werden.
+Falls dies nicht funktionieren sollte, kann die .jar-Datei auch so geöffnet werden:
 
 1.) Lade zusätlich zu Java auch noch javafx-sdk herunter
 
-2.) Erstelle eine batch-datei mit diesem Inhalt:
+2.) Erstelle eine [batch-Datei](https://github.com/jku-win-se/teaching-2025.ss.prse.braeuer.team2/blob/main/docs/Lunchify.bat) mit diesem Inhalt:
 
+```
 @echo off
 set PATH_TO_FX="<Pfad zu javafxsdk>"
-set PATH_TO_JAR="<Pfad zur .jar Datei>" 
+set PATH_TO_JAR="<Pfad zur .jar-Datei>" 
 java --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -jar %PATH_TO_JAR%
 pause
+```
 
 z.B.:
 
+```
 @echo off
 set PATH_TO_FX="C:\Users\Lukas\Documents\javafx-sdk-21.0.6\lib"
 set PATH_TO_JAR="%~dp0lunchify.jar"   Das JAR im gleichen Verzeichnis wie die Batch-Datei
 java --module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.fxml -jar %PATH_TO_JAR%
 pause
+```
 
 3.) Starte das Programm mit einem Doppelklick auf die batch-Datei
