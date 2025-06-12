@@ -128,7 +128,7 @@ public class ExportDataController extends Controller{
 
         ExportData exportData = new ExportData();
 
-        // Metadata
+
         Map<String, Object> metadata = new LinkedHashMap<>();
         metadata.put("exportDate", LocalDate.now().toString());
         metadata.put("month", getMonthName(month));
@@ -137,7 +137,7 @@ public class ExportDataController extends Controller{
         metadata.put("currency", "EUR");
         exportData.metadata = metadata;
 
-        // Summary
+
         double totalAmount = invoices.stream().mapToDouble(InvoiceExport::getSum).sum();
         Map<String, Object> summary = new LinkedHashMap<>();
         summary.put("totalAmount", round(totalAmount));
@@ -156,16 +156,21 @@ public class ExportDataController extends Controller{
             Map<String, Object> invoiceMap = new LinkedHashMap<>();
             invoiceMap.put("id", inv.getId());
             invoiceMap.put("date", inv.getDate());
-            invoiceMap.put("amount", round(inv.getSum()));
+            invoiceMap.put("amount", round(inv.getSum()));  // Betrag rundet
             invoiceMap.put("type", inv.getTyp().name());
             invoiceMap.put("status", inv.getStatus().name());
-            invoiceMap.put("refund", round(inv.getRefund()));
+            invoiceMap.put("refund", round(inv.getRefund()));  // Rückerstattung rundet
 
             ui.invoices.add(invoiceMap);
             ui.totalInvoices++;
-            ui.totalAmount += inv.getSum();
-            ui.refundToPay += inv.getRefundToPay();
-            ui.totalRefund += inv.getRefund();
+
+
+            ui.totalAmount = round(ui.totalAmount + inv.getSum());  // Betrag nach der Berechnung rundet
+            ui.totalRefund = round(ui.totalRefund + inv.getRefund());  // Rückerstattung nach der Berechnung rundet
+
+            if (inv.getStatus() == InvoiceStatus.ACCEPTED) {
+                ui.refundToPay = round(ui.refundToPay + inv.getRefundToPay());  // Refund to pay nur für "ACCEPTED" Rechnungen
+            }
         }
 
         exportData.users = new ArrayList<>(userMap.values());
